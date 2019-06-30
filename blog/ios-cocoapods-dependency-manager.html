@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用CocoaPods管理iOS项目中的依赖库</title>
+  <meta name="description" content="一种开发语言发展到一定的程度就会出现相应的依赖管理工具（Dependency Manager）或者是中央代码仓库，例如：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用CocoaPods管理iOS项目中的依赖库">
+  <meta name="twitter:description" content="一种开发语言发展到一定的程度就会出现相应的依赖管理工具（Dependency Manager）或者是中央代码仓库，例如：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用CocoaPods管理iOS项目中的依赖库">
+  <meta property="og:description" content="一种开发语言发展到一定的程度就会出现相应的依赖管理工具（Dependency Manager）或者是中央代码仓库，例如：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-cocoapods-dependency-manager.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-13 23:13:28 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-13</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">使用CocoaPods管理iOS项目中的依赖库</h1>
+  </header>
+
+  <section class="post">
+    <p>一种开发语言发展到一定的程度就会出现相应的依赖管理工具（Dependency Manager）或者是中央代码仓库，例如：</p>
+
+<ul>
+  <li>Java: Maven，Ivy</li>
+  <li>Ruby: gems</li>
+  <li>Python: pip, easy_install</li>
+  <li>Node.js: npm</li>
+</ul>
+
+<p>随着iOS开发者的增加，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫做：<a href="http://cocoapods.org">CocoaPods</a>。CocoaPods是一个负责管理iOS项目中第三方开源代码的工具，其源码在Github上托管。该项目开始于2011年8月12日，经过一年多的发展，现在已经超过1000次提交，并且持续保持活跃更新。开发iOS项目不可避免地要使用第三方开源库，CocoaPods的出现使得开发者可以节省设置和更新第三方开源库的时间。</p>
+
+<p><img src="/images/ios_cocoapods/cocoapods_logo.png" alt="CocoaPods Logo" /></p>
+
+<p>##安装CocoaPods</p>
+
+<p>CocoaPods是使用</p>
+
+<p>1、由于ruby的软件源因使用Amazon的云服务所以在国内无法访问，需要更新下ruby源，使用<code class="highlighter-rouge">ruby.taobao.org</code>（淘宝）替换<code class="highlighter-rouge">rubygems.org</code>（默认）源，具体的说明请戳:<a href="http://ruby.taobao.org">RubyGems 镜像 - 淘宝网</a></p>
+
+<p>(1)移除<code class="highlighter-rouge">https://rubygems.org/</code>源</p>
+
+<p><code class="highlighter-rouge">gem sources --remove https://rubygems.org/</code></p>
+
+<p>(2)添加<code class="highlighter-rouge">https://ruby.taobao.org/</code>源</p>
+
+<p><code class="highlighter-rouge">gem sources -a https://ruby.taobao.org/</code></p>
+
+<p>(3)检查安装情况，确认只有<code class="highlighter-rouge">https://ruby.taobao.org</code></p>
+
+<p><code class="highlighter-rouge">gem sources -l</code></p>
+
+<p>执行结果如下表示替换源成功:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*** CURRENT SOURCES ***
+
+https://ruby.taobao.org
+</code></pre></div></div>
+
+<p>2、安装CocoaPods非常简单直接使用下面的两行命令即可</p>
+
+<p><code class="highlighter-rouge">sudo gem install cocoapods</code></p>
+
+<p><code class="highlighter-rouge">pod setup</code></p>
+
+<p>补充说明:</p>
+
+<p>(1)如果提示Ruby环境不够新，使用<code class="highlighter-rouge">sudo gem update --system</code>升级即可，升级完成重复上面的步骤。</p>
+
+<p>(2)<code class="highlighter-rouge">pod setup</code>是将<code class="highlighter-rouge">Spec</code>项目复制到当前用户的<code class="highlighter-rouge">.cocoapods/master</code>目录下，其实就相当于将CocoaPods所管理的一些第三方的库的描述文件同步一份到本地，便于进行查询和安装，以后更新新版本的Spec项目只需要再次执行<code class="highlighter-rouge">pod setup</code>即可 。</p>
+
+<p>##使用CocoaPods</p>
+
+<p>1、使用CocoaPods管理第三方库</p>
+
+<p>使用CocoaPods需要新建一个名为Podfile的文件，以如下格式将依赖库的名字依次列在文件中，<code class="highlighter-rouge">platform</code>指的是平台的名称和版本号，<code class="highlighter-rouge">'~&gt; 2.0'</code>这个指的是版本号，如果没有默认是最新版本。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>platform :ios, '7.0'
+pod 'AFNetworking', '~&gt; 2.0'
+pod 'JSONKit', '~&gt; 1.4'
+pod 'RegexKitLite'
+</code></pre></div></div>
+<p>将编辑好的Podfile文件放到项目的根目录中，cd到Podfile文件所在的目录，然后执行下面的命令：</p>
+
+<p><code class="highlighter-rouge">pod install</code></p>
+
+<p>CocoaPods会自动帮你把Podfile文件中列出来的第三方库全部下载下来，并且自动设置好变异参数和依赖关系。</p>
+
+<p>补充说明:</p>
+
+<p>(1)<code class="highlighter-rouge">pod install</code>命令执行完成之后终端会出现[!] From now on use <code class="highlighter-rouge">CocoaPodsDemo.xcworkspace</code>.这样一句话，意思就是从现在开始起以后打开项目使用<code class="highlighter-rouge">*.xcworkspace</code>这个来打开不再使用原来的<code class="highlighter-rouge">*.xcodeproj</code>.</p>
+
+<p>(2)每次更改了<code class="highlighter-rouge">Podfile</code>文件，需要执行<code class="highlighter-rouge">pod update</code>来更新一下。</p>
+
+<p>2、搜索可用的第三方库</p>
+
+<p><code class="highlighter-rouge">pod search AFNetworking</code></p>
+
+<p>执行上面的命令可用查询出和``相关的一些开源的库，下面的是查询结果的示例，可以看到库的名称，最新版本号和lis版本号等信息：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-&gt; AFNetworking (2.3.1)
+   A delightful iOS and OS X networking framework.
+   pod 'AFNetworking', '~&gt; 2.3.1'
+   - Homepage: https://github.com/AFNetworking/AFNetworking
+   - Source:   https://github.com/AFNetworking/AFNetworking.git
+   - Versions: 2.3.1, 2.3.0, 2.2.4, 2.2.3, 2.2.2, 2.2.1, 2.2.0, 2.1.0, 2.0.3, 2.0.2, 2.0.1, 2.0.0, 2.0.0-RC3, 2.0.0-RC2, 2.0.0-RC1, 1.3.4, 1.3.3, 1.3.2, 1.3.1, 1.3.0,
+   1.2.1, 1.2.0, 1.1.0, 1.0.1, 1.0, 1.0RC3, 1.0RC2, 1.0RC1, 0.10.1, 0.10.0, 0.9.2, 0.9.1, 0.9.0, 0.7.0, 0.5.1 [master repo]
+   - Sub specs:
+     - AFNetworking/Serialization (2.3.1)
+     - AFNetworking/Security (2.3.1)
+     - AFNetworking/Reachability (2.3.1)
+     - AFNetworking/NSURLConnection (2.3.1)
+     - AFNetworking/NSURLSession (2.3.1)
+     - AFNetworking/UIKit (2.3.1)
+</code></pre></div></div>
+
+<p>##其他配置</p>
+
+<p>在日常开发中执行<code class="highlighter-rouge">pod install/update</code>时总是长时间停留在<code class="highlighter-rouge">Analyzing dependencies</code>上。这是因为在使用CocoaPods进行<code class="highlighter-rouge">update</code>或者<code class="highlighter-rouge">install</code>的时候每次会更新获取的<code class="highlighter-rouge">pod specs</code>。</p>
+
+<p>1、使用specs仓库镜像，执行下面的三行命令可以使用specs仓库镜像</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pod repo remove master
+pod repo add master https://gitcafe.com/akuandev/Specs.git
+pod repo update
+</code></pre></div></div>
+
+<p>如果想切换到oschina的源，将上面的第二行的网站替换成<code class="highlighter-rouge">http://git.oschina.net/akuandev/Specs.git</code></p>
+
+<p>第二条命令执行的时候会比较耗时,这个时候要去把整个specs仓库clone一下大概60M左右。</p>
+
+<p>2、如果不想在pod install/pod update的时候不想升级specs库可以使用参数忽略掉</p>
+
+<p><code class="highlighter-rouge">pod install --verbose --no-repo-update</code></p>
+
+<p><code class="highlighter-rouge">pod update --verbose --no-repo-update</code></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://www.cnblogs.com/superhappy/archive/2013/04/23/3038493.html">《IOS 第三方管理库管理 CocoaPods》</a></p>
+
+<p>2、<a href="http://zl4393753.iteye.com/blog/1838824">《CocoaPods 安装使用》</a></p>
+
+<p>3、<a href="http://tiyanzhimei.com/index.php/cocoapods-ios-xiang-mu-di-san-fang-ku-guan-li-li-qi/">《CocoaPods-iOS项目第三方库管理利器》</a></p>
+
+<p>4、<a href="http://blog.csdn.net/ysy441088327/article/details/8611731">《开源框架:CocoaPods》</a></p>
+
+<p>5、<a href="http://cocoapods.org">《CocoaPods官网》</a></p>
+
+<p>6、<a href="http://akinliu.github.io/2014/05/03/cocoapods-specs-/">《cocoapods specs 镜像》</a></p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/adapt-for-ios7.html" title="link to iOS应用程序适配iOS7">iOS应用程序适配iOS7</a></h2>
+       <p class="excerpt">Apple自去年发布iOS7以来一直以来都有关注目前各个大厂发布的app，到目前为止基本上绝大多数App Store上的app已经做到iOS7适配，不光是支持iOS7的布局调整更多的是在iOS7整体设计方面的改进，朝着扁平化和简单线条话的方式进行设计。##UI适配在iOS7中view默认是全屏模式，状态栏的高度也加在了view的高度上，例如iOS7之前iPhone5/5s/5c中self.view.frame.size.height = 548，在iOS7中就是568了，在iOS7中nav...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-16 23:02:33 +0800" class="post-list__meta--date date">2014-08-16</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/adapt-for-ios7.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-url-scheme.html" title="link to iOS中的URL Scheme">iOS中的URL Scheme</a></h2>
+       <p class="excerpt">在iOS的SDK中提供了一个非常有意思的功能，它能将iOS的Application同自定义的URL Schema绑定，同时可以通过URL Scheme在浏览器或者是其他应用中启动这个Application。本文主要介绍如何通过URL Scheme的方式启动应用和参数的传递。##创建URL Scheme1、首先在*-Info.plist中添加一行,选择URL types，效果如下图所示：2、在展开的Item 0中填写URL identifier,这个用来唯一标识用户自定义的URL Schem...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-11 19:07:27 +0800" class="post-list__meta--date date">2014-08-11</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-url-scheme.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

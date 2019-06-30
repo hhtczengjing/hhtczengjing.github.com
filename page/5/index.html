@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>曾静的博客</title>
+  <meta name="description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="曾静的博客">
+  <meta name="twitter:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="曾静的博客">
+  <meta property="og:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/page/5/">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover " style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list hidden">
+
+  <ol class="post-list">
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios-plcrashreporter.html" title="访问 iOS中使用PLCrashReporter收集Crash">iOS中使用PLCrashReporter收集Crash</a></h2>
+      <p class="excerpt">iOS应用程序在上线过程中可能会出现各种闪退，如果APP经常出现闪退会让一部分用户选择卸载，这样会带来很大的损失，下图(来自于Bugly)可以看出APP出现崩溃后会带来的影响。对于这些崩溃信息怎么收集分析就是一个很大的问题，通过解析Crash文件可以帮助我们改善APP，修复bug等。收集Crash信息的方式有很多，比较常见的是使用第三方服务，比如友盟、百度统计、Bugly等。(下图为Bugly）###使用系统自带的Crash收集//需要捕获的signalstatic int s_fatal...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2016-05-21 23:40:53 +0800" class="post-list__meta--date date">2016-05-21</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-plcrashreporter.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/hello-cordova-ios.html" title="访问 iOS中Cordova开发初探">iOS中Cordova开发初探</a></h2>
+      <p class="excerpt">跨平台开发是我们长久以来都在关注的话题，前段时间写了一篇关于React Native的文章《React Native开发初探》。也在公司的项目中部分使用React Native，虽然React Native的出现带来了很多变革，但是光一个环境搭建就把很多人挡在了门外，另外React Native更新的频率过快差不多两周一个版本，所以目前还是处于观望阶段。Cordova是一个开源的移动应用开发框架，是Adobe贡献给Apache的开源项目，是从PhoneGap中抽出的核心代码，是驱动Phon...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2016-04-01 22:08:53 +0800" class="post-list__meta--date date">2016-04-01</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/hello-cordova-ios.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/octopress-to-jekyll.html" title="访问 将博客从Octopress迁移到Jekyll">将博客从Octopress迁移到Jekyll</a></h2>
+      <p class="excerpt">一直想把Octopress的主题给换了，没有找到满意的主题。最近发现喵神的博客(OneV’s Den)由ghost迁移到了Jekyll了。这些都不是重点，重点是他把之前使用的主题也一起弄到Jekyll上面来了，而且代码开源在GitHub上面了(项目地址：https://github.com/onevcat/vno-jekyll),效果如下：###安装Vno Jekyll####（1）从GitHub把项目的源码clone下来git clone https://github.com/onevc...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2016-01-23 18:49:35 +0800" class="post-list__meta--date date">2016-01-23</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/octopress-to-jekyll.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/hello-react-native.html" title="访问 React Native开发初探">React Native开发初探</a></h2>
+      <p class="excerpt">Facebook在React.js Conf 2015大会(2015.3.26)上开源了React Native。最开始只支持iOS，2015年9月15日发布了React Native for Android，至此React Native支持主流的两大平台（iOS和Android）。新事物的出现，都会引发行业的热烈讨论，自React Native发布起，一直都是热门的讨论话题。React Native的出现在一定程度上解决了我们目前在移动开发上面临的问题。我们身处在移动互联网的黄金时代，越...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2016-01-23 18:49:35 +0800" class="post-list__meta--date date">2016-01-23</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/hello-react-native.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios9-3d-touch.html" title="访问 在iOS9中使用3D Touch">在iOS9中使用3D Touch</a></h2>
+      <p class="excerpt">在iPhone 6s和iPhone 6s Plus中Apple引入了3D Touch技术。3D Touch的触控技术，被苹果称为新一代多点触控技术。其实，就是此前在Apple Watch上采用的Force Touch，屏幕可感应不同的感压力度。iOS9提供了四类API（Home Screen Quick Action、UIKit Peek &amp; Pop 、WebView Peek &amp; Pop 和UITouch Force Properties）用于操作3D Touch(Pre...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-10-24 21:19:25 +0800" class="post-list__meta--date date">2015-10-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios9-3d-touch.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios9-corespotlight.html" title="访问 在iOS9中使用CoreSpotlight">在iOS9中使用CoreSpotlight</a></h2>
+      <p class="excerpt">在iOS9之前，用户可以通过Spotlight中输入关键字来查找App。在iOS9中Apple随之发布了一套全新的iOS9 Search APIs之后，开发者不但可以自由的将App的部分内容建立索引，还能对Spotlight上的搜索结果以及点击不同的结果显示的内容进行设置。###三种搜索的API简介####NSUserActivityNSUserActivity是iOS8专为Handoff推出的API，在iOS9得到了提升。现在用户只需要提供元数据(metadata)就能搜索到不同的活动(...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-10-18 16:37:38 +0800" class="post-list__meta--date date">2015-10-18</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios9-corespotlight.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/encrypt-sqlite-with-sqlcipher.html" title="访问 使用SQLCipher加密SQLite数据库">使用SQLCipher加密SQLite数据库</a></h2>
+      <p class="excerpt">在iOS应用程序开发中经常需要使用SQLite来存储数据，很多时候需要加密保存一部分的数据。常见的做法是将要存储的内容先加密然后存到数据库中，使用的时候将数据进行解密，这样就会有大量的性能消耗在数据的加解密上（性能主要取决于加解密的算法和CPU的能力）。  SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.SQL...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-07-19 20:02:54 +0800" class="post-list__meta--date date">2015-07-19</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/encrypt-sqlite-with-sqlcipher.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/simple-usage-of-realm-in-ios.html" title="访问 iOS中Realm数据库的基本用法">iOS中Realm数据库的基本用法</a></h2>
+      <p class="excerpt">Realm是由Y Combinator公司孵化的一款支持运行在手机、平板和可穿戴设备上的嵌入式数据库（旨在取代CoreData和Sqlite）。Realm并不是对Core Data的简单封装，相反地，Realm并不是基于Core Data，也不是基于SQLite所构建的。它拥有自己的数据库存储引擎，可以高效且快速地完成数据库的构建操作。Realm可以轻松地移植到项目当中，并且绝大部分常用的功能（比如说插入、查询等等）都可以用一行简单的代码轻松完成！目前支持Objective-C、Swift...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-07-12 19:10:40 +0800" class="post-list__meta--date date">2015-07-12</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/simple-usage-of-realm-in-ios.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/simple-usage-of-gitlab.html" title="访问 GitLab的简单使用">GitLab的简单使用</a></h2>
+      <p class="excerpt">GitLab是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。它拥有与Github类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。团队成员可以利用内置的简单聊天程序(Wall)进行交流。它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找。开源中国代码托管平台git.oschina.net就是基于GitLab项目搭...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-07-12 04:05:48 +0800" class="post-list__meta--date date">2015-07-12</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/simple-usage-of-gitlab.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/apple-watch-development-at-glance.html" title="访问 初识Apple Watch应用开发">初识Apple Watch应用开发</a></h2>
+      <p class="excerpt">自发布iOS8.2 SDK和Xcode6.2来，大家对于WatchKit的关注就不绝于耳。特别随着Apple Watch的发售一大批的Apple Watch的应用就如雨后春笋一般涌入AppStore。本文对《WatchKit Programming Guide》中提到的相关概念结合目前的各方资料进行整理，重点介绍在Apple Watch开发中的一些基本概念和数据通信方面的内容。###配置Xcode添加Watch应用1、使用最新的Xcode(Xcode 6.2及以上)打开现有的iOS项目2、...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-07-08 22:35:09 +0800" class="post-list__meta--date date">2015-07-08</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/apple-watch-development-at-glance.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+  </ol>
+
+  <hr class="post-list__divider " />
+
+<nav class="pagination" role="navigation">
+    
+        <a class="newer-posts pagination__newer btn btn-small btn-tertiary" href="/page/4/#blog">&larr; 最近</a>
+    
+    <span class="pagination__page-number">5 / 11</span>
+    
+        <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/6/#blog">更早 &rarr;</a>
+    
+</nav>
+
+
+</div>
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

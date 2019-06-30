@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中使用cryptopp进行加解密</title>
+  <meta name="description" content="Crypto++是一个免费开源的加解密库，支持一些非常丰富的加解密算法(如AES/RSA等)。如果要考虑到实现一套跨平台多端加解密效果一致可以考虑使用该库，当然使用各自平台提供的api也能实现。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中使用cryptopp进行加解密">
+  <meta name="twitter:description" content="Crypto++是一个免费开源的加解密库，支持一些非常丰富的加解密算法(如AES/RSA等)。如果要考虑到实现一套跨平台多端加解密效果一致可以考虑使用该库，当然使用各自平台提供的api也能实现。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中使用cryptopp进行加解密">
+  <meta property="og:description" content="Crypto++是一个免费开源的加解密库，支持一些非常丰富的加解密算法(如AES/RSA等)。如果要考虑到实现一套跨平台多端加解密效果一致可以考虑使用该库，当然使用各自平台提供的api也能实现。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-cryptopp-encryption.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-10-04 18:46:37 +0800" itemprop="datePublished" class="post-meta__date date">2018-10-04</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中使用cryptopp进行加解密</h1>
+  </header>
+
+  <section class="post">
+    <p><a href="https://www.cryptopp.com">Crypto++</a>是一个免费开源的加解密库，支持一些非常丰富的加解密算法(如AES/RSA等)。如果要考虑到实现一套跨平台多端加解密效果一致可以考虑使用该库，当然使用各自平台提供的api也能实现。</p>
+
+<p>目前只提供了源码的方式，如果要集成到iOS的项目里面需要先编译成静态库，下面就<code class="highlighter-rouge">5.6.2</code>这个版本进行介绍：</p>
+
+<h3 id="1编译静态库">1.编译静态库</h3>
+
+<h4 id="1-下载源码">(1) 下载源码</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/weidai11/cryptopp.git
+git checkout CRYPTOPP_5_6_2
+</code></pre></div></div>
+
+<h4 id="2-准备一个makefile文件">(2) 准备一个<code class="highlighter-rouge">Makefile</code>文件</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>touch Makefile
+</code></pre></div></div>
+
+<p>文件内容为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CXXFLAGS += -g -O2 -Wall -Wno-unused -Wno-unknown-pragmas -DNDEBUG -DCRYPTOPP_DISABLE_ASM -DCRYPTOPP_DISABLE_SSE2 -MMD -MT dependencies
+
+TARGET = libcryptopp.a
+SRCS = $(shell echo *.cpp)
+OBJS = $(SRCS:.cpp=.o)
+
+.phoney: clean
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $@
+
+%.o : %.cpp
+	$(CXX) $(CXXFLAGS) -c $&lt;
+
+clean:
+	$(RM) $(TARGET) $(OBJS)
+</code></pre></div></div>
+
+<h4 id="3-编写编译脚本">(3) 编写编译脚本</h4>
+
+<h5 id="1-ios平台">1) iOS平台</h5>
+
+<p>创建脚本文件：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>touch build-ios.sh
+</code></pre></div></div>
+
+<p>脚本内容为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">XCODE_ROOT</span><span class="o">=</span><span class="sb">`</span>xcode-select <span class="nt">-print-path</span><span class="sb">`</span>
+
+<span class="nb">echo</span> <span class="s2">"making for iOS"</span>
+<span class="nv">ARCHS</span><span class="o">=</span><span class="s2">"x86_64 i386 armv7 armv7s arm64"</span>
+<span class="nv">SDK_VERSION</span><span class="o">=</span><span class="sb">`</span>xcrun <span class="nt">--sdk</span> iphoneos <span class="nt">--show-sdk-version</span> 2&gt; /dev/null<span class="sb">`</span>
+<span class="nv">MIN_SDK_VERSION</span><span class="o">=</span>7.0
+
+<span class="nb">echo</span> <span class="s2">"sdk version is: "</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">SDK_VERSION</span><span class="k">}</span>
+
+<span class="nv">IOS_STATIC_ARCHIVES</span><span class="o">=</span><span class="s2">""</span>
+<span class="k">for </span>ARCH <span class="k">in</span> <span class="k">${</span><span class="nv">ARCHS</span><span class="k">}</span>
+<span class="k">do
+    </span><span class="nv">PLATFORM</span><span class="o">=</span><span class="s2">""</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"i386"</span> <span class="o">]</span> <span class="o">||</span> <span class="o">[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"x86_64"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+        </span><span class="nv">PLATFORM</span><span class="o">=</span><span class="s2">"iPhoneSimulator"</span>
+    <span class="k">else
+        </span><span class="nv">PLATFORM</span><span class="o">=</span><span class="s2">"iPhoneOS"</span>
+    <span class="k">fi
+
+    </span><span class="nb">export </span><span class="nv">DEV_ROOT</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">XCODE_ROOT</span><span class="k">}</span><span class="s2">/Platforms/</span><span class="k">${</span><span class="nv">PLATFORM</span><span class="k">}</span><span class="s2">.platform/Developer"</span>
+    <span class="nb">export </span><span class="nv">SDK_ROOT</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">DEV_ROOT</span><span class="k">}</span><span class="s2">/SDKs/</span><span class="k">${</span><span class="nv">PLATFORM</span><span class="k">}${</span><span class="nv">SDK_VERSION</span><span class="k">}</span><span class="s2">.sdk"</span>
+    <span class="nb">export </span><span class="nv">TOOLCHAIN_ROOT</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">XCODE_ROOT</span><span class="k">}</span><span class="s2">/Toolchains/XcodeDefault.xctoolchain/usr/bin/"</span>
+    <span class="nb">export </span><span class="nv">CC</span><span class="o">=</span><span class="s2">"clang -arch </span><span class="nv">$ARCH</span><span class="s2"> -fembed-bitcode"</span>
+    <span class="nb">export </span><span class="nv">CXX</span><span class="o">=</span>clang++
+    <span class="nb">export </span><span class="nv">AR</span><span class="o">=</span><span class="k">${</span><span class="nv">TOOLCHAIN_ROOT</span><span class="k">}</span>libtool
+    <span class="nb">export </span><span class="nv">RANLIB</span><span class="o">=</span><span class="k">${</span><span class="nv">TOOLCHAIN_ROOT</span><span class="k">}</span>ranlib
+    <span class="nb">export </span><span class="nv">ARFLAGS</span><span class="o">=</span><span class="s2">"-static -o"</span>
+    <span class="nb">export </span><span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-arch </span><span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span><span class="s2"> -isysroot </span><span class="k">${</span><span class="nv">SDK_ROOT</span><span class="k">}</span><span class="s2">"</span>
+    <span class="nb">export </span><span class="nv">BUILD_PATH</span><span class="o">=</span><span class="s2">"IOS_BUILD_</span><span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span><span class="s2">"</span>
+    <span class="nb">export </span><span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">"-x c++ -arch </span><span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span><span class="s2"> -isysroot </span><span class="k">${</span><span class="nv">SDK_ROOT</span><span class="k">}</span><span class="s2"> -I</span><span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span><span class="s2"> -miphoneos-version-min=</span><span class="k">${</span><span class="nv">MIN_SDK_VERSION</span><span class="k">}</span><span class="s2"> -mios-simulator-version-min=</span><span class="k">${</span><span class="nv">MIN_SDK_VERSION</span><span class="k">}</span><span class="s2">"</span>
+
+    <span class="nb">mkdir</span> <span class="nt">-pv</span> <span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span>
+    make <span class="nt">-f</span> Makefile
+    <span class="nb">mv</span> <span class="k">*</span>.o <span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span>
+    <span class="nb">mv</span> <span class="k">*</span>.d <span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span>
+    <span class="nb">mv </span>libcryptopp.a <span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span>
+
+    <span class="nv">IOS_STATIC_ARCHIVES</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">IOS_STATIC_ARCHIVES</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span><span class="s2">/libcryptopp.a"</span>
+<span class="k">done
+
+</span><span class="nb">echo</span> <span class="s2">"Creating universal library..."</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> bin/ios
+lipo <span class="nt">-create</span> <span class="k">${</span><span class="nv">IOS_STATIC_ARCHIVES</span><span class="k">}</span> <span class="nt">-output</span> bin/ios/libcryptopp.a
+
+<span class="nb">echo</span> <span class="s2">"removing thin archs"</span>
+<span class="k">for </span>ARCH <span class="k">in</span> <span class="k">${</span><span class="nv">ARCHS</span><span class="k">}</span>
+<span class="k">do
+    </span><span class="nv">directoryName</span><span class="o">=</span>IOS_BUILD_<span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span>
+    <span class="nb">rm</span> <span class="nt">-rf</span> <span class="k">${</span><span class="nv">directoryName</span><span class="k">}</span>
+<span class="k">done
+
+</span><span class="nb">echo</span> <span class="s2">"Build done!"</span>
+</code></pre></div></div>
+
+<h5 id="2-macos平台">2) macOS平台</h5>
+
+<p>创建脚本文件：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>touch build-macOS.sh
+</code></pre></div></div>
+
+<p>脚本内容为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">XCODE_ROOT</span><span class="o">=</span><span class="sb">`</span>xcode-select <span class="nt">-print-path</span><span class="sb">`</span>
+
+<span class="nb">echo</span> <span class="s2">"making for macOSX"</span>
+<span class="nv">ARCHS</span><span class="o">=</span><span class="s2">"x86_64 i386"</span>
+<span class="nv">SDK_VERSION</span><span class="o">=</span><span class="sb">`</span>xcrun <span class="nt">--sdk</span> macosx <span class="nt">--show-sdk-version</span> 2&gt; /dev/null<span class="sb">`</span>
+<span class="nv">MIN_SDK_VERSION</span><span class="o">=</span>10.10
+<span class="nv">PLATFORM</span><span class="o">=</span><span class="s2">"MacOSX"</span>
+
+<span class="nb">echo</span> <span class="s2">"sdk version is: "</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">SDK_VERSION</span><span class="k">}</span>
+
+<span class="nv">MACOSX_STATIC_ARCHIVES</span><span class="o">=</span><span class="s2">""</span>
+<span class="k">for </span>ARCH <span class="k">in</span> <span class="k">${</span><span class="nv">ARCHS</span><span class="k">}</span>
+<span class="k">do
+    </span><span class="nb">export </span><span class="nv">DEV_ROOT</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">XCODE_ROOT</span><span class="k">}</span><span class="s2">/Platforms/</span><span class="k">${</span><span class="nv">PLATFORM</span><span class="k">}</span><span class="s2">.platform/Developer"</span>
+    <span class="nb">export </span><span class="nv">SDK_ROOT</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">DEV_ROOT</span><span class="k">}</span><span class="s2">/SDKs/</span><span class="k">${</span><span class="nv">PLATFORM</span><span class="k">}${</span><span class="nv">SDK_VERSION</span><span class="k">}</span><span class="s2">.sdk"</span>
+    <span class="nb">export </span><span class="nv">TOOLCHAIN_ROOT</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">XCODE_ROOT</span><span class="k">}</span><span class="s2">/Toolchains/XcodeDefault.xctoolchain/usr/bin/"</span>
+    <span class="nb">export </span><span class="nv">CC</span><span class="o">=</span><span class="s2">"clang -arch </span><span class="nv">$ARCH</span><span class="s2"> -fembed-bitcode"</span>
+    <span class="nb">export </span><span class="nv">CXX</span><span class="o">=</span>clang++
+    <span class="nb">export </span><span class="nv">AR</span><span class="o">=</span><span class="k">${</span><span class="nv">TOOLCHAIN_ROOT</span><span class="k">}</span>libtool
+    <span class="nb">export </span><span class="nv">RANLIB</span><span class="o">=</span><span class="k">${</span><span class="nv">TOOLCHAIN_ROOT</span><span class="k">}</span>ranlib
+    <span class="nb">export </span><span class="nv">ARFLAGS</span><span class="o">=</span><span class="s2">"-static -o"</span>
+    <span class="nb">export </span><span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-arch </span><span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span><span class="s2"> -isysroot </span><span class="k">${</span><span class="nv">SDK_ROOT</span><span class="k">}</span><span class="s2">"</span>
+    <span class="nb">export </span><span class="nv">BUILD_PATH</span><span class="o">=</span><span class="s2">"MACOSX_BUILD_</span><span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span><span class="s2">"</span>
+    <span class="nb">export </span><span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">"-x c++ -arch </span><span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span><span class="s2"> -isysroot </span><span class="k">${</span><span class="nv">SDK_ROOT</span><span class="k">}</span><span class="s2"> -I</span><span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span><span class="s2"> -mmacosx-version-min=</span><span class="k">${</span><span class="nv">MIN_SDK_VERSION</span><span class="k">}</span><span class="s2">"</span>
+
+    <span class="nb">mkdir</span> <span class="nt">-pv</span> <span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span>
+    make <span class="nt">-f</span> Makefile
+    <span class="nb">mv</span> <span class="k">*</span>.o <span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span>
+    <span class="nb">mv</span> <span class="k">*</span>.d <span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span>
+    <span class="nb">mv </span>libcryptopp.a <span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span>
+
+    <span class="nv">MACOSX_STATIC_ARCHIVES</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">MACOSX_STATIC_ARCHIVES</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">BUILD_PATH</span><span class="k">}</span><span class="s2">/libcryptopp.a"</span>
+<span class="k">done
+
+</span><span class="nb">echo</span> <span class="s2">"Creating universal library..."</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> bin/macosx
+lipo <span class="nt">-create</span> <span class="k">${</span><span class="nv">MACOSX_STATIC_ARCHIVES</span><span class="k">}</span> <span class="nt">-output</span> bin/macosx/libcryptopp.a
+
+<span class="nb">echo</span> <span class="s2">"removing thin archs"</span>
+<span class="k">for </span>ARCH <span class="k">in</span> <span class="k">${</span><span class="nv">ARCHS</span><span class="k">}</span>
+<span class="k">do
+    </span><span class="nv">directoryName</span><span class="o">=</span>MACOSX_BUILD_<span class="k">${</span><span class="nv">ARCH</span><span class="k">}</span>
+    <span class="nb">rm</span> <span class="nt">-rf</span> <span class="k">${</span><span class="nv">directoryName</span><span class="k">}</span>
+<span class="k">done
+
+</span><span class="nb">echo</span> <span class="s2">"Build done!"</span>
+</code></pre></div></div>
+
+<h3 id="2使用">2.使用</h3>
+
+<p>下面就MD5加密进行示例如何使用，更多其他的使用方式请参考官方的文档：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// md5
+// 引用头文件`md5.h`
+- (NSString *)getMD5String:(NSString *)str {
+    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    if(!data || data.length &lt;= 0) {
+        return nil;
+    }
+    CryptoPP::MD5 md5;
+    byte digest[CryptoPP::MD5::DIGESTSIZE];
+    md5.CalculateDigest(digest, (const byte*)[data bytes], [data length]);
+    NSData *md5Dat = [NSData dataWithBytes:digest length:sizeof digest];
+    NSMutableString *s = [NSMutableString string];
+    unsigned char *hashValue = (byte *)[md5Dat bytes];
+    int i;
+    for (i = 0; i &lt; [md5Dat length]; i++) {
+        [s appendFormat:@"%02x", hashValue[i]];
+    }
+    return s;
+}
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://www.cnblogs.com/cocoajin/p/6112562.html">Cryptopp iOS 使用 RSA加密解密和签名验证签名</a></p>
+
+<p>2、<a href="https://www.cryptopp.com/docs/ref/">官方文档</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/hello-flutter.html" title="link to Flutter开发初探">Flutter开发初探</a></h2>
+       <p class="excerpt">Flutter是由谷歌创建的一个框架，用于构建“现代移动应用”。目前它还处于beta阶段，不过它的文档和相关工具十分齐全，有些移动应用已经在使用Flutter。开发环境搭建由于在国内访问Flutter有时可能会受到限制，可以通过如下的配置使用国内的镜像(可以在一定程度上加快下载的速度)：export PUB_HOSTED_URL=https://pub.flutter-io.cnexport FLUTTER_STORAGE_BASE_URL=https://storage.flutter-...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-11-11 18:46:37 +0800" class="post-list__meta--date date">2018-11-11</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/hello-flutter.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-masonry-source.html" title="link to iOS中Masonry源码分析">iOS中Masonry源码分析</a></h2>
+       <p class="excerpt">Masonry是一个轻量级的iOS布局框架，使用一套更加方便的语法来对AutoLayout进行包装。它拥有自己的描述语法(DSL)， 采用更优雅的链式语法封装了AutoLayout，简介明了并具备高可读性。同时支持iOS和macOS。AutoLayout需求：在父视图上面创建一个绿色的视图，要求距父视图的边距都是10，使用代码方式实现方式如下：(1) 创建视图控件创建一个UIView视图，并把它添加到父视图上面：UIView *view1 = [[UIView alloc] init];v...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-09-01 13:22:56 +0800" class="post-list__meta--date date">2018-09-01</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-masonry-source.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

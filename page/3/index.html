@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>曾静的博客</title>
+  <meta name="description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="曾静的博客">
+  <meta name="twitter:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="曾静的博客">
+  <meta property="og:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/page/3/">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover " style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list hidden">
+
+  <ol class="post-list">
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/scrapy-run-on-docker.html" title="访问 在Docker上运行Scrapy">在Docker上运行Scrapy</a></h2>
+      <p class="excerpt">之前使用Scrapy写过一个空气质量的采集程序，最近要切换到另外一台服务器上面去，折腾了几个小时的安装环境还是没跑起来。几次之后就放弃了，刚好那台服务器上面安装了Docker的环境，运行了一个Nexus的服务几个月来一直都很稳定，那为啥不可以把Scrapy也放在上面运行呢？操作过程下面记录下我的处理的过程：（1）创建dockfile在scrapy.cfg文件所在的目录下面创建dockfile，里面的内容如下：FROM ubuntuMAINTAINER hhtczengjing@gmail....&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-10-10 10:08:00 +0800" class="post-list__meta--date date">2017-10-10</time> &#8226; <span class="post-list__meta--tags tags">Docker</span><a class="btn-border-small" href=/blog/scrapy-run-on-docker.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/install-hadoop-in-centos.html" title="访问 CentOS安装Hadoop">CentOS安装Hadoop</a></h2>
+      <p class="excerpt">系统环境下载软件：  （1）JDK  （2）Hadoop  （3）MySQL  （4）Hive  （5）HBase  （6）Zookeeper1、服务器配置（1）修改主机名将192.168.13.1、192.168.13.2 和 192.168.13.3 这三台机器分别命名为hadoop-master、hadoop-slave1 和 hadoop-slave2。1） 修改/etc/sysconfig/network文件修改HOSTNAME=localhost.localdomain为HOS...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-09-10 10:08:00 +0800" class="post-list__meta--date date">2017-09-10</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/install-hadoop-in-centos.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/load-excel-data-with-kettle.html" title="访问 使用Kettle导入Excel数据">使用Kettle导入Excel数据</a></h2>
+      <p class="excerpt">ETL（Extraction, Transformation, and Loading），在日常的工作中我们经常会遇到各种数据的处理，转换，迁移。比如将Excel的数据导入到数据库，将SQLServer里面的数据转换后存到Oracle，将数据库的数据提取到文本等。最开始都是使用写代码然后进行处理，多了几次之后就觉得麻烦了。后来了解到Kettle这个工具，首先无需安装直接就能使用，支持图形化的GUI设计界面，然后可以以工作流的形式流转，在做一些简单或复杂的数据抽取、质量检测、数据清洗、数据转...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-08-20 10:08:00 +0800" class="post-list__meta--date date">2017-08-20</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/load-excel-data-with-kettle.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/build-docker-image-with-dockerfile.html" title="访问 使用Dockerfile构建Docker镜像">使用Dockerfile构建Docker镜像</a></h2>
+      <p class="excerpt">Docker中有个非常重要的概念叫做——镜像（Image）。Docker 镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-08-01 08:08:00 +0800" class="post-list__meta--date date">2017-08-01</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/build-docker-image-with-dockerfile.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/centos-nexus-install.html" title="访问 Maven私有库Nexus的安装和使用">Maven私有库Nexus的安装和使用</a></h2>
+      <p class="excerpt">在进行Java开发的时候，通常会使用Maven进行第三方库的管理，类似于iOS中的Cocoapods。我们在使用Cocoapods的时候都感受过更新索引库Specs的痛苦，使用Maven的时候依赖库也是从中央库(Central Repository)下载，速度可想而知会很慢。另外如果我们内部开发了一些基础的工具库，又不太方便托管到Central Repository的时候怎么办呢？参考Cocoapods我们可以搭建内部的私有库来解决这些问题。Nexus 是Maven仓库管理器，如果你使用M...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-07-22 00:08:00 +0800" class="post-list__meta--date date">2017-07-22</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/centos-nexus-install.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/install-docker-in-centos.html" title="访问 CentOS安装Docker">CentOS安装Docker</a></h2>
+      <p class="excerpt">之前写过一篇关于在Mac上面使用并安装Docker的文章《Mac上Docker的安装和使用初探》，介绍了在Macos上面安装Docker的步骤。近期由于需要在一台CentOS 6.5的服务器上面部署一些服务，考虑到使用Docker来做这些事情，记录一下处理的步骤。检查内核版本uname -r如果输出的信息为2.6.32-431.el6.centos.plus.x86_64，表示当前的内核版本是2.6.32。docker需要的内核版本是3.10，所以需要升级Linux的内核，升级的步骤如下：...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-07-21 11:08:00 +0800" class="post-list__meta--date date">2017-07-21</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/install-docker-in-centos.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios-ocr-with-tesseract.html" title="访问 iOS中使用Tesseract提取身份证号码">iOS中使用Tesseract提取身份证号码</a></h2>
+      <p class="excerpt">OCR （Optical Character Recognition，光学字符识别）是指电子设备（例如扫描仪或数码相机）检查纸上打印的字符，通过检测暗、亮的模式确定其形状，然后用字符识别方法将形状翻译成计算机文字的过程。通俗来说就是通过对图像进行处理提取裁剪出来有字符的区域然后对字符进行识别翻译成文字。上面的图片是来自于Baidu的在线OCR识别。本文是基于tesseract-ocr（Tesseract是一个开源的OCR引擎，可以识别多种格式的图像文件并将其转换成文本，目前已支持包括中文在...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-07-15 11:08:00 +0800" class="post-list__meta--date date">2017-07-15</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-ocr-with-tesseract.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/eclipse-tomcat-launch-error.html" title="访问 Eclipse无法正常启动Tomcat项目解决办法">Eclipse无法正常启动Tomcat项目解决办法</a></h2>
+      <p class="excerpt">以前一直使用 MyEclipse 开发 JavaEE 项目，实在是太卡了，近期将之前的项目全部迁移到了 Eclipse 上面。一段时间内都好好的，这两天突然发现启动 Tomcat 不正常了，具体表现如下：（1）Tomcat 在 Eclipse 里面能正常启动，但在浏览器中访问http://localhost:8080/报404错误。也就是说 Tomcat 启动了但是里面部署的 web 项目没有启动。（2）关闭 Eclipse 里面的 Tomcat，在 Tomcat 安装目录下双击start...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-06-07 21:51:00 +0800" class="post-list__meta--date date">2017-06-07</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/blog/eclipse-tomcat-launch-error.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/jersey-swagger-api.html" title="访问 Jersey整合Swagger自动生成API文档">Jersey整合Swagger自动生成API文档</a></h2>
+      <p class="excerpt">之前写过一篇文章《使用Jersey开发REST服务》，里面简单介绍了使用Jersey来快速创建REST的API服务。REST API都是要对外提供服务的，那么文档是必须的。经常要给其他人员提供文档，每次都是要不断的维护word/excel的文件，挺麻烦的。能不能做到自动生成呢？答案是可以的，swagger就是这样的一个组件帮助我们快速生成，让开发人员只需要关注功能的开发即可，后续的工作就交给Swagger就好了。下面简单介绍下如何在Jersey的项目中集成Swagger。1、pom.xml...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-05-04 21:51:00 +0800" class="post-list__meta--date date">2017-05-04</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/blog/jersey-swagger-api.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/openssl-windows-compile.html" title="访问 Windows环境下OpenSSL的编译和使用">Windows环境下OpenSSL的编译和使用</a></h2>
+      <p class="excerpt">OpenSSL是目前使用的非常广泛的加密算法库，基本上我们日常使用到的HTTPS、SSH都离不开它的身影。本文就在Windows环境下面编译最新版本的OpenSSL的步骤进行整理。编译OpenSSL1.编译环境准备(1) perlOpenSSL的编译需要使用到perl的环境，如果之前安装过可以跳过此步骤。1) 下载perl安装包根据操作系统的版本下载对应最新版本的perl（当前最新的版本是5.22.3.2204），下载地址是：https://www.activestate.com/acti...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-04-08 19:00:00 +0800" class="post-list__meta--date date">2017-04-08</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/blog/openssl-windows-compile.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+  </ol>
+
+  <hr class="post-list__divider " />
+
+<nav class="pagination" role="navigation">
+    
+        <a class="newer-posts pagination__newer btn btn-small btn-tertiary" href="/page/2/#blog">&larr; 最近</a>
+    
+    <span class="pagination__page-number">3 / 11</span>
+    
+        <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/4/#blog">更早 &rarr;</a>
+    
+</nav>
+
+
+</div>
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

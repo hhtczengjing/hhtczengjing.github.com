@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发之同一应用设置不同图标和名称</title>
+  <meta name="description" content="经常在开发中遇到同一个App会有很多渠道版本，比如OTA内部测试版本，AppStore发布版本等。针对这些不同的版本我们通常会选择不同的图标、应用名称等，效果如下图所示：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发之同一应用设置不同图标和名称">
+  <meta name="twitter:description" content="经常在开发中遇到同一个App会有很多渠道版本，比如OTA内部测试版本，AppStore发布版本等。针对这些不同的版本我们通常会选择不同的图标、应用名称等，效果如下图所示：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发之同一应用设置不同图标和名称">
+  <meta property="og:description" content="经常在开发中遇到同一个App会有很多渠道版本，比如OTA内部测试版本，AppStore发布版本等。针对这些不同的版本我们通常会选择不同的图标、应用名称等，效果如下图所示：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-two-version-app-setting-profile.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-09-06 22:01:47 +0800" itemprop="datePublished" class="post-meta__date date">2014-09-06</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS开发之同一应用设置不同图标和名称</h1>
+  </header>
+
+  <section class="post">
+    <p>经常在开发中遇到同一个App会有很多渠道版本，比如OTA内部测试版本，AppStore发布版本等。针对这些不同的版本我们通常会选择不同的图标、应用名称等，效果如下图所示：</p>
+
+<p><img src="/images/ios-two-version-app/demo_preview.png" alt="demo_preview.png" /></p>
+
+<p>P.S上面使用的两个测试图标分别来源于<code class="highlighter-rouge">土巴兔</code>和<code class="highlighter-rouge">乐视TV</code>的iPhone版本APP的图标，是两个非常不错的APP，感谢你们。</p>
+
+<p>##Bundle ID</p>
+
+<p>iOS系统区分不同的App是否相同是根据App的Bundle ID是否相同来判断的。如果想要在一个系统上安装一个App的多个版本其实是需要多个Bundle ID，就是说正式版一个Bundle ID，测试版一个Bundle ID。比如我们正式版(发布到AppStore上)的Bundle ID是<code class="highlighter-rouge">com.devzeng.myappappstore</code>，内部OTA测试版本的Bundle ID是<code class="highlighter-rouge">com.devzeng.myappota</code>.</p>
+
+<p>##Build Configuration
+默认Xcode会提供2个Build配置项(Build Configuration):Debug和Release。一般来说这样两种情况就足够了，但是在有些时候我们需要添加一个新的配置项，添加一个新的配置项的步骤如下：</p>
+
+<p>1、方式一：选中<code class="highlighter-rouge">PROJECT</code>的名称，然后选中<code class="highlighter-rouge">Info</code>，点击<code class="highlighter-rouge">Configurations</code>下面的<code class="highlighter-rouge">+</code>选择<code class="highlighter-rouge">Duplicate "Debug" Configuration</code>,如下图：</p>
+
+<p><img src="http://blog.devzeng.com/images/ios-two-version-app/build_setting_01.png" alt="build_setting_01.png" /></p>
+
+<p>2、方式二：选中<code class="highlighter-rouge">PROJECT</code>的名称，然后选中<code class="highlighter-rouge">Editor</code>-&gt;<code class="highlighter-rouge">Add Configuration</code>-&gt;<code class="highlighter-rouge">Duplicate "Debug" Configuration</code>，如下图所示：</p>
+
+<p><img src="/images/ios-two-version-app/build_setting_02.png" alt="build_setting_02.png" /></p>
+
+<p>##User-Defined Setting</p>
+
+<p>在Xcode中使用<code class="highlighter-rouge">User-Defined Setting</code>可以定义一些Xcode编译使用的宏配置，为了实现不同环境下App显示的名称和图标不同，可以在<code class="highlighter-rouge">User-Defined Setting</code>中定义一些有关应用程序名称和应用图标的配置。</p>
+
+<p>1、开启<code class="highlighter-rouge">User-Defined Setting</code>，如下图：</p>
+
+<p><img src="/images/ios-two-version-app/user-defined-01.png" alt="user-defined-01.png" /></p>
+
+<p>2、添加<code class="highlighter-rouge">APP_DISPLAY_NAME</code>(APP的名称)、<code class="highlighter-rouge">APP_ICON_NAME</code>(APP图标名称)和<code class="highlighter-rouge">BUNDLE_IDENTIFIER</code>（APP Bundle ID）三个配置选项，效果如下图：</p>
+
+<p><img src="/images/ios-two-version-app/user-defined-02.png" alt="user-defined-02.png" /></p>
+
+<p>##Info.plist配置</p>
+
+<p>关于常见的Info.plist的一些配置可以参考<a href="http://blog.devzeng.com/blog/ios-info-dot-plist-config.html">《iOS中Info.plist文件的常见配置》</a>。</p>
+
+<p>1、配置应用的图标</p>
+
+<p>使用<code class="highlighter-rouge">${APP_ICON_NAME}.png</code>、<code class="highlighter-rouge">${APP_ICON_NAME}@2x.png</code>和<code class="highlighter-rouge">${APP_ICON_NAME}-120@2x.png</code>替代图标的名称。</p>
+
+<p><img src="/images/ios-two-version-app/info_plist_icon_name.png" alt="info_plist_icon_name.png" /></p>
+
+<p>2、配置应用的名称</p>
+
+<p>设置<code class="highlighter-rouge">Bundle display name</code>为<code class="highlighter-rouge">${APP_DISPLAY_NAME}</code>，其中<code class="highlighter-rouge">APP_DISPLAY_NAME</code>是前面<code class="highlighter-rouge">User-Defined Setting</code>中设置的应用程序名称的配置项。</p>
+
+<p><img src="/images/ios-two-version-app/info_plist_display_name.png" alt="info_plist_display_name.png" /></p>
+
+<p>3、配置Bundle ID,用于区分不同的版本</p>
+
+<p>设置<code class="highlighter-rouge">Bundle identifier</code>为<code class="highlighter-rouge">${BUNDLE_IDENTIFIER}</code>，其中<code class="highlighter-rouge">BUNDLE_IDENTIFIER</code>是前面<code class="highlighter-rouge">User-Defined Setting</code>中设置的应用程序Bundle ID的配置项。</p>
+
+<p><img src="/images/ios-two-version-app/info_plist_bundle_id.png" alt="info_plist_bundle_id.png" /></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://nilsou.com/blog/2013/07/29/how-to-have-two-versions-of-the-same-app-on-your-device/">《How to Have Two Versions of the Same App on Your Device》</a></p>
+
+<p>2、<a href="http://joeyio.com/ios/2013/08/16/how-to-have-two-versions-of-the-same-app-on-your-device/">《如何在一个设备上安装一个App的两个不同版本》</a></p>
+
+<p>3、<a href="http://stackoverflow.com/questions/19842746/adding-a-build-configuration-in-xcode">《Adding a build configuration in Xcode》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-xcode-search-paths.html" title="link to iOS开发中的Search Paths设置">iOS开发中的Search Paths设置</a></h2>
+       <p class="excerpt">在iOS开发中经常遇到一些关于路径的设置，比如引入了百度地图的SDK，项目拷贝到其他的电脑上或者多人同时开发的时候容易报Library Not Found的错误，或者是引入第三方库比如ASIHttpRequest/RETableView经常报#include &lt;&gt;的错误这就需要配置一些搜索路径。##Framework/Library Search Paths1、Framework Search Paths附加到项目中的framework(.framework bundles)的...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-09-14 18:34:42 +0800" class="post-list__meta--date date">2014-09-14</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-xcode-search-paths.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-multithead-of-gcd.html" title="link to iOS多线程之GCD">iOS多线程之GCD</a></h2>
+       <p class="excerpt">Grand Central Dispatch(简称GCD)是Apple在Mac OS X 10.6和iOS4.0中首次引入的一个多核并行运算的解决方案。GCD是基于C语言的，如果使用GCD完全由系统管理线程，开发者不需要编写线程代码，只需专注定义想要只需的任务，然后添加到适当的Dispatch Queue(调度队列)。GCD是一个可用来替代NSThread、NSOperation、NSOperataionQueue等技术的一个非常强大的解决方案。GCD在工作时会自动利用更多的处理器核心以充...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-31 16:04:42 +0800" class="post-list__meta--date date">2014-08-31</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-multithead-of-gcd.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

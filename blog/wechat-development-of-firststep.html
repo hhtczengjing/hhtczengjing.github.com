@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>微信公众平台开发之开启开发者模式</title>
+  <meta name="description" content="说起来接触微信公众平台账号开发差不多快有半年了，在这期间利用零散的时间也开发了个企业服务号。经过这个公众账号的开发，对目前微信公众平台的开放的API算是比较熟悉了，对于常见的消息类型（text、news、music、voice、location等）等都有了一些认识和在使用过程中的技巧有了一定的认识。在开发过程中遇...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="微信公众平台开发之开启开发者模式">
+  <meta name="twitter:description" content="说起来接触微信公众平台账号开发差不多快有半年了，在这期间利用零散的时间也开发了个企业服务号。经过这个公众账号的开发，对目前微信公众平台的开放的API算是比较熟悉了，对于常见的消息类型（text、news、music、voice、location等）等都有了一些认识和在使用过程中的技巧有了一定的认识。在开发过程中遇...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="微信公众平台开发之开启开发者模式">
+  <meta property="og:description" content="说起来接触微信公众平台账号开发差不多快有半年了，在这期间利用零散的时间也开发了个企业服务号。经过这个公众账号的开发，对目前微信公众平台的开放的API算是比较熟悉了，对于常见的消息类型（text、news、music、voice、location等）等都有了一些认识和在使用过程中的技巧有了一定的认识。在开发过程中遇...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/wechat-development-of-firststep.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-07-27 15:47:07 +0800" itemprop="datePublished" class="post-meta__date date">2014-07-27</time> &#8226; <span class="post-meta__tags tags">WeChat</span>
+    </div>
+    <h1 class="post-title">微信公众平台开发之开启开发者模式</h1>
+  </header>
+
+  <section class="post">
+    <p>说起来接触微信公众平台账号开发差不多快有半年了，在这期间利用零散的时间也开发了个企业服务号。经过这个公众账号的开发，对目前微信公众平台的开放的API算是比较熟悉了，对于常见的消息类型（text、news、music、voice、location等）等都有了一些认识和在使用过程中的技巧有了一定的认识。在开发过程中遇到的一些问题也有了一些领悟，所以想将一些经验分享出来，让大家共同进步。</p>
+
+<h2 id="开发者模式配置">开发者模式配置</h2>
+
+<p>1、在浏览器中输入<code class="highlighter-rouge">https://mp.weixin.qq.com</code>或<a href="https://mp.weixin.qq.com">点此打开微信后台界面</a></p>
+
+<p><img src="/images/wechat_develop/wechat_login.png" alt="微信后台登录界面" /></p>
+
+<p>2、申请消息接口:登录成功后选择<code class="highlighter-rouge">开发者中心</code>-&gt;<code class="highlighter-rouge">填写服务器配置</code>，微信公众平台提供的高级功能包含两种模式：<code class="highlighter-rouge">编辑模式</code>和<code class="highlighter-rouge">开发模式</code>，并且这两种模式是互斥关系，即两种模式不能同时开启。</p>
+
+<p>那两种模式有什么区别呢？作为开发人员到底要开启哪一种呢？</p>
+
+<ul>
+  <li>
+    <p>编辑模式：主要针对非编程人员及信息发布类公众帐号使用。开启该模式后，可以方便地通过界面配置“自定义菜单”和“自动回复的消息”。</p>
+  </li>
+  <li>
+    <p>开发模式：主要针对具备开发能力的人使用。开启该模式后，能够使用微信公众平台开放的接口，通过编程方式实现自定义菜单的创建、用户消息的接收/处理/响应。这种模式更加灵活，建议有开发能力的公司或个人都采用该模式。</p>
+  </li>
+</ul>
+
+<p><img src="/images/wechat_develop/wechat_config.png" alt="微信后台登录界面" /></p>
+
+<p>这里需要填写<code class="highlighter-rouge">URL</code>和<code class="highlighter-rouge">Token</code>两个值。URL指的是能够接收处理微信服务器发送的GET/POST请求的地址，并且是已经存在的，现在就能够在浏览器访问到的地址，这就要求我们先把公众帐号后台处理程序开发好（至少应该完成了对GET请求的处理）并部署在公网服务器上。</p>
+
+<p>3、验证URL有效性</p>
+
+<p>开发者提交信息后，微信服务器将发送GET请求到填写的URL上，GET请求携带四个参数：</p>
+
+<ul>
+  <li>signature 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp、nonce参数。</li>
+  <li>timestamp 时间戳</li>
+  <li>nonce 随机数</li>
+  <li>echostr 随机字符串</li>
+</ul>
+
+<p>开发者通过检验signature对请求进行校验（下面有校验方式）。若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>加密/校验流程如下：
+1. 将token、timestamp、nonce三个参数进行字典序排序
+2. 将三个参数字符串拼接成一个字符串进行sha1加密
+3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
+</code></pre></div></div>
+
+<p>#####PHP版验证URL有效性</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private function checkSignature()
+{
+	$signature = $_GET["signature"];
+    $timestamp = $_GET["timestamp"];
+    $nonce = $_GET["nonce"];
+    	
+	$token = TOKEN;
+	$tmpArr = array($token, $timestamp, $nonce);
+	sort($tmpArr, SORT_STRING);
+	$tmpStr = implode($tmpArr);
+	$tmpStr = sha1($tmpStr);
+	
+	if($tmpStr == $signature){
+		return true;
+	}else{
+		return false;
+	}
+}
+</code></pre></div></div>
+
+<p>#####Java版验证URL有效性</p>
+
+<p>(1)获取signature、timestamp、nonce和echostr四个参数</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 微信加密签名
+		String signature = request.getParameter("signature");
+		// 时间戳
+		String timestamp = request.getParameter("timestamp");
+		// 随机数
+		String nonce = request.getParameter("nonce");
+		// 随机字符串
+		String echostr = request.getParameter("echostr");
+
+		PrintWriter out = response.getWriter();
+		// 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
+		if (SignUtil.checkSignature(signature, timestamp, nonce)) {
+			out.print(echostr);
+		}
+		out.close();
+		out = null;
+	}
+</code></pre></div></div>
+
+<p>(2)验证签名</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static boolean checkSignature(String signature, String timestamp, String nonce) {
+	String[] arr = new String[] { token, timestamp, nonce };
+	// 将token、timestamp、nonce三个参数进行字典序排序
+	Arrays.sort(arr);
+	StringBuilder content = new StringBuilder();
+	for (int i = 0; i &lt; arr.length; i++) {
+		content.append(arr[i]);
+	}
+	MessageDigest md = null;
+	String tmpStr = null;
+
+	try {
+		md = MessageDigest.getInstance("SHA-1");
+		// 将三个参数字符串拼接成一个字符串进行sha1加密
+		byte[] digest = md.digest(content.toString().getBytes());
+		tmpStr = byteToStr(digest);
+	} catch (NoSuchAlgorithmException e) {
+		e.printStackTrace();
+	}
+
+	content = null;
+	// 将sha1加密后的字符串可与signature对比，标识该请求来源于微信
+	return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
+}
+	
+//将字节数组转换为十六进制字符串
+private static String byteToStr(byte[] byteArray) {
+	String strDigest = "";
+	for (int i = 0; i &lt; byteArray.length; i++) {
+		strDigest += byteToHexStr(byteArray[i]);
+	}
+	return strDigest;
+}
+
+//将字节转换为十六进制字符串
+private static String byteToHexStr(byte mByte) {
+	char[] di={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
+	char[] tempArr = new char[2];
+	tempArr[0] = di[(mByte &gt;&gt;&gt; 4) &amp; 0X0F];
+	tempArr[1] = di[mByte &amp; 0X0F];
+
+	String s = new String(tempArr);
+	return s;
+}
+</code></pre></div></div>
+
+<p>###注意事项</p>
+
+<ul>
+  <li>
+    <p>验证成功后返回的字符串必须为<code class="highlighter-rouge">echostr</code>这个，否则验证不会成功</p>
+  </li>
+  <li>
+    <p>接口配置里面写的Token和代码里面校验用的<code class="highlighter-rouge">Token</code>是指的同一个字符串</p>
+  </li>
+</ul>
+
+<p>4、成为开发者</p>
+
+<p>验证URL有效性成功后即接入生效，成为开发者。如果公众号类型为服务号（订阅号只能使用普通消息接口），可以在公众平台网站中申请认证，认证成功的服务号将获得众多接口权限，以满足开发者需求。</p>
+
+<p>此后用户每次向公众号发送消息、或者产生自定义菜单点击事件时，响应URL将得到推送。</p>
+
+<p>公众号调用各接口时，一般会获得正确的结果，具体结果可见对应接口的说明。返回错误时，可根据返回码来查询错误原因。<a href="http://mp.weixin.qq.com/wiki/index.php?title=全局返回码说明">全局返回码说明</a></p>
+
+<p>用户向公众号发送消息时，公众号方收到的消息发送者是一个OpenID，是使用用户微信号加密后的结果，每个用户对每个公众号有一个唯一的OpenID。</p>
+
+<p><code class="highlighter-rouge">此外请注意，微信公众号接口只支持80接口。</code></p>
+
+<p>##参考资料
+1、<a href="http://mp.weixin.qq.com/wiki/index.php?title=接入指南">《接入指南》</a></p>
+
+<p>2、<a href="http://mp.weixin.qq.com/wiki/index.php?title=全局返回码说明">《全局返回码说明》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/lyq8479/article/details/8944988">《[027] 微信公众帐号开发教程第3篇-开发模式启用及接口配置》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/oc-associated-objects.html" title="link to Objective-C中的Associated Objects">Objective-C中的Associated Objects</a></h2>
+       <p class="excerpt">Associated Objects(关联对象)或者叫做关联引用(Associated References)，是作为Objective-C 2.0运行时功能被引入到Mac OS 10.6 Snow Leopard(及iOS4)系统。与它相关在&lt;objc/rumtime.h&gt;中有3个C函数，他们可以让对象在运行时关联任何值：(1)用给定的key和policy来为指定对象(object)设置关联对象值(value)void objc_setAssociatedObject(id ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-28 21:50:11 +0800" class="post-list__meta--date date">2014-07-28</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/oc-associated-objects.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-multithead-of-nsthread.html" title="link to iOS多线程之NSThread">iOS多线程之NSThread</a></h2>
+       <p class="excerpt">iOS创建线程的方式有三种，分别是NSThread、NSOperation和GCD。这样三种编程方式从上到下，抽象度层次是由低到高，抽象度越高的使用越简单，也是Apple最推荐使用的。这里主要是介绍NSThread的相关使用要点，后续会继续介绍NSOperation和GCD的使用方法。创建线程对于多线程的开发，iOS系统提供了多种不同的接口，先谈谈iOS多线程最基础方面的使用。产生线程的方式姑且分两类，一类是显式调用，另一类是隐式调用。显式创建线程(1)采用NSThread的detachN...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-27 01:23:37 +0800" class="post-list__meta--date date">2014-07-27</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-multithead-of-nsthread.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

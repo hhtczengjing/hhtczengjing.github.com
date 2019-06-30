@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>将博客从GitHub迁移到GitCafe</title>
+  <meta name="description" content="最近一直使用Github Pages功能以及Octopress来记录自己在学习和生活中的琐事，之前也写了一篇文章《Hello Octopress》来分享如何在GitHub使用Octopress来搭建博客的技术细节。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="将博客从GitHub迁移到GitCafe">
+  <meta name="twitter:description" content="最近一直使用Github Pages功能以及Octopress来记录自己在学习和生活中的琐事，之前也写了一篇文章《Hello Octopress》来分享如何在GitHub使用Octopress来搭建博客的技术细节。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="将博客从GitHub迁移到GitCafe">
+  <meta property="og:description" content="最近一直使用Github Pages功能以及Octopress来记录自己在学习和生活中的琐事，之前也写了一篇文章《Hello Octopress》来分享如何在GitHub使用Octopress来搭建博客的技术细节。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/change-blog-host-to-gitcafe.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-07-13 14:51:57 +0800" itemprop="datePublished" class="post-meta__date date">2014-07-13</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">将博客从GitHub迁移到GitCafe</h1>
+  </header>
+
+  <section class="post">
+    <p>最近一直使用<a href="https://pages.github.com/">Github Pages功能</a>以及<a href="http://octopress.org/">Octopress</a>来记录自己在学习和生活中的琐事，之前也写了一篇文章<a href="/blog/hello-octopress.html">《Hello Octopress》</a>来分享如何在GitHub使用Octopress来搭建博客的技术细节。</p>
+
+<p>但是最近发现一个很头疼的问题就是博客的访问速度实在是很慢，虽然做了一部分的优化，比如将GOOGLE的字体和jQuery的链接移除，但整体来看速度还是没有明显的提升，最近看到网上有资料提到可以将博客转移到GitCafe的方法，周末闲来无事就将博客内容镜像到<a href="http://gitcafe.com/signup?invited_by=zengjing">GitCafe</a>上。</p>
+
+<p>以下为大家介绍详细的迁移过程。</p>
+
+<h2 id="迁移教程">迁移教程</h2>
+
+<h3 id="注册">注册</h3>
+
+<p>如果你还没有注册过<a href="http://gitcafe.com/signup?invited_by=zengjing">GitCafe</a>，首先需要<a href="https://gitcafe.com/signup">点这里</a>注册一下。</p>
+
+<p><img src="/images/gitcafe/gitcafe-signup.png" alt="注册用户" /></p>
+
+<h3 id="在gitcafe上新建一个博客项目">在GitCafe上新建一个博客项目</h3>
+
+<p>然后我们需要先在GitCafe上新建一个博客项目。GitCafe的博客搭建官方教程藏得比较深，所以我第一次还没有找到，教程地址在<a href="https://gitcafe.com/GitCafe/Help/wiki/Pages-%E7%9B%B8%E5%85%B3%E5%B8%AE%E5%8A%A9#wiki">这里</a>。具体来说，就是创建一个与用户名(如果是组织，就是组织名)相同名称的项目。如果你创建的项目名与用户名相同，GitCafe会自动识别成这是一个Page项目，如下所示：</p>
+
+<p><img src="/images/gitcafe/gitcafe-create-page.png" alt="创建新项目" /></p>
+
+<h3 id="设置多个git-remote源">设置多个Git Remote源</h3>
+
+<p>接下来我们需要将原本提交到Github上的博客内容同步提交到GitCafe。因为我的博客是基于<a href="http://octopress.org/">Octopress</a>的，我介绍一下Octopress的做法，其它博客引擎的做法类似。
+为简化操作，便于部署，可以直接修改<code class="highlighter-rouge">Rakefile</code>文件。在其大约第269行左右增加如下代码，也可以达到同样的目的，这样你每次就仍然只需要执行<code class="highlighter-rouge">rake deploy</code>即可同时将博客同步到github和gitcafe【替换YOUR_GITCAFE_SOURCE为你对应的GitCafe源地址】：</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">system</span> <span class="s2">"git remote add gitcafe YOUR_GITCAFE_SOURCE &gt;&gt; /dev/null 2&gt;&amp;1"</span>
+<span class="nb">system</span> <span class="s2">"git push -u gitcafe master:gitcafe-pages"</span>
+</code></pre></div></div>
+
+<p>插入代码的示例位置如下：</p>
+
+<p><img src="/images/gitcafe/gitcafe-edit-rakefile.png" alt="设置Rakefile" /></p>
+
+<h3 id="设置域名">设置域名</h3>
+
+<p>GitCafe的自定义域名设置比github要友好得多，它不但提供了图形界面设置，并且支持同时设置多个域名。在<code class="highlighter-rouge">项目管理</code>-&gt;<code class="highlighter-rouge">域名管理</code>中，我们可以找到相应的设置项，如下所示：</p>
+
+<p><img src="/images/gitcafe/custom_domains.png" alt="自定义域名" /></p>
+
+<p>在设置完之后，我们需要去域名解析的服务商那儿，将对应的域名用<code class="highlighter-rouge">A记录</code>类型，解析到<code class="highlighter-rouge">117.79.146.98</code>即可。</p>
+
+<p><img src="/images/gitcafe/domain_dns.png" alt="域名解析" /></p>
+
+<h2 id="参考资料">参考资料</h2>
+
+<p>1、<a href="http://devtang.com/blog/2014/06/02/use-gitcafe-to-host-blog/">《将博客从GitHub迁移到GitCafe》</a></p>
+
+<p>2、<a href="https://gitcafe.com/GitCafe/Help/wiki/Pages-相关帮助#wiki">《Pages相关帮助》</a></p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-ipa-recodesign.html" title="link to iOS应用程序ipa安装包重签名">iOS应用程序ipa安装包重签名</a></h2>
+       <p class="excerpt">在日常的工作中经常遇到需要将一些应用程序IPA安装包【已经上架到apple app store,或者是别人写的IPA】发给别人来安装，获取是其他渠道获取来的IPA版本，对于普通人来说安装这些ipa文件有点麻烦，需要使用iTools/iFunBox这些软件来进行安装，不能像企业级的IN-HOUSE方式进行部署，直接在网页上下载。最近看到iTools/同步推这样的应用可以直接下载应用程序，而且使用的是企业级证书发布的，排除部分企业是特殊渠道分发的，但是其中一份仍然是使用其他公司的证书进行发布打...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-20 17:24:52 +0800" class="post-list__meta--date date">2014-07-20</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-ipa-recodesign.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-viewcontroller-lifecycle.html" title="link to 浅入浅出iOS应用程序的生命周期">浅入浅出iOS应用程序的生命周期</a></h2>
+       <p class="excerpt">由于iOS设备对于系统资源的使用有诸多限制，一个应用程序在前台与后台有不同的行为。为提高电池使用寿命和用户与前台应用程序的体验，操作系统限制应用程序在后台的运行。当应用程序在前台和后台之间进行切换时，操作系统会通知应用来进行相关的处理。1.应用程序的生命周期iOS的应用程序主要由未运行、未激活、激活、后台和挂起这五个状态组成，每个状态具体的描述如下：状态描述(1)**未运行(Not Running)**：程序未启动(2)**未激活(Inactive)**：程序在前台运行，不过没有接收到事件...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-12 22:37:29 +0800" class="post-list__meta--date date">2014-07-12</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-viewcontroller-lifecycle.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

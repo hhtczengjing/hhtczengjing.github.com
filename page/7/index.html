@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>曾静的博客</title>
+  <meta name="description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="曾静的博客">
+  <meta name="twitter:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="曾静的博客">
+  <meta property="og:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/page/7/">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover " style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list hidden">
+
+  <ol class="post-list">
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/wechat-qiyehao-message-send.html" title="访问 微信企业号开发之消息发送">微信企业号开发之消息发送</a></h2>
+      <p class="excerpt">和服务号不同的是企业号中放开了发送消息的限制，将企业内部的业务需要和微信的消息体系结合起来可以带来更多的便利。在前面也介绍到了在响应用户的请求的时候如果无法及时回应可以直接返回空的消息体，然后调用主动发送消息的接口进行消息的发送来解决这个问题。###发送消息的类型及数据格式1、text消息消息数据格式：{   "touser": "UserID1|UserID2|UserID3",   "toparty": "PartyID1|PartyID2 ",   "totag": "TagID1|...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-11-27 20:37:11 +0800" class="post-list__meta--date date">2014-11-27</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-qiyehao-message-send.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/wechat-qiyehao-message-response.html" title="访问 微信企业号开发之消息与事件的被动响应">微信企业号开发之消息与事件的被动响应</a></h2>
+      <p class="excerpt">企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。本文重点介绍接收到用户的消息请求后如何给用户响应消息。###消息与事件的类型1、text消息消息的明文XML结构：&lt;xml&gt;   &lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;   &lt;...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-11-26 20:43:26 +0800" class="post-list__meta--date date">2014-11-26</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-qiyehao-message-response.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/wechat-qiehao-development-of-message-receive.html" title="访问 微信企业号开发之消息与事件的接收">微信企业号开发之消息与事件的接收</a></h2>
+      <p class="excerpt">企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。将应用设置在回调模式时，企业可以通过回调URL接收员工回复的消息，以及员工关注、点击菜单、上报地理位置等事件。在接收到事件后，企业可以发送被动响应消息，实现员工与企业的互动。企业在接收消息，以及发送被动响应消息时，数据包以xml格式组成，以AES方式加密传输。本文主要介绍如何处...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-11-25 20:52:05 +0800" class="post-list__meta--date date">2014-11-25</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-qiehao-development-of-message-receive.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/wechat-qiyehao-developement-with-url-config-and-verify.html" title="访问 微信企业号开发之开启回调模式">微信企业号开发之开启回调模式</a></h2>
+      <p class="excerpt">企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。本文主要介绍如何使用Java语言进行回调模式的URL验证等内容。###开启回调模式配置1、到应用中心选择需要使用回调模式开发的应用，点击进入后会有如下的模式可供选择：2、选择回调模式点击进入回调模式的配置界面，如下图所示：当你开启应用的回调模式时，企业号会要求你填写应用的URL...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-11-24 19:53:17 +0800" class="post-list__meta--date date">2014-11-24</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-qiyehao-developement-with-url-config-and-verify.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios8-today-extension.html" title="访问 iOS8中Today Extension的使用">iOS8中Today Extension的使用</a></h2>
+      <p class="excerpt">扩展（Extension）是iOS 8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。iOS 8系统有6个支持扩展的系统区域，分别是Today、Share、Action、Photo Editing、Storage Provider、Custom keyboard。支持扩展的系统区域也被称为扩展点。对于赛事比分，股票、天气、快递这类需要实时获取的信息，可以在通知中心的Today视图中创建一个Today扩展实现。...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-11-22 23:49:18 +0800" class="post-list__meta--date date">2014-11-22</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios8-today-extension.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios-settings-bundle.html" title="访问 iOS开发中Settings.bundle的使用">iOS开发中Settings.bundle的使用</a></h2>
+      <p class="excerpt">在iOS开发中很多时候开发者需要让用户自行设置一些系统的配置项目，比如让用户设置是否支持在3G模式下加载数据，或者是让用户自己设置支不支持网络数据缓存的功能。另外在企业级应用开发中经常有需要对后台的访问地址进行调整那么需要用户自行的进行配置，下面是爱奇艺和招商银行的设置配置项：###Settings.bundle配置说明在Settings.bundle中支持如下几种配置项：1、GroupGroup类似于UITableView中的Group分组，用来表示一组设置项，配置如下所示：配置项说明：...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-11-16 16:35:48 +0800" class="post-list__meta--date date">2014-11-16</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-settings-bundle.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/github-code-repository.html" title="访问 使用GitHub进行项目托管">使用GitHub进行项目托管</a></h2>
+      <p class="excerpt">Git 是由 Linux 之父 Linus Tovalds 为了更好地管理linux内核开发而创立的分布式版本控制／软件配置管理软件。目前支持 Windows 、MacOSX 、Linux 等多种主流平台，特点为快速、高效及易于使用。###在GitHub上创建一个新的repository1、在浏览器中输入https://github.com/login登录GitHub.2、登录完成后，点击页面的右上角的加号，选择New repository.3、为repository创建一个简短的、易记的...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-11-01 14:55:26 +0800" class="post-list__meta--date date">2014-11-01</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/github-code-repository.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/handle-url-in-wechat-development.html" title="访问 微信公众平台开发之URL处理">微信公众平台开发之URL处理</a></h2>
+      <p class="excerpt">在微信公众平台开发中会遇到很多地方需要向客户端返回一个URL地址，比如用户点击了界面上的菜单，触发了菜单的事件，后台检测到这个事件之后需要想用户返回一些信息，如果信息是以一段文本来展示的而且里面包含一个阅读更多的超链接，这个该怎么处理呢？熟悉HTML的朋友对超链接一定不会陌生，只要用&lt;a href="URL地址"&gt;这是超链接&lt;/a&gt;这样的形式写一段代码就可以实现一个简单的超链接，用户点击之后会跳转到href属性里配置的URL地址。今天主要介绍的是在微信中如何使用超链...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-10-27 22:28:12 +0800" class="post-list__meta--date date">2014-10-27</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/handle-url-in-wechat-development.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/startssl-free-certificate.html" title="访问 在StartSSL上申请免费SSL证书">在StartSSL上申请免费SSL证书</a></h2>
+      <p class="excerpt">跟VeriSign一样，StartSSL（http://www.startssl.com，公司名：StartCom）也是一家CA机构，它的根证书很久之前就被一些具有开源背景的浏览器支持（Firefox浏览器、谷歌Chrome浏览器、苹果Safari浏览器等）。在去年9月份，StartSSL竟然搞定了微软：微软在升级补丁中，更新了通过Windows根证书认证程序（Windows Root Certificate Program）的厂商清单，并首次将StartCom公司列入了该认证清单，这是微...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-10-20 22:18:54 +0800" class="post-list__meta--date date">2014-10-20</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/startssl-free-certificate.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios-development-by-using-svn.html" title="访问 iOS开发中SVN管理工具的使用">iOS开发中SVN管理工具的使用</a></h2>
+      <p class="excerpt">SVN是Subversion的简称，是一个开放源代码的版本控制系统，相较于RCS、CVS，它采用了分支管理系统，它的设计目标就是取代CVS。互联网上很多版本控制服务已从CVS转移到Subversion。##SVN命令行工具1、从本地导入代码到服务器(第一次初始化导入)，在终端中输入：svn import /Users/apple/Documents/workspace/project svn://hostname/svn/project --username=mj --password=1...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2014-10-18 15:58:25 +0800" class="post-list__meta--date date">2014-10-18</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-development-by-using-svn.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+  </ol>
+
+  <hr class="post-list__divider " />
+
+<nav class="pagination" role="navigation">
+    
+        <a class="newer-posts pagination__newer btn btn-small btn-tertiary" href="/page/6/#blog">&larr; 最近</a>
+    
+    <span class="pagination__page-number">7 / 11</span>
+    
+        <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/8/#blog">更早 &rarr;</a>
+    
+</nav>
+
+
+</div>
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用Jersey开发REST服务</title>
+  <meta name="description" content="REST 是英文 Representational State Transfer 的缩写，有中文翻译为“表述性状态转移”。REST 这个术语是由 Roy Fielding 在他的博士论文 《 Architectural Styles and the Design of Network-based Software...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用Jersey开发REST服务">
+  <meta name="twitter:description" content="REST 是英文 Representational State Transfer 的缩写，有中文翻译为“表述性状态转移”。REST 这个术语是由 Roy Fielding 在他的博士论文 《 Architectural Styles and the Design of Network-based Software...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用Jersey开发REST服务">
+  <meta property="og:description" content="REST 是英文 Representational State Transfer 的缩写，有中文翻译为“表述性状态转移”。REST 这个术语是由 Roy Fielding 在他的博士论文 《 Architectural Styles and the Design of Network-based Software...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/java-restful-with-jersey.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-03-18 18:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-03-18</time> &#8226; <span class="post-meta__tags tags">Java</span>
+    </div>
+    <h1 class="post-title">使用Jersey开发REST服务</h1>
+  </header>
+
+  <section class="post">
+    <p>REST 是英文 <code class="highlighter-rouge">Representational State Transfer</code> 的缩写，有中文翻译为“<code class="highlighter-rouge">表述性状态转移</code>”。REST 这个术语是由 Roy Fielding 在他的博士论文 <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">《 Architectural Styles and the Design of Network-based Software Architectures 》</a>中提出的。REST 并非标准，而是一种开发 Web 应用的架构风格，可以将其理解为一种设计模式。REST 基于 HTTP，URI，以及 XML 这些现有的广泛流行的协议和标准，伴随着 REST，HTTP 协议得到了更加正确的使用。</p>
+
+<p>Jersy是一个业内使用非常广泛的Java Rest框架，本文就Jersey（2.13版本）的快速使用进行简单介绍，如需要了解更多的高级用法请查看官方的文档。</p>
+
+<h3 id="1在pomxml中加入jersey相关依赖">1、在pom.xml中加入jersey相关依赖</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.glassfish.jersey.containers&lt;/groupId&gt;
+    &lt;artifactId&gt;jersey-container-grizzly2-servlet&lt;/artifactId&gt;
+    &lt;version&gt;2.13&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.glassfish.jersey.containers&lt;/groupId&gt;
+    &lt;artifactId&gt;jersey-container-servlet-core&lt;/artifactId&gt;
+    &lt;version&gt;2.13&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.glassfish.jersey.media&lt;/groupId&gt;
+    &lt;artifactId&gt;jersey-media-json-jackson&lt;/artifactId&gt;
+    &lt;version&gt;2.13&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre></div></div>
+
+<h3 id="2配置webxml文件">2、配置web.xml文件</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;servlet&gt;
+    &lt;servlet-name&gt;Jersey REST Service&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.glassfish.jersey.servlet.ServletContainer&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;jersey.config.server.provider.packages&lt;/param-name&gt;
+        &lt;param-value&gt;com.devzeng.demo.api&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;Jersey REST Service&lt;rvlet-name&gt;
+	&lt;url-pattern&gt;/api/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</code></pre></div></div>
+
+<h3 id="3开发">3、开发</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Path("/api")
+public class HelloApiService {
+
+    @POST
+	@Path("save")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String save(@FormParam("data") String data) {
+		return "{\"message\":\"save\"}";
+	}
+	
+	@GET
+	@Path("list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String list(@QueryParam("from") String from, @QueryParam("to") String to) {
+		return "{\"message\":\"list\"}"; 
+	}
+	
+	@GET
+	@Path("detail/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String detail(@PathParam("id") String id) {
+		return "{\"message\":\"detail\"}"; 
+	}
+}
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<h4 id="1跨域问题解决">(1)跨域问题解决</h4>
+
+<p>如果编写的API接口需要给前端进行调用，通常会遇到跨域的问题，可以使用下面的方式进行解决：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Provider
+public class SceduleApiServiceCorsFilter implements ContainerResponseFilter {
+
+	public void filter(ContainerRequestContext creq, ContainerResponseContext cres) throws IOException {
+		cres.getHeaders().add("Access-Control-Allow-Origin", "*");
+        cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+        cres.getHeaders().add("Access-Control-Allow-Credentials", "true");
+        cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+        cres.getHeaders().add("Access-Control-Max-Age", "1209600");
+	}
+	
+}
+</code></pre></div></div>
+
+<h4 id="2json--xml处理">(2)JSON &amp; XML处理</h4>
+
+<p>对于REST的接口通常需要返回的数据格式是JSON、XML。如果每次都是使用JSONObject这样的库来进行拼接，也是一件很麻烦的事情，为何不能直接返回对应的POJO对象呢。Jersey就支持这样的处理，为了让项目结构比较清晰，推荐建立一个单独的package（如com.devzeng.rest.pojo）,在该package创建一个POJO对象<code class="highlighter-rouge">MyCustomBean</code>。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class MyCustomBean {
+
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getAge() {
+        return age;
+    }
+    
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+</code></pre></div></div>
+
+<h5 id="1json处理">1)JSON处理</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@GET
+@Path("hellojson")
+@Produces(MediaType.APPLICATION_JSON)
+public MyCustomBean sayHelloWithJson() {
+    MyCustomBean bean = new MyCustomBean();
+    bean("tom");
+    bean.setAge(20);
+    return bean;
+}
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>① <code class="highlighter-rouge">Produces</code>注解需要指定返回的数据格式是JSON格式(<code class="highlighter-rouge">MediaType.APPLICATION_JSON</code>)。</p>
+
+<p>② 如果启动之后报如下错误：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>org.glassfish.jersey.message.internal.WriterInterceptorExecutor$TerminalWriterInterceptor aroundWriteTo
+</code></pre></div></div>
+
+<p>表示POJO对象没有被序列化成JSON对象，需要添加相关的库，推荐使用<code class="highlighter-rouge">jersey-media-json-jackson</code>模块：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.glassfish.jersey.media&lt;/groupId&gt;
+    &lt;artifactId&gt;jersey-media-json-jackson&lt;/artifactId&gt;
+    &lt;version&gt;2.13&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre></div></div>
+
+<h5 id="2-xml处理">2) XML处理</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@GET
+@Path("helloxml")
+@Produces(MediaType.APPLICATION_XML)
+public MyCustomBean sayHelloWithXML() {
+    MyCustomBean bean = new MyCustomBean();
+    bean("tom");
+    bean.setAge(20);
+    return bean;
+}
+</code></pre></div></div>
+
+<p>① <code class="highlighter-rouge">Produces</code>注解需要指定返回的数据格式是XML格式(<code class="highlighter-rouge">MediaType.APPLICATION_XML</code>)。</p>
+
+<p>② 启动项目之后如果报如下错误：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>org.glassfish.jersey.message.internal.WriterInterceptorExecutor$TerminalWriterInterceptor aroundWriteTo
+</code></pre></div></div>
+
+<p>需要在POJO对象上面加上<code class="highlighter-rouge">@XmlRootElement</code>，<code class="highlighter-rouge">@XmlRootElement</code>表示将一个类或者是枚举类型映射成为一个XML元素。</p>
+
+<h4 id="3中文乱码问题">（3）中文乱码问题</h4>
+
+<p>1) 推荐将项目的所有格式设置为UTF-8;</p>
+
+<p>2) 如果还存在中文乱码的问题，需要将</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1.<a href="https://jersey.java.net/">《Jersey官方文档》</a></p>
+
+<p>2.<a href="https://www.gitbook.com/book/waylau/rest-in-action">《REST 实战》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/openssl-windows-compile.html" title="link to Windows环境下OpenSSL的编译和使用">Windows环境下OpenSSL的编译和使用</a></h2>
+       <p class="excerpt">OpenSSL是目前使用的非常广泛的加密算法库，基本上我们日常使用到的HTTPS、SSH都离不开它的身影。本文就在Windows环境下面编译最新版本的OpenSSL的步骤进行整理。编译OpenSSL1.编译环境准备(1) perlOpenSSL的编译需要使用到perl的环境，如果之前安装过可以跳过此步骤。1) 下载perl安装包根据操作系统的版本下载对应最新版本的perl（当前最新的版本是5.22.3.2204），下载地址是：https://www.activestate.com/acti...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-04-08 19:00:00 +0800" class="post-list__meta--date date">2017-04-08</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/blog/openssl-windows-compile.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-ci-with-jenkins.html" title="link to iOS中使用Jenkins搭建持续集成环境">iOS中使用Jenkins搭建持续集成环境</a></h2>
+       <p class="excerpt">在持续集成(Continuous integration，简称CI)这块，Jenkins无疑是目前使用的比较多的一个开源框架。本文就如何快速搭建一个iOS的持续集成环境进行介绍。Jenkins安装系统要求：必须安装JDK 1.5以上版本，推荐安装最新版本的JDK。可以通过java -version查看是否安装JDK。$ java -version java version "1.8.0_91"Java(TM) SE Runtime Environment (build 1.8.0_91-b...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-02-25 19:00:00 +0800" class="post-list__meta--date date">2017-02-25</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-ci-with-jenkins.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

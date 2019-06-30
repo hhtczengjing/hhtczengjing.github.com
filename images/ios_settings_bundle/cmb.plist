@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Title</key>
+			<string>设置</string>
+			<key>FooterText</key>
+			<string>设置新的时间不会影响已进入后台的程序，下次进入后台时生效。</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>后台保持在线时长</string>
+			<key>Key</key>
+			<string>kSettingIdentifier_BackgroundOnlineTime</string>
+			<key>DefaultValue</key>
+			<integer>5</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>5</integer>
+				<integer>10</integer>
+				<integer>15</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>不保持在线</string>
+				<string>1分钟</string>
+				<string>2分钟</string>
+				<string>5分钟</string>
+				<string>10分钟</string>
+				<string>15分钟</string>
+			</array>
+		</dict>
+	</array>
+	<key>StringsTable</key>
+	<string>Root</string>
+</dict>
+</plist>

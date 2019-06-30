@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS多线程之NSOperation和NSOperationQueue</title>
+  <meta name="description" content="如果对Java或者与Java类似的语言熟悉的话，可以说NSOperation对象很像java.lang.Runnable接口。类似的，在Java的Runnable接口中，NSOperation对象被设计为可以扩展的。还是和Java一样，这里也有一个方法可以被重载次数的最小值。对于NSOpetation来说，这个方...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS多线程之NSOperation和NSOperationQueue">
+  <meta name="twitter:description" content="如果对Java或者与Java类似的语言熟悉的话，可以说NSOperation对象很像java.lang.Runnable接口。类似的，在Java的Runnable接口中，NSOperation对象被设计为可以扩展的。还是和Java一样，这里也有一个方法可以被重载次数的最小值。对于NSOpetation来说，这个方...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS多线程之NSOperation和NSOperationQueue">
+  <meta property="og:description" content="如果对Java或者与Java类似的语言熟悉的话，可以说NSOperation对象很像java.lang.Runnable接口。类似的，在Java的Runnable接口中，NSOperation对象被设计为可以扩展的。还是和Java一样，这里也有一个方法可以被重载次数的最小值。对于NSOpetation来说，这个方...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-nsoperation-and-nsoperationqueue.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-24 18:31:30 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-24</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS多线程之NSOperation和NSOperationQueue</h1>
+  </header>
+
+  <section class="post">
+    <p>如果对Java或者与Java类似的语言熟悉的话，可以说NSOperation对象很像java.lang.Runnable接口。类似的，在Java的Runnable接口中，NSOperation对象被设计为可以扩展的。还是和Java一样，这里也有一个方法可以被重载次数的最小值。对于NSOpetation来说，这个方法就是<code class="highlighter-rouge">-(void)main</code>方法.使用NSOperation的最简单的一种方法是把它加入一个NSOperationQueue。一旦operation被加入了这个队列，队列就马上把它踢出开始运行。operation运行结束后，队列就马上将它释放。</p>
+
+<p>##NSOperation</p>
+
+<p>1、NSOperation</p>
+
+<p>NSOperation实例封装了需要执行的操作和执行操作所需的数据，并且能够以并发或者非并发的方式执行这个操作，NSOperation本身是抽象基类，因此必须使用它的子类。NSoperation</p>
+
+<p>(1)执行操作</p>
+
+<p>NSOperation调用start方法即可开始执行操作，NSOperation对象默认按同步方式执行，也就是在调用start方法所处的线程中直接执行。</p>
+
+<p><code class="highlighter-rouge">[operation start]</code></p>
+
+<p>NSOperation对象的<code class="highlighter-rouge">- (BOOL)isConcurrent;</code>方法会返回当前操作相对于调用start方法的线程是同步还是异步执行，默认返回是NO，表示操作与调用线程同步执行。</p>
+
+<p><code class="highlighter-rouge">[operation isConcurrent]</code></p>
+
+<p>(2)取消操作</p>
+
+<p>operation开始执行操作之后，默认会一直执行操作直到完成，可以调用cancel方法中途取消操作。</p>
+
+<p><code class="highlighter-rouge">operation cancel</code></p>
+
+<p>(3)执行完毕监听处理</p>
+
+<p>如果想在一个NSOperation操作执行完毕之后做一些事情，可以调用NSOperation的setCompletionBlock方法来设置想要做的事情，代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[operation1 setCompletionBlock:^{
+	//执行完毕处理  
+}];
+</code></pre></div></div>
+
+<p>或者</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>operation.completionBlock = ^{
+	//执行完毕处理
+};
+</code></pre></div></div>
+
+<p>(4)重载main方法</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)main
+{
+	//操作执行的内容
+}
+</code></pre></div></div>
+
+<p>(5)最佳实践</p>
+
+<p>operation开始执行之后,会一直执行任务直到完成,或者显式地取消操作。取消可能发生在任何时候,甚至在operation执行之前。尽管NSOperation提供了一个方法,让应用取消一个操作,但是识别出取消事件则是我们自己的事情。如果operation直接终止, 可能无法回收所有已分配的内存或资源，因此operation对象需要检测取消事件,并优雅地退出执行NSOperation对象需要定期地调用isCancelled方法检测操作是否已经被取消,如果返回YES(表示已取消),则立即退出执行。不管是自定义NSOperation子类,还是使用系统提供的两个具体子类,都需要支持取消。isCancelled方法本身非常轻量,可以频繁地调用而不产生大的性能损失。以下地方可能需要调用isCancelled:</p>
+
+<ul>
+  <li>
+    <p>在执行任何实际的工作之前</p>
+  </li>
+  <li>
+    <p>在循环的每次迭代过程中,如果每个迭代相对较长可能需要调用多次</p>
+  </li>
+  <li>
+    <p>代码中相对比较容易中止操作的任何地方</p>
+  </li>
+</ul>
+
+<p>实例代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)main
+{
+    @autoreleasepool {
+        if(self.isCancelled)
+        {
+            return;
+        }
+        //TODO:获取数据
+        if(self.isCancelled)
+        {
+            //释放资源
+            return;
+        }
+        //TODO:处理数据
+        if(self.isCancelled)
+        {
+            //释放资源
+            return;
+        }
+        //TODO:通知主线程处理
+    }
+}
+</code></pre></div></div>
+
+<p>2、NSInvocationOperation</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(runInBackground) object:nil];
+[operation start];
+</code></pre></div></div>
+
+<p>3、NSBlockOperation</p>
+
+<p>(1)使用NSBlockOperation执行一个操作</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+	//执行的操作
+}];
+[operation start];
+</code></pre></div></div>
+<p>上面的Block是同步执行的。</p>
+
+<p>(2)使用addExecutionBlock方法关联多个操作</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+	//执行的操作1
+}];
+[operation addExecutionBlock:^{
+   //执行的操作2
+}];
+[operation addExecutionBlock:^{
+   //执行的操作3
+}];
+[operation start];
+</code></pre></div></div>
+<p>上面的几个Block是并发执行的，也就是在不同的线程中执行的。</p>
+
+<p>##NSOperationQueue</p>
+
+<p>一个NSOperation对象可以通过调用start方法来执行任务，默认是同步执行的。也可以将NSOperation添加到一个NSOperationQueue(操作队列)中去执行，而且是异步执行的。</p>
+
+<p>1、创建一个操作队列</p>
+
+<p><code class="highlighter-rouge">NSOperationQueue *queue = [[NSOperationQueue alloc] init];</code></p>
+
+<p>2、添加NSOperation到NSOperationQueue中</p>
+
+<p>(1)添加一个NSOperation</p>
+
+<p><code class="highlighter-rouge">[queue addOperation:operation]</code></p>
+
+<p>(2)添加一组NSOperation</p>
+
+<p><code class="highlighter-rouge">[queue addOperations:operations waitUntilFinished:NO]</code></p>
+
+<p>(3)添加一个block形式的Operation</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[queue addOperationWithBlock:^{
+	//执行一个Block的操作        
+}];
+</code></pre></div></div>
+
+<p>3、设置队列的最大并发操作数量</p>
+
+<p>队列的最大并发操作数量，意思是队列中最多同时运行几条线程。虽然NSOperationQueue类设计用于并发执行Operations,你也可以强制单个queue一次只能执行一个Operation。<code class="highlighter-rouge">setMaxConcurrentOperationCount:</code>方法可以配置queue的最大并发操作数量。设为1就表示queue每次只能执行一个操作。不过operation执行的顺序仍然依赖于其它因素,比如operation是否准备好和operation的优先级等。</p>
+
+<p>控制每次只能执行一个操作，可以这样写：</p>
+
+<p><code class="highlighter-rouge">queue.maxConcurrentOperationCount = 1;</code></p>
+
+<p>或者</p>
+
+<p><code class="highlighter-rouge">[queue setMaxConcurrentOperationCount:1];</code></p>
+
+<p>4、取消operations</p>
+
+<p>(1)单个NSOperation取消</p>
+
+<p><code class="highlighter-rouge">[operation cancel]</code></p>
+
+<p>(2)取消NSOperationQueue中的所有操作</p>
+
+<p><code class="highlighter-rouge">[queue cancelAllOperations]</code></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://www.cnblogs.com/zhidao-chen/archive/2012/07/06/2579152.html">《NSOperation and NSOperationQueue》</a></p>
+
+<p>2、<a href="http://blog.csdn.net/totogo2010/article/details/8013316">《iOS多线程编程之NSOperation和NSOperationQueue的使用》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/q199109106q/article/details/8565923">《多线程编程2 - NSOperation》</a></p>
+
+<p>4、<a href="http://blog.csdn.net/q199109106q/article/details/8566222">《多线程编程3 - NSOperationQueue》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-xcode-usage.html" title="link to iOS开发中Xcode常见使用技巧">iOS开发中Xcode常见使用技巧</a></h2>
+       <p class="excerpt">Xcode是苹果公司开发向开发人员提供的集成开发环境(IDE)，主要用于开发Mac OS X和iOS的应用程序只能运行于Mac操作系统下。本文旨在记录一些在开发中常见的Xcode的配置和使用技巧，后续会持续更新。##更新说明  2014-08-27 v1.0 初稿  2014-09-24 V1.1 增加Xcode断点不进调试的相关内容  2014-09-26 V1.2 增加Xcode6缺失新建Empty Application相关模板的问题##旧版本Xcode支持高版本的设备问题描述：如何...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-27 23:07:17 +0800" class="post-list__meta--date date">2014-08-27</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-xcode-usage.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-info-dot-plist-config.html" title="link to iOS中Info.plist文件的常见配置">iOS中Info.plist文件的常见配置</a></h2>
+       <p class="excerpt">在创建一个新的Xcode工程后，会在Supporting Files文件夹下自动生成一个工程名-Info.plist的文件，这个是对工程做一些运行期配置的文件(很重要，必须有该文件)。如果使用文本编辑器打开这个文件，会发现这是一个XML格式的文本文件，使用Xcode的Open As-&gt;Source Code或者Property List可以进行编辑，本文会重点介绍一些在iOS开发中常见的的Info.plist的配置项。##Info.plist配置项说明1、设置启动图标(CFBundl...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-24 16:06:02 +0800" class="post-list__meta--date date">2014-08-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-info-dot-plist-config.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

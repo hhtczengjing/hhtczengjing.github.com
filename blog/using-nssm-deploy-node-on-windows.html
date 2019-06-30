@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用NSSM在Windows服务器上部署Node.js应用</title>
+  <meta name="description" content="">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用NSSM在Windows服务器上部署Node.js应用">
+  <meta name="twitter:description" content="">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用NSSM在Windows服务器上部署Node.js应用">
+  <meta property="og:description" content="">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/using-nssm-deploy-node-on-windows.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-11-24 10:15:53 +0800" itemprop="datePublished" class="post-meta__date date">2016-11-24</time> &#8226; <span class="post-meta__tags tags">Node</span>
+    </div>
+    <h1 class="post-title">使用NSSM在Windows服务器上部署Node.js应用</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="/images/nssm-node-deploy/node-logo.png" alt="node-logo.png" /></p>
+
+<p>最近使用Node的Express框架做了一个简单的应用，原本是打算部署到CentOS服务器上面的，后来由于种种原因只能部署到Window的服务器上面了。Node.js在Linux上面部署非常的方便，可以使用<a href="https://github.com/foreverjs/forever">forever</a>或者<a href="https://github.com/unitech/pm2">pm2</a>来做这个事情，而且使用起来非常的简单，后续有机会会单独介绍如何使用，在Windows下就是稍微有点麻烦了，这两个组件都不支持。</p>
+
+<p>找了一些资料发现了nssm这个工具，部署超级简单，而且会监控你安装的node服务，如果node挂了，nssm会自动重启它。下面记录下部署的步骤：</p>
+
+<h3 id="1下载安装nssm">(1)下载安装nssm</h3>
+
+<p>当前最新的<a href="https://nssm.cc">NSSM</a>版本是2.24，可以到官网上下载最新版本。下载地址是<code class="highlighter-rouge">https://nssm.cc/release/nssm-2.24.zip</code>。</p>
+
+<h3 id="2安装服务">(2)安装服务</h3>
+
+<h4 id="1打开终端根据操作系统的位数3264进入到对应的文件夹下">1）打开终端根据操作系统的位数(32/64)进入到对应的文件夹下：</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd F:/nssm-2.24/win32
+</code></pre></div></div>
+
+<p>nssm的使用方式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nssm install servername //创建servername服务
+nssm start servername //启动服务
+nssm stop servername //暂停服务
+nssm restart servername //重新启动服务
+nssm remove servername //删除创建的servername服务
+</code></pre></div></div>
+
+<h4 id="2执行创建服务的命令">2）执行创建服务的命令</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nssm install hbtoutiaoapi
+</code></pre></div></div>
+
+<p>其中<code class="highlighter-rouge">hbtoutiaoapi</code>这个是创建的Windows服务的名称，命令执行成功之后会弹出一个对话框，如下图所示：</p>
+
+<p><img src="/images/nssm-node-deploy/nssm-install.png" alt="nssm-install.png" /></p>
+
+<p>说明：</p>
+
+<ul>
+  <li>①Path：指的是node.exe的路径</li>
+  <li>②Startup directory: 指的是启动的文件的路径</li>
+  <li>③Arguments: 指的是启动的文件的名称</li>
+</ul>
+
+<p>总的说来其实就是相当于执行了<code class="highlighter-rouge">node.exe E:\hbtoutiaoapi\bin\www</code>这个命令。填写完成之后点击<code class="highlighter-rouge">Install service</code>就行了，然后在系统的服务里面就可以看到了。在浏览器中访问<code class="highlighter-rouge">http://localhost:3000</code>，如下图所示：</p>
+
+<p><img src="/images/nssm-node-deploy/preview.png" alt="preview.png" /></p>
+
+<p>###参考资料</p>
+
+<p>1.<a href="https://nodejs.org/en/">《Node.js官网》</a></p>
+
+<p>2.<a href="http://nssm.cc">《NSSM - the Non-Sucking Service Manager》</a></p>
+
+<p>3.<a href="https://my.oschina.net/u/1582119/blog/316069">《使用nssm在windows服务器上部署nodejs》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-docker-on-macos.html" title="link to Mac上Docker的安装和使用初探">Mac上Docker的安装和使用初探</a></h2>
+       <p class="excerpt">Docker 是个划时代的开源项目，它彻底释放了虚拟化的威力，极大提高了应用的运行效率，降低了云计算资源供应的成本，同时让应用的部署、测试和分发都变得前所未有的高效和轻松！Docker 最初是 dotCloud 公司创始人 Solomon Hykes 在法国期间发起的一个公司内部项目，它是基于 dotCloud 公司多年云服务技术的一次革新，并于2013年3月以 Apache 2.0 授权协议开源，主要项目代码在 GitHub 上进行维护。Docker 项目后来还加入了 Linux 基金会...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-11-25 00:05:53 +0800" class="post-list__meta--date date">2016-11-25</time> &#8226; <span class="post-list__meta--tags tags">Docker</span><a class="btn-border-small" href=/blog/using-docker-on-macos.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-leveldb.html" title="link to iOS中KV数据库LevelDB的编译和使用">iOS中KV数据库LevelDB的编译和使用</a></h2>
+       <p class="excerpt">LevelDB是Google公司重量级工程师Jeff Dean和Sanjay Ghemawat发起的开源项目。LevelDB是一个持久化存储的KV系统，和Redis这种内存型的KV系统不同，LevelDB不会像Redis一样狂吃内存，而是将大部分数据存储到磁盘上。目前能够支持billion级别的数据量，在这个数量级别下还有着非常高的性能，主要归功于它的良好的设计。LevelDB开源并托管在GitHub上，项目的地址是：https://github.com/google/leveldb。有个...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-07-10 12:15:53 +0800" class="post-list__meta--date date">2016-07-10</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-leveldb.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

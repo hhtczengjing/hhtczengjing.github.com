@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发中Settings.bundle的使用</title>
+  <meta name="description" content="在iOS开发中很多时候开发者需要让用户自行设置一些系统的配置项目，比如让用户设置是否支持在3G模式下加载数据，或者是让用户自己设置支不支持网络数据缓存的功能。另外在企业级应用开发中经常有需要对后台的访问地址进行调整那么需要用户自行的进行配置，下面是爱奇艺和招商银行的设置配置项：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发中Settings.bundle的使用">
+  <meta name="twitter:description" content="在iOS开发中很多时候开发者需要让用户自行设置一些系统的配置项目，比如让用户设置是否支持在3G模式下加载数据，或者是让用户自己设置支不支持网络数据缓存的功能。另外在企业级应用开发中经常有需要对后台的访问地址进行调整那么需要用户自行的进行配置，下面是爱奇艺和招商银行的设置配置项：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发中Settings.bundle的使用">
+  <meta property="og:description" content="在iOS开发中很多时候开发者需要让用户自行设置一些系统的配置项目，比如让用户设置是否支持在3G模式下加载数据，或者是让用户自己设置支不支持网络数据缓存的功能。另外在企业级应用开发中经常有需要对后台的访问地址进行调整那么需要用户自行的进行配置，下面是爱奇艺和招商银行的设置配置项：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-settings-bundle.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-11-16 16:35:48 +0800" itemprop="datePublished" class="post-meta__date date">2014-11-16</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS开发中Settings.bundle的使用</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS开发中很多时候开发者需要让用户自行设置一些系统的配置项目，比如让用户设置是否支持在3G模式下加载数据，或者是让用户自己设置支不支持网络数据缓存的功能。另外在企业级应用开发中经常有需要对后台的访问地址进行调整那么需要用户自行的进行配置，下面是爱奇艺和招商银行的设置配置项：</p>
+
+<p><img src="/images/ios_settings_bundle/app_settings.png" alt="app_settings.png" /></p>
+
+<p>###Settings.bundle配置说明</p>
+
+<p>在Settings.bundle中支持如下几种配置项：</p>
+
+<p><img src="/images/ios_settings_bundle/settings_preference_control_types.png" alt="settings_preference_control_types.png" /></p>
+
+<p>1、<code class="highlighter-rouge">Group</code></p>
+
+<p>Group类似于UITableView中的Group分组，用来表示一组设置项，配置如下所示：</p>
+
+<p><img src="/images/ios_settings_bundle/settings_bundle_group.png" alt="settings_bundle_group.png" /></p>
+
+<p>配置项说明：</p>
+
+<p>(1)Title：表示分组的显示标题</p>
+
+<p>(2)Type：默认是Group</p>
+
+<p>(3)FooterText：Group的底部显示的文字内容</p>
+
+<p>2、<code class="highlighter-rouge">Multi Value</code></p>
+
+<p><code class="highlighter-rouge">Multi Value</code>是为了让用户在多个值中选择需要的内容，相当于下拉列表的形式进行选择，配置如下所示：</p>
+
+<p><img src="/images/ios_settings_bundle/settings_bundle_multi_value.png" alt="settings_bundle_multi_value.png" /></p>
+
+<p>配置项说明：</p>
+
+<p>(1)Type：默认是Multi Value</p>
+
+<p>(2)Title：配置项显示的标题</p>
+
+<p>(3)Identifier：设置项的标识符，用于读取配置项的配置内容</p>
+
+<p>(4)Default Value：默认的值，对应的是Values中的项目</p>
+
+<p>(5)Titles：显示的标题的集合</p>
+
+<p>(6)Values：显示的值的集合，与标题一一对应</p>
+
+<p>3、<code class="highlighter-rouge">Slider</code></p>
+
+<p><img src="/images/ios_settings_bundle/settings_bundle_slider.png" alt="settings_bundle_slider.png" /></p>
+
+<p>配置项说明：</p>
+
+<p>(1)Type：配置类型，默认是Slider</p>
+
+<p>(2)Identifier：设置项的标识符，用于读取配置项的配置内容</p>
+
+<p>(3)Default Value：默认值，Number类型</p>
+
+<p>(4)Minimum Value：最小值，Number类型</p>
+
+<p>(5)Maximum Value：最大值，Number类型</p>
+
+<p>(6)Max Value Image Filename：最大值那一端的图片。</p>
+
+<p>(7)Min Value Image Filename：最小值那一端的图片。</p>
+
+<p>4、<code class="highlighter-rouge">Text Field</code></p>
+
+<p><img src="/images/ios_settings_bundle/settings_bundle_text_field.png" alt="settings_bundle_text_field.png" /></p>
+
+<p>配置项说明:</p>
+
+<p>(1)Text Field is Secure：是否为安全文本。如果设置为YES，则内容以圆点符号出现。</p>
+
+<p>(2)Autocapitalization Style：自动大写。有四个值: <code class="highlighter-rouge">None(无)</code>、<code class="highlighter-rouge">Sentences(句子首字母大写)</code>、<code class="highlighter-rouge">Words(单词首字母大写)</code>和<code class="highlighter-rouge">All Characters(所有字母大写)</code>。</p>
+
+<p>(3)Autocorrection Style：自动纠正拼写，如果开启，你输入一个不存在的单词，系统会划红线提示。有三个值：<code class="highlighter-rouge">Default(默认)</code>、<code class="highlighter-rouge">No Autocorrection(不自动纠正)</code>和<code class="highlighter-rouge">Autocorrection(自动纠正)</code>。</p>
+
+<p>(4)Keyboard Type：键盘样式。有五个值：<code class="highlighter-rouge">Alphabet(字母表，默认)</code>、<code class="highlighter-rouge">Numbers and Punctuation(数字和标点符号)</code>、<code class="highlighter-rouge">Number Pad(数字面板)</code>、<code class="highlighter-rouge">URL(比Alphabet多出了.com等域名后缀)</code>和<code class="highlighter-rouge">Email Address(比Alphabet多出了@符合)</code>。</p>
+
+<p>5、<code class="highlighter-rouge">Title</code></p>
+
+<p><img src="/images/ios_settings_bundle/settings_bundle_title.png" alt="settings_bundle_title.png" /></p>
+
+<p>配置项说明：</p>
+
+<p>(1)Type：默认是Title</p>
+
+<p>(2)Title：配置项显示的标题</p>
+
+<p>(3)Identifier：设置项的标识符，用于读取配置项的配置内容</p>
+
+<p>(4)Default Value：默认的值</p>
+
+<p>6、<code class="highlighter-rouge">Toggle Switch</code></p>
+
+<p><code class="highlighter-rouge">Toggle Switch</code>是一个类似于UISwitch的选项，用于设置简单的开启或者关闭的选项，配置如下所示：</p>
+
+<p><img src="/images/ios_settings_bundle/settings_bundle_toggle.png" alt="settings_bundle_toggle.png" /></p>
+
+<p>配置项说明：</p>
+
+<p>(1)Type：默认是Toggle Switch</p>
+
+<p>(2)Title：配置项显示的标题</p>
+
+<p>(3)Identifier：设置项的标识符，用于读取配置项的配置内容</p>
+
+<p>(4)Default Value：默认的值</p>
+
+<p>###在项目中使用</p>
+
+<p>1、添加Setting.bundle文件到项目中</p>
+
+<p><img src="/images/ios_settings_bundle/add_settings_bundle.png" alt="add_settings_bundle.png" /></p>
+
+<p>2、读取配置信息</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)readingPreference
+{
+    //获取Settings.bundle路径
+    NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
+    if(!settingsBundle)
+    {
+        NSLog(@"找不到Settings.bundle文件");
+        return;
+    }
+    //读取Settings.bundle里面的配置信息
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[settingsBundle stringByAppendingPathComponent:@"Root.plist"]];
+    NSArray *preferences = [settings objectForKey:@"PreferenceSpecifiers"];
+    NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
+    for(NSDictionary *prefSpecification in preferences)
+    {
+        NSString *key = [prefSpecification objectForKey:@"Key"];
+        if(key)
+        {
+            [defaultsToRegister setObject:[prefSpecification objectForKey:@"DefaultValue"] forKey:key];
+        }
+    }
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    //TODO：读取指定数据
+}
+</code></pre></div></div>
+
+<p>3、在AppDelegate中读取配置信息</p>
+
+<p>(1)应用启动后读取配置信息</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //读取配置文件
+    [[SystemConfigHelper shared] readingPreference];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    return YES;
+}
+</code></pre></div></div>
+
+<p>(2)应用程序进入到前台后读取配置信息</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    //读取配置信息
+    [[SystemConfigHelper shared] readingPreference];
+}
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p><code class="highlighter-rouge">SystemConfigHelper</code>是用来读取系统配置信息的工具.</p>
+
+<p>###典型实例</p>
+
+<p>1、<a href="/images/ios_settings_bundle/iqiyi.plist">爱奇艺iPhone客户端的Settings.bundle配置</a></p>
+
+<p>2、<a href="/images/ios_settings_bundle/cmb.plist">招商银行iPhone客户端的Settings.bundle配置</a></p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://www.cocoachina.com/ios/20141103/10112.html">《整合Settings.bundle显示版本信息》</a></p>
+
+<p>2、<a href="http://www.cnblogs.com/wayne23/p/3441898.html">《应用程序首选项(application preference)及数据存储》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/nogodoss/article/details/21938771">《设置束(Setting Bundle)的使用》</a></p>
+
+<p>4、<a href="http://www.cnblogs.com/minglz/archive/2013/05/30/3048269.html">《三十而立，从零开始学ios开发（十九）：Application Settings and User Defaults（上）》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios8-today-extension.html" title="link to iOS8中Today Extension的使用">iOS8中Today Extension的使用</a></h2>
+       <p class="excerpt">扩展（Extension）是iOS 8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。iOS 8系统有6个支持扩展的系统区域，分别是Today、Share、Action、Photo Editing、Storage Provider、Custom keyboard。支持扩展的系统区域也被称为扩展点。对于赛事比分，股票、天气、快递这类需要实时获取的信息，可以在通知中心的Today视图中创建一个Today扩展实现。...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-22 23:49:18 +0800" class="post-list__meta--date date">2014-11-22</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios8-today-extension.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/github-code-repository.html" title="link to 使用GitHub进行项目托管">使用GitHub进行项目托管</a></h2>
+       <p class="excerpt">Git 是由 Linux 之父 Linus Tovalds 为了更好地管理linux内核开发而创立的分布式版本控制／软件配置管理软件。目前支持 Windows 、MacOSX 、Linux 等多种主流平台，特点为快速、高效及易于使用。###在GitHub上创建一个新的repository1、在浏览器中输入https://github.com/login登录GitHub.2、登录完成后，点击页面的右上角的加号，选择New repository.3、为repository创建一个简短的、易记的...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-01 14:55:26 +0800" class="post-list__meta--date date">2014-11-01</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/github-code-repository.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

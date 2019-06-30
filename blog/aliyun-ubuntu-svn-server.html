@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>阿里云Ubuntu系统搭建SVN服务器</title>
+  <meta name="description" content="近期入手了一台阿里云（阿里云是国内优秀的云计算服务提供商，属于阿里巴巴旗下）的云服务器（Ubuntu系统）打算用来做WEB API的服务器，另外为了便于对数据和相关文档的管理需要在服务器上搭建SVN服务器，本文主要是用于记录如何搭建SVN服务器以及在搭建过程中遇到的一些问题。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="阿里云Ubuntu系统搭建SVN服务器">
+  <meta name="twitter:description" content="近期入手了一台阿里云（阿里云是国内优秀的云计算服务提供商，属于阿里巴巴旗下）的云服务器（Ubuntu系统）打算用来做WEB API的服务器，另外为了便于对数据和相关文档的管理需要在服务器上搭建SVN服务器，本文主要是用于记录如何搭建SVN服务器以及在搭建过程中遇到的一些问题。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="阿里云Ubuntu系统搭建SVN服务器">
+  <meta property="og:description" content="近期入手了一台阿里云（阿里云是国内优秀的云计算服务提供商，属于阿里巴巴旗下）的云服务器（Ubuntu系统）打算用来做WEB API的服务器，另外为了便于对数据和相关文档的管理需要在服务器上搭建SVN服务器，本文主要是用于记录如何搭建SVN服务器以及在搭建过程中遇到的一些问题。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/aliyun-ubuntu-svn-server.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-10-14 23:39:09 +0800" itemprop="datePublished" class="post-meta__date date">2014-10-14</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">阿里云Ubuntu系统搭建SVN服务器</h1>
+  </header>
+
+  <section class="post">
+    <p>近期入手了一台阿里云（阿里云是国内优秀的云计算服务提供商，属于阿里巴巴旗下）的云服务器（Ubuntu系统）打算用来做WEB API的服务器，另外为了便于对数据和相关文档的管理需要在服务器上搭建SVN服务器，本文主要是用于记录如何搭建SVN服务器以及在搭建过程中遇到的一些问题。</p>
+
+<p><img src="/images/aliyun_ubuntu_svn/aliyun_info.png" alt="aliyun_info.png" /></p>
+
+<p>##SVN服务器相关软件安装</p>
+
+<p>1、使用SSH远程服务器</p>
+
+<p>（1）对于MAC OS/Liunx的用户直接打开终端输入</p>
+
+<p><code class="highlighter-rouge">ssh 用户名@实例名</code>，例如 <code class="highlighter-rouge">ssh root@192.168.1.100</code></p>
+
+<p>执行上面的命令后终端会提示输入密码，验证通过后会出现如下信息：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Welcome to Ubuntu 12.04.5 LTS (GNU/Linux 3.2.0-67-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+New release '14.04.1 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+
+Welcome to aliyun Elastic Compute Service!
+
+Last login: Tue Oct 14 21:31:10 2014
+</code></pre></div></div>
+
+<p>(2)Windows的用户需要按照系统的要求安装指定的软件或者是直接使用WEB的终端进行访问</p>
+
+<p>2、安装软件</p>
+
+<p>依次在终端中执行下面的命令安装如下三个软件包：</p>
+
+<p>（1）<code class="highlighter-rouge">sudo apt-get install subversion</code></p>
+
+<p>（2）<code class="highlighter-rouge">sudo apt-get install apache2</code></p>
+
+<p>（3）<code class="highlighter-rouge">sudo apt-get install libapache2-svn</code></p>
+
+<p>其中<code class="highlighter-rouge">subversion</code>是SVN必须的，apache2和libapache2-svn是为了配置SVN服务器支持通过HTTP访问</p>
+
+<p>##SVN服务器配置</p>
+
+<p>1、相关用户、组的设定</p>
+
+<p><code class="highlighter-rouge">sudo addgroup subversion</code></p>
+
+<p><code class="highlighter-rouge">sudo usermod -G subversion -a www-data</code></p>
+
+<p>2、创建项目的目录</p>
+
+<p><code class="highlighter-rouge">sudo mkdir /home/svn</code></p>
+
+<p>3、配置Subversion</p>
+
+<p>（1）配置dav_svn.conf文件</p>
+
+<p><code class="highlighter-rouge">vim /etc/apache2/mods-available/dav_svn.conf</code></p>
+
+<p>按照下面的步骤进行配置即可</p>
+
+<p>&lt;1&gt;删除<code class="highlighter-rouge">&lt;Location /svn&gt;</code>和<code class="highlighter-rouge">DAV svn</code>这两行前面的注释</p>
+
+<p><img src="/images/aliyun_ubuntu_svn/aliyun_ubuntu_svn_001.png" alt="aliyun_ubuntu_svn_001.png" /></p>
+
+<p>&lt;2&gt;删除<code class="highlighter-rouge">SVNParentPath ...</code>前面的注释，并且把后面的路径替换成创建的SVN的项目路径<code class="highlighter-rouge">/home/svn</code></p>
+
+<p><img src="/images/aliyun_ubuntu_svn/aliyun_ubuntu_svn_002.png" alt="aliyun_ubuntu_svn_002.png" /></p>
+
+<p>&lt;3&gt;删除AuthType Basic、AuthName “Subversion Repository”前面的注释，去掉AuthUserFile所在行前面的注释，并且修改后面的路径为<code class="highlighter-rouge">/etc/subversion/dav_svn.passwd</code>，去掉AuthzSVNAccessFile所在行前面的注释，并且修改后面的路径为<code class="highlighter-rouge">/etc/subversion/dav_svn.authz</code>,删除Require valid-user和&lt;/Location&gt;前面的注释，具体如下所示：</p>
+
+<p><img src="/images/aliyun_ubuntu_svn/aliyun_ubuntu_svn_003.png" alt="aliyun_ubuntu_svn_003.png" /></p>
+
+<p>其中：</p>
+
+<p><code class="highlighter-rouge">/etc/subversion/dav_svn.passwd</code>文件是SVN用户名和密码的配置，指定基本用户验证的密码文件存放的位置</p>
+
+<p><code class="highlighter-rouge">/etc/subversion/dav_svn.authz</code>文件是访问权限配置</p>
+
+<p>（2）重启Apache 2 WEB服务器</p>
+
+<p><code class="highlighter-rouge">sudo /etc/init.d/apache2 restart</code></p>
+
+<p>4、创建SVN文件仓库</p>
+
+<p>（1）创建指定的项目存放路径</p>
+
+<p><code class="highlighter-rouge">cd /home/svn</code></p>
+
+<p><code class="highlighter-rouge">mkdir project1</code></p>
+
+<p>（2）更改版本库所示的用户、组</p>
+
+<p><code class="highlighter-rouge">sudo chown -R root:subversion project1</code></p>
+
+<p>（3）创建SVN仓库</p>
+
+<p><code class="highlighter-rouge">sudo svnadmin create /home/svn/project1</code></p>
+
+<p>（4）赋予组成员对所有新加入文件仓库的文件拥有相应的权限</p>
+
+<p><code class="highlighter-rouge">sudo chmod -R g+rws project1</code></p>
+
+<p>5、用户和权限配置</p>
+
+<p>（1）创建dav_svn.passwd文件并添加用户admin001，执行命令后会提示要输入密码</p>
+
+<p><code class="highlighter-rouge">sudo htpasswd -c /etc/subversion/dav_svn.passwd admin001</code></p>
+
+<p>继续添加新用户，去掉-c，否则会覆盖本文件</p>
+
+<p><code class="highlighter-rouge">sudo htpasswd /etc/subversion/dav_svn.passwd admin002</code></p>
+
+<p>（2）创建授权文件</p>
+
+<p><code class="highlighter-rouge">vim /etc/subversion/dav_svn.authz</code></p>
+
+<p>里面加入project1的权限配置，如</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[groups]
+administrator=admin001,admin001
+
+[project1:/]
+@administrator=rw
+</code></pre></div></div>
+
+<p>6、重启SVN服务器</p>
+
+<p><code class="highlighter-rouge">killall svnserve</code></p>
+
+<p><code class="highlighter-rouge">svnserve -d -r /home/svn/</code></p>
+
+<p>至此SVN服务器搭建完成，可以在终端执行</p>
+
+<p><code class="highlighter-rouge">svn checkout http://hostname/svn/project1 project1 --username 用户名 --password 密码</code>
+来checkout项目了</p>
+
+<p>##相关问题</p>
+
+<p>1、Apache和Tomcat端口号冲突</p>
+
+<p>（1）修改<code class="highlighter-rouge">/etc/apache2/ports.conf</code>文件将<code class="highlighter-rouge">Listen 80</code>改成<code class="highlighter-rouge">Listen 8080</code>表示监听8080端口或者其他可用端口</p>
+
+<p>（2）修改<code class="highlighter-rouge">/etc/apache2/sites-enabled/000-default</code>文件，修改<code class="highlighter-rouge">&lt;VirtualHost*:80&gt;</code>改成<code class="highlighter-rouge">&lt;VirtualHost*:8080&gt;</code></p>
+
+<p>2、关闭和启动Tomcat服务器</p>
+
+<p>（1）关闭：<code class="highlighter-rouge">sudo /etc/init.d/tomcat stop</code></p>
+
+<p>（2）启动：<code class="highlighter-rouge">sudo /etc/init.d/tomcat start</code></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://www.aliyun.com/about/?spm=5176.383338.25.1.MVser7">《关于阿里云》</a></p>
+
+<p>2、<a href="http://www.cnblogs.com/ouuy/archive/2012/04/27/2473706.html">《UBUNTU SVN 服务器配置》</a></p>
+
+<p>3、<a href="http://www.cnblogs.com/likwo/p/3152365.html">《阿里云ubuntu 创建svn服务器》</a></p>
+
+<p>4、<a href="http://www.cnblogs.com/xulb597/archive/2012/07/02/2573575.html">《Linux SVN 命令详解》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-development-by-using-svn.html" title="link to iOS开发中SVN管理工具的使用">iOS开发中SVN管理工具的使用</a></h2>
+       <p class="excerpt">SVN是Subversion的简称，是一个开放源代码的版本控制系统，相较于RCS、CVS，它采用了分支管理系统，它的设计目标就是取代CVS。互联网上很多版本控制服务已从CVS转移到Subversion。##SVN命令行工具1、从本地导入代码到服务器(第一次初始化导入)，在终端中输入：svn import /Users/apple/Documents/workspace/project svn://hostname/svn/project --username=mj --password=1...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-10-18 15:58:25 +0800" class="post-list__meta--date date">2014-10-18</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-development-by-using-svn.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/wechat-development-of-access-token.html" title="link to 微信公众平台开发之access_token">微信公众平台开发之access_token</a></h2>
+       <p class="excerpt">为了使第三方开发者能够为用户提供更多更有价值的个性化服务，微信公众平台开放了许多接口，包括自定义菜单接口、客服接口、获取用户信息接口、用户分组接口、群发接口等，开发者在调用这些接口时，都需要传入一个相同的参数access_token，它是公众账号的全局唯一票据，它是接口访问凭证。本文重点是介绍在实际的开发中如何获取access_token和如何保持获取到的access_token长期有效。##获取access_token的接口说明以HTTP GET请求的方式向微信服务器发送请求，请求的UR...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-09-29 22:15:03 +0800" class="post-list__meta--date date">2014-09-29</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-development-of-access-token.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

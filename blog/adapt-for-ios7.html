@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS应用程序适配iOS7</title>
+  <meta name="description" content="Apple自去年发布iOS7以来一直以来都有关注目前各个大厂发布的app，到目前为止基本上绝大多数App Store上的app已经做到iOS7适配，不光是支持iOS7的布局调整更多的是在iOS7整体设计方面的改进，朝着扁平化和简单线条话的方式进行设计。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS应用程序适配iOS7">
+  <meta name="twitter:description" content="Apple自去年发布iOS7以来一直以来都有关注目前各个大厂发布的app，到目前为止基本上绝大多数App Store上的app已经做到iOS7适配，不光是支持iOS7的布局调整更多的是在iOS7整体设计方面的改进，朝着扁平化和简单线条话的方式进行设计。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS应用程序适配iOS7">
+  <meta property="og:description" content="Apple自去年发布iOS7以来一直以来都有关注目前各个大厂发布的app，到目前为止基本上绝大多数App Store上的app已经做到iOS7适配，不光是支持iOS7的布局调整更多的是在iOS7整体设计方面的改进，朝着扁平化和简单线条话的方式进行设计。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/adapt-for-ios7.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-16 23:02:33 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-16</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS应用程序适配iOS7</h1>
+  </header>
+
+  <section class="post">
+    <p>Apple自去年发布iOS7以来一直以来都有关注目前各个大厂发布的app，到目前为止基本上绝大多数App Store上的app已经做到iOS7适配，不光是支持iOS7的布局调整更多的是在iOS7整体设计方面的改进，朝着扁平化和简单线条话的方式进行设计。</p>
+
+<p>##UI适配</p>
+
+<p>在iOS7中view默认是全屏模式，状态栏的高度也加在了view的高度上，例如iOS7之前iPhone5/5s/5c中self.view.frame.size.height = 548，在iOS7中就是568了，在iOS7中navigationbar是半透明的，statusbar则是全透明的，这样一来，原来的程序用xcode5+iOS7sdk上编译后运行就会出现问题了。</p>
+
+<p>关于iOS6/iOS7 SDK在不同的设备上显示的差异对比图如下：</p>
+
+<p><img src="/images/ios7_adapt/ios_design.png" alt="ios_design.png" /></p>
+
+<p>1、没有导航栏的适配</p>
+
+<p><img src="/images/ios7_adapt/ios7_no_navi.png" alt="ios7_no_navi.png" /></p>
+
+<p>在没有导航栏的情况下，代码运行在iOS7上，内容向上偏移了20px。适配的办法是将view整体向下移20。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.view.bounds = CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height);
+</code></pre></div></div>
+
+<p>2、有导航栏的适配</p>
+
+<p><img src="/images/ios7_adapt/ios7_navi.png" alt="ios7_navi.png" /></p>
+
+<p>在iOS7中，苹果引入了一个新的属性，叫做[UIViewController setEdgesForExtendedLayout:]，它的默认值为UIRectEdgeAll。当你的容器是navigation controller时，默认的布局将从navigation bar的顶部开始。这就是为什么所有的UI元素都往上漂移了44pt，修复这个问题很简单，在<code class="highlighter-rouge">viewDidLoad</code>方法中加入如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#ifdef IOS7_SDK_AVAILABLE
+    if(IOS7_OR_LATER)
+    {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.extendedLayoutIncludesOpaqueBars = NO;
+        self.modalPresentationCapturesStatusBarAppearance = NO;
+    }
+#endif
+</code></pre></div></div>
+
+<p>上面使用的宏的代码如下，其中<code class="highlighter-rouge">IOS7_SDK_AVAILABLE</code>是用来判断是否使用的是iOS7的SDK，<code class="highlighter-rouge">IOS7_OR_LATER</code>指的是当前系统的版本是否是iOS7及以上的系统。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#if __IPHONE_OS_VERSION_MAX_ALLOWED &gt;= 70000
+#define IOS7_SDK_AVAILABLE 1
+#endif
+#define IOS7_OR_LATER ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending)
+</code></pre></div></div>
+
+<p>补充说明:</p>
+
+<p>(1)edgesForExtendedLayout是一个类型为UIExtendedEdge的属性，指定边缘要延伸的方向。 因为iOS7鼓励全屏布局，它的默认值很自然地是UIRectEdgeAll，四周边缘均延伸，就是说，如果即使视图中上有navigationBar，下有tabBar，那么视图仍会延伸覆盖到四周的区域。</p>
+
+<p>如果把视图做如下设置，那么视图就不会延伸到这些bar的后面了.</p>
+
+<p>3、其他UI方面的适配</p>
+
+<p>(1)可以用旧版的sdk来编译，这样在真机上还是和原来一样的效果</p>
+
+<p>(2)如果勾选了Hide during application lauch的话，在iOS7的设备上是没有问题的，启动完以后status bar会重新出现的，但是在iOS7以下的设备需要在launch didfinish里面把status bar显示出来</p>
+
+<p>(3)对于UILabel，在iOS 7中它的background颜色默认是clearColor，而在iOS 6中默认的是白色。所以，我们最好在代码中对label的background颜色进行明确的设置<code class="highlighter-rouge">label.backgroundColor = [UIColor clearColor];</code></p>
+
+<p>##其他适配</p>
+
+<p>1、mac地址无法获取</p>
+
+<p>在iOS6之后，苹果禁用了禁用了UIDevice的uniqueIdentifier方法，所以获取设备唯一标识的方法采用了获取Mac地址然后MD5加密，但是在iOS7中发现，该方法统一返回02:00:00:00:00:00,所以用做设备的标识符已经没有意义。</p>
+
+<p>推荐使用CFUUID(它是CoreFoundatio包的一部分，因此API属于C语言风格。CFUUIDCreate 方法用来创建CFUUIDRef，并且可以获得一个相应的NSString).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  CFUUIDRef cfuuid = CFUUIDCreate(kCFAllocatorDefault);
+NSString *cfuuidString = (NSString*)CFBridgingRelease(CFUUIDCreateString(kCFAllocatorDefault, cfuuid));
+</code></pre></div></div>
+<p>获得的这个CFUUID值系统并没有存储。每次调用CFUUIDCreate，系统都会返回一个新的唯一标示符。如果你希望存储这个标示符，那么需要自己将其存储到NSUserDefaults, Keychain, Pasteboard或其它地方。</p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://beyondvincent.com/blog/2013/11/19/122-working-with-ios-6-and-7/">《iOS 7 教程：让程序同时支持iOS 6和iOS 7》</a></p>
+
+<p>2、<a href="http://beyondvincent.com/blog/2013/11/03/120-customize-navigation-status-bar-ios-7/">《iOS 7 教程：定制iOS 7中的导航栏和状态栏》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/toss156/article/details/11843873">《【IOS】IOS7 UI适配》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-info-dot-plist-config.html" title="link to iOS中Info.plist文件的常见配置">iOS中Info.plist文件的常见配置</a></h2>
+       <p class="excerpt">在创建一个新的Xcode工程后，会在Supporting Files文件夹下自动生成一个工程名-Info.plist的文件，这个是对工程做一些运行期配置的文件(很重要，必须有该文件)。如果使用文本编辑器打开这个文件，会发现这是一个XML格式的文本文件，使用Xcode的Open As-&gt;Source Code或者Property List可以进行编辑，本文会重点介绍一些在iOS开发中常见的的Info.plist的配置项。##Info.plist配置项说明1、设置启动图标(CFBundl...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-24 16:06:02 +0800" class="post-list__meta--date date">2014-08-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-info-dot-plist-config.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-cocoapods-dependency-manager.html" title="link to 使用CocoaPods管理iOS项目中的依赖库">使用CocoaPods管理iOS项目中的依赖库</a></h2>
+       <p class="excerpt">一种开发语言发展到一定的程度就会出现相应的依赖管理工具（Dependency Manager）或者是中央代码仓库，例如：  Java: Maven，Ivy  Ruby: gems  Python: pip, easy_install  Node.js: npm随着iOS开发者的增加，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫做：CocoaPods。CocoaPods是一个负责管理iOS项目中第三方开源代码的工具，其源码在Github上托管。该项目开始于2011年8月12日，经过...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-13 23:13:28 +0800" class="post-list__meta--date date">2014-08-13</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-cocoapods-dependency-manager.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

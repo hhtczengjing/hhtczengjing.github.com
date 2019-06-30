@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>CentOS如何挂载远程盘</title>
+  <meta name="description" content="前段时间公司要迁移gitlab服务器，由于服务器剩余的空间不太多了，无法直接执行备份，考虑到Linux下面可以挂载其他机器的目录来直接使用，记录下整个操作的过程：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CentOS如何挂载远程盘">
+  <meta name="twitter:description" content="前段时间公司要迁移gitlab服务器，由于服务器剩余的空间不太多了，无法直接执行备份，考虑到Linux下面可以挂载其他机器的目录来直接使用，记录下整个操作的过程：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="CentOS如何挂载远程盘">
+  <meta property="og:description" content="前段时间公司要迁移gitlab服务器，由于服务器剩余的空间不太多了，无法直接执行备份，考虑到Linux下面可以挂载其他机器的目录来直接使用，记录下整个操作的过程：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/centos-remote-disk-mounted.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-05-25 11:46:29 +0800" itemprop="datePublished" class="post-meta__date date">2018-05-25</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">CentOS如何挂载远程盘</h1>
+  </header>
+
+  <section class="post">
+    <p>前段时间公司要迁移gitlab服务器，由于服务器剩余的空间不太多了，无法直接执行备份，考虑到Linux下面可以挂载其他机器的目录来直接使用，记录下整个操作的过程：</p>
+
+<h3 id="安装环境">安装环境</h3>
+
+<p>(1) 检查nfs是否安装</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm -qa | grep nfs
+</code></pre></div></div>
+
+<p>如果没有安装：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum install nfs-utils -y
+</code></pre></div></div>
+
+<p>(2) 检查rpcbind是否安装</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm -qa | grep rpcbind
+</code></pre></div></div>
+
+<p>如果没有安装：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum install rpcbind  -y
+</code></pre></div></div>
+
+<h3 id="服务端配置">服务端配置</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/exports
+
+/home/data 192.168.3.93(rw,no_root_squash,no_all_squash,async)
+</code></pre></div></div>
+
+<p>这个配置表示开放本地存储目录<code class="highlighter-rouge">/home/data</code>只允许<code class="highlighter-rouge">192.168.3.93</code>这个主机有访问权限</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">rw</code>表示允许读写</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">no_root_squash</code>表示root用户具有完全的管理权限</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">no_all_squash</code>表示保留共享文件的UID和GID，此项是默认不写也可以；</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">async</code>表示数据可以先暂时在内存中，不是直接写入磁盘，可以提高性能，另外也可以配置<code class="highlighter-rouge">sync</code>表示数据直接同步到磁盘</p>
+  </li>
+</ul>
+
+<p>配置生效</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exportfs -r
+</code></pre></div></div>
+
+<p>启动:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service rpcbind start
+
+service nfs start
+</code></pre></div></div>
+
+<h3 id="客户端配置">客户端配置</h3>
+
+<p>（1）安装<code class="highlighter-rouge">nfs-utils</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum -y install nfs-utils
+</code></pre></div></div>
+
+<p>（2）关闭防火墙</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service iptables stop
+</code></pre></div></div>
+
+<p>（3）创建挂载点</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /mnt/data
+</code></pre></div></div>
+
+<p>（4）挂载目录</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mount -t nfs 192.168.3.102:/home/data /mnt/data -o proto=tcp -o nolock
+</code></pre></div></div>
+
+<p>1) 查看服务器共享目录信息：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>showmount -e 192.168.3.102
+</code></pre></div></div>
+
+<p>2) 查看挂载情况：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df -h
+</code></pre></div></div>
+
+<p>（5）卸载目录</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>umount /mnt/data
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://www.cnblogs.com/liuyisai/p/5992511.html">Linux下NFS服务器的搭建与配置</a></p>
+
+<p>2、<a href="https://blog.csdn.net/coolwubo/article/details/60779933">用mount挂载远程服务器网络硬盘</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/selenium-captcha-recognition.html" title="link to 使用Selenium获取验证码并识别">使用Selenium获取验证码并识别</a></h2>
+       <p class="excerpt">最近项目组提了个需求要求我这边帮他们实现一个网站的数据采集并对接到指定的数据库表里面，记录下使用的在线API识别验证码的过程：由于验证码在每次加载页面的时候都会刷新，也就是说每次打开登录界面都是不同的验证码，所以需要将打开的登录界面截图然后从里面扣取验证码对应的内容再提交到服务器进行识别。1、对登录界面进行截图url = ''driver = webdriver.PhantomJS()driver.get(url)driver.set_window_size(1200, 800) #此处一...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-06-24 11:46:29 +0800" class="post-list__meta--date date">2018-06-24</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/selenium-captcha-recognition.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/python-convert-word-to-pdf.html" title="link to 使用Python批量将Word文档转换为PDF">使用Python批量将Word文档转换为PDF</a></h2>
+       <p class="excerpt">最近一直在整理数据，刚好有一批Word文档需要批量另存为PDF格式的文档，使用win32com操作Word，写了个Python的脚本用于批量进行转换。1、环境准备(1) 安装pip install pywin32(2) 初始化由于我的机器上面安装的是Office 2010, 安装完成pywin32之后，进入到Python安装路径\Lib\site-packages\win32com\client的目录下面执行如下代码：python makepy.py -d "Microsoft Word ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-25 11:46:29 +0800" class="post-list__meta--date date">2018-04-25</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/python-convert-word-to-pdf.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中Cordova开发初探</title>
+  <meta name="description" content="跨平台开发是我们长久以来都在关注的话题，前段时间写了一篇关于React Native的文章《React Native开发初探》。也在公司的项目中部分使用React Native，虽然React Native的出现带来了很多变革，但是光一个环境搭建就把很多人挡在了门外，另外React Native更新的频率过快差不...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中Cordova开发初探">
+  <meta name="twitter:description" content="跨平台开发是我们长久以来都在关注的话题，前段时间写了一篇关于React Native的文章《React Native开发初探》。也在公司的项目中部分使用React Native，虽然React Native的出现带来了很多变革，但是光一个环境搭建就把很多人挡在了门外，另外React Native更新的频率过快差不...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中Cordova开发初探">
+  <meta property="og:description" content="跨平台开发是我们长久以来都在关注的话题，前段时间写了一篇关于React Native的文章《React Native开发初探》。也在公司的项目中部分使用React Native，虽然React Native的出现带来了很多变革，但是光一个环境搭建就把很多人挡在了门外，另外React Native更新的频率过快差不...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/hello-cordova-ios.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-04-01 22:08:53 +0800" itemprop="datePublished" class="post-meta__date date">2016-04-01</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中Cordova开发初探</h1>
+  </header>
+
+  <section class="post">
+    <p>跨平台开发是我们长久以来都在关注的话题，前段时间写了一篇关于React Native的文章<a href="http://blog.devzeng.com/blog/hello-react-native.html">《React Native开发初探》</a>。也在公司的项目中部分使用React Native，虽然React Native的出现带来了很多变革，但是光一个环境搭建就把很多人挡在了门外，另外React Native更新的频率过快差不多两周一个版本，所以目前还是处于观望阶段。</p>
+
+<p><img src="/images/hello-cordova-ios/cordova-logo.png" alt="cordova-logo" /></p>
+
+<p>Cordova是一个开源的移动应用开发框架，是Adobe贡献给Apache的开源项目，是从PhoneGap中抽出的核心代码，是驱动PhoneGap的核心引擎。Cordova架构如下所示：</p>
+
+<p><img src="/images/hello-cordova-ios/cordova_app_architecture.png" alt="cordova_app_architecture.png" /></p>
+
+<p>从上图可以看出Cordova是基于WebView的，主要是负责Native/OS和Web之间的交互。我们可以使用Cordova的插件机制对Cordova的功能进行扩展，本文主要是介绍Cordova的用法的插件的开发。</p>
+
+<p>###在现有项目中集成Cordova</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pod 'Cordova'
+</code></pre></div></div>
+
+<p>如果需要引入一些相关的插件，可以加入如下配置，下面的这些插件可以通过pod搜索到：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    pod 'CordovaPlugin-console'
+    pod 'cordova-plugin-camera'
+    pod 'cordova-plugin-contacts'
+    pod 'cordova-plugin-device'
+    pod 'cordova-plugin-device-orientation'
+    pod 'cordova-plugin-device-motion'
+    pod 'cordova-plugin-globalization'
+    pod 'cordova-plugin-geolocation'
+    pod 'cordova-plugin-file'
+    pod 'cordova-plugin-media-capture'
+    pod 'cordova-plugin-network-information'
+    pod 'cordova-plugin-splashscreen'
+    pod 'cordova-plugin-inappbrowser'
+    pod 'cordova-plugin-file-transfer'
+    pod 'cordova-plugin-statusbar'
+    pod 'cordova-plugin-vibration'
+</code></pre></div></div>
+
+<p>上面的插件对应着架构图中右边的Plugins，具体的使用方式参考官方的示例。</p>
+
+<p>###如何使用Cordova加载网页</p>
+
+<p>建议先下载一份phonegap的示例文件，项目地址是<code class="highlighter-rouge">https://github.com/phonegap/phonegap-webview-ios</code>，可以通过pod查询到(在终端中执行<code class="highlighter-rouge">pod search phonegap</code>):</p>
+
+<p><img src="/images/hello-cordova-ios/phonegap-template.png" alt="phonegap-template.png" /></p>
+
+<p>本人的项目是基于上面的这个模板项目进行开发的，修改的步骤如下：</p>
+
+<p>####（1）添加config.xml的配置文件</p>
+
+<p>参见示例项目中的config.xml。</p>
+
+<p>####（2）html中引入cordova js库文件</p>
+
+<p>参见示例项目中的js引入。</p>
+
+<p>####（3）index.js文件内容：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var app = {
+    initialize: function () {
+        this.bindEvents();
+    },
+    bindEvents: function () {
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    onDeviceReady: function () {
+        app.receivedEvent('deviceready');
+        document.getElementById("button").onclick = app.testConnection;
+    },
+    receivedEvent: function (id) {
+        console.log('Received Event: ' + id + ', DEVICE READY FIRED!!!');
+    },
+    testConnection: function () {
+        var networkState = navigator.connection.type;
+        var states = {};
+        states[Connection.UNKNOWN] = 'Unknown connection';
+        states[Connection.ETHERNET] = 'Ethernet connection';
+        states[Connection.WIFI] = 'WiFi connection';
+        states[Connection.CELL_2G] = 'Cell 2G connection';
+        states[Connection.CELL_3G] = 'Cell 3G connection';
+        states[Connection.CELL_4G] = 'Cell 4G connection';
+        states[Connection.CELL] = 'Cell generic connection';
+        states[Connection.NONE] = 'No network connection';
+        console.log('Network Info plugin test - connection type ' + states[networkState]);
+    }
+};
+app.initialize();
+</code></pre></div></div>
+
+<p>以上摘自示例项目中的index.js</p>
+
+<p>####（4）使用CDVViewController</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CDVViewController *viewController = [CDVViewController new];
+viewController.wwwFolderName = @"myfolder";
+viewController.startPage = @"mypage.html"
+</code></pre></div></div>
+
+<p>其中使用CDVViewController通常需要设置wwwFolderName的目录名称，和startPage首页的名称即可。</p>
+
+<p>###Cordova自定义插件开发</p>
+
+<p>####（1）创建插件的实现类需要继承CDVPlugin</p>
+
+<p><em>MyBrowserPlugin.h：</em></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@interface MyBrowserPlugin : CDVPlugin
+
+- (void)open:(CDVInvokedUrlCommand *)command;
+
+@end
+</code></pre></div></div>
+
+<p><em>MyBrowserPlugin.m：</em></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)open:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult* pluginResult = nil;
+    if(!command.arguments || command.arguments.count &lt;= 0) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    else {
+        NSString* url = [command.arguments objectAtIndex:0];
+        if (url != nil &amp;&amp; url.length &gt; 0) {
+            //TODO:打开网页浏览器
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        }
+        else {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        }
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+</code></pre></div></div>
+
+<p>如果上面的操作需要耗时很长时间可以在后台运行，示例代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)myPluginMethod:(CDVInvokedUrlCommand*)command {
+    // Check command.arguments here.
+    [self.commandDelegate runInBackground:^{
+        NSString* payload = nil;
+        // Some blocking logic...
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:payload];
+        // The sendPluginResult method is thread-safe.
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
+}
+</code></pre></div></div>
+
+<p>####（2）实现插件JS端的代码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cordova.define("com.devzeng.cordova.mybrowser", function(require, exports, module){
+    var exec = require('cordova/exec');
+    module.exports = {
+        open: function(url, callback) {
+               exec(function(param){callback('success');}, function(){callback('error');}, "MyBrowserPlugin", "open", [url]);
+        }
+    };
+});
+</code></pre></div></div>
+
+<p>其中上面的exec函数中的第四个参数open是指的MyBrowserPlugin的open方法。使用的时候直接下面的方式调用：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mybrowser.open('url地址', function(message){...});
+</code></pre></div></div>
+
+<p>####（3）在web端(cordova_plugin.js)配置插件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+	"file": "plugins/cordova-plugin-mybrowser/www/plugin.js",
+	"id": "com.devzeng.cordova.mybrowser",
+	"pluginId": "cordova-plugin-mybrowser",
+	"clobbers": [
+		"mybrowser"
+	]
+}
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>1）file指的是插件js文件的路径，相对于cordova_plugin.js文件</p>
+
+<p>2）id指的是上面定义的id字符串，pluginId可以设置为插件的名字</p>
+
+<p>3）clobbers中设置的数据是用来自动注册到window中的对象，我们在使用的时候直接使用该命令即可。</p>
+
+<p>####（4）在项目中(config.xml)配置插件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;feature name="MyBrowserPlugin"&gt;
+	&lt;param name="ios-package" value="MyBrowserPlugin" /&gt;
+&lt;/feature&gt;
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>1）feature中的name对应着前面<code class="highlighter-rouge">exec(success, failure, service, action, params)</code>中的service</p>
+
+<p>2）param中的name在iOS中固定写成ios-package, 后面的value就对应着该插件的入口实现类</p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://cordova.apache.org/docs/en/6.x/guide/platforms/ios/plugin.html">《iOS Plugin Development Guide》</a></p>
+
+<p>2、<a href="http://rensanning.iteye.com/blog/2029362">《Cordova 3.x 基础（12） – Plugin开发》</a></p>
+
+<p>3、<a href="http://cordova.apache.org/docs/en/latest/guide/overview/">《Cordova Documentation》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-plcrashreporter.html" title="link to iOS中使用PLCrashReporter收集Crash">iOS中使用PLCrashReporter收集Crash</a></h2>
+       <p class="excerpt">iOS应用程序在上线过程中可能会出现各种闪退，如果APP经常出现闪退会让一部分用户选择卸载，这样会带来很大的损失，下图(来自于Bugly)可以看出APP出现崩溃后会带来的影响。对于这些崩溃信息怎么收集分析就是一个很大的问题，通过解析Crash文件可以帮助我们改善APP，修复bug等。收集Crash信息的方式有很多，比较常见的是使用第三方服务，比如友盟、百度统计、Bugly等。(下图为Bugly）###使用系统自带的Crash收集//需要捕获的signalstatic int s_fatal...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-05-21 23:40:53 +0800" class="post-list__meta--date date">2016-05-21</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-plcrashreporter.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/octopress-to-jekyll.html" title="link to 将博客从Octopress迁移到Jekyll">将博客从Octopress迁移到Jekyll</a></h2>
+       <p class="excerpt">一直想把Octopress的主题给换了，没有找到满意的主题。最近发现喵神的博客(OneV’s Den)由ghost迁移到了Jekyll了。这些都不是重点，重点是他把之前使用的主题也一起弄到Jekyll上面来了，而且代码开源在GitHub上面了(项目地址：https://github.com/onevcat/vno-jekyll),效果如下：###安装Vno Jekyll####（1）从GitHub把项目的源码clone下来git clone https://github.com/onevc...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-01-23 18:49:35 +0800" class="post-list__meta--date date">2016-01-23</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/octopress-to-jekyll.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

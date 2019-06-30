@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Jersey整合Swagger自动生成API文档</title>
+  <meta name="description" content="之前写过一篇文章《使用Jersey开发REST服务》，里面简单介绍了使用Jersey来快速创建REST的API服务。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Jersey整合Swagger自动生成API文档">
+  <meta name="twitter:description" content="之前写过一篇文章《使用Jersey开发REST服务》，里面简单介绍了使用Jersey来快速创建REST的API服务。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Jersey整合Swagger自动生成API文档">
+  <meta property="og:description" content="之前写过一篇文章《使用Jersey开发REST服务》，里面简单介绍了使用Jersey来快速创建REST的API服务。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/jersey-swagger-api.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-05-04 21:51:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-05-04</time> &#8226; <span class="post-meta__tags tags">Java</span>
+    </div>
+    <h1 class="post-title">Jersey整合Swagger自动生成API文档</h1>
+  </header>
+
+  <section class="post">
+    <p>之前写过一篇文章<a href="http://blog.devzeng.com/blog/java-restful-with-jersey.html">《使用Jersey开发REST服务》</a>，里面简单介绍了使用Jersey来快速创建REST的API服务。</p>
+
+<p>REST API都是要对外提供服务的，那么文档是必须的。经常要给其他人员提供文档，每次都是要不断的维护word/excel的文件，挺麻烦的。能不能做到自动生成呢？答案是可以的，swagger就是这样的一个组件帮助我们快速生成，让开发人员只需要关注功能的开发即可，后续的工作就交给Swagger就好了。</p>
+
+<p>下面简单介绍下如何在Jersey的项目中集成Swagger。</p>
+
+<h3 id="1pomxml加入swagger的依赖">1、pom.xml加入swagger的依赖</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
+    &lt;groupId&gt;io.swagger&lt;/groupId&gt;
+    &lt;artifactId&gt;swagger-jersey2-jaxrs&lt;/artifactId&gt; 
+    &lt;version&gt;1.5.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre></div></div>
+
+<h3 id="2修改webxml配置">2、修改web.xml配置</h3>
+
+<h4 id="1-修改jersey配置">(1) 修改Jersey配置</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;!-- jersey --&gt;
+&lt;servlet&gt;
+    &lt;servlet-name&gt;jersey&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.glassfish.jersey.servlet.ServletContainer&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;jersey.config.server.provider.packages&lt;/param-name&gt;
+        &lt;param-value&gt;io.swagger.jaxrs.listing,com.devzeng.service.schedule.api&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;jersey&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/api/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</code></pre></div></div>
+
+<h4 id="2新增swagger配置">（2）新增swagger配置</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;!-- swagger --&gt;
+&lt;servlet&gt;
+    &lt;servlet-name&gt;Jersey2Config&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;io.swagger.jersey.config.JerseyJaxrsConfig&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;api.version&lt;/param-name&gt;
+        &lt;param-value&gt;1.0.0&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;swagger.api.basepath&lt;/param-name&gt;
+        &lt;param-value&gt;http://localhost:8080/api&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;2&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">swagger.api.basepath</code>:这个是api访问的baseurl</li>
+</ul>
+
+<h3 id="3配置注解">3、配置注解</h3>
+
+<h3 id="4配置swagger-ui">4、配置swagger-ui</h3>
+
+<h4 id="1-下载swagger-ui">(1) 下载swagger-ui</h4>
+
+<p><code class="highlighter-rouge">https://github.com/swagger-api/swagger-ui</code></p>
+
+<p>推荐使用2.x版本</p>
+
+<h4 id="2-拷贝dist目录下面的文件到webroot下面">(2) 拷贝dist目录下面的文件到webroot下面</h4>
+
+<h4 id="3-修改indexhtml页面的url地址">(3) 修改index.html页面的url地址</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>url = "http://localhost:8080/api/swagger.json";
+</code></pre></div></div>
+
+<p>生成的文档效果如下：</p>
+
+<p><img src="/images/jersey-swagger/swagger-demo.jpg" alt="swagger-demo.jpg" /></p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-Jersey-2.X-Project-Setup-1.5#configure-and-initialize-swagger">Swagger Core Jersey 2.X Project Setup 1.5</a></p>
+
+<p>2、<a href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger-Core Annotations</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/eclipse-tomcat-launch-error.html" title="link to Eclipse无法正常启动Tomcat项目解决办法">Eclipse无法正常启动Tomcat项目解决办法</a></h2>
+       <p class="excerpt">以前一直使用 MyEclipse 开发 JavaEE 项目，实在是太卡了，近期将之前的项目全部迁移到了 Eclipse 上面。一段时间内都好好的，这两天突然发现启动 Tomcat 不正常了，具体表现如下：（1）Tomcat 在 Eclipse 里面能正常启动，但在浏览器中访问http://localhost:8080/报404错误。也就是说 Tomcat 启动了但是里面部署的 web 项目没有启动。（2）关闭 Eclipse 里面的 Tomcat，在 Tomcat 安装目录下双击start...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-06-07 21:51:00 +0800" class="post-list__meta--date date">2017-06-07</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/blog/eclipse-tomcat-launch-error.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/openssl-windows-compile.html" title="link to Windows环境下OpenSSL的编译和使用">Windows环境下OpenSSL的编译和使用</a></h2>
+       <p class="excerpt">OpenSSL是目前使用的非常广泛的加密算法库，基本上我们日常使用到的HTTPS、SSH都离不开它的身影。本文就在Windows环境下面编译最新版本的OpenSSL的步骤进行整理。编译OpenSSL1.编译环境准备(1) perlOpenSSL的编译需要使用到perl的环境，如果之前安装过可以跳过此步骤。1) 下载perl安装包根据操作系统的版本下载对应最新版本的perl（当前最新的版本是5.22.3.2204），下载地址是：https://www.activestate.com/acti...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-04-08 19:00:00 +0800" class="post-list__meta--date date">2017-04-08</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/blog/openssl-windows-compile.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

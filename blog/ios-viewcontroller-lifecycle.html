@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>浅入浅出iOS应用程序的生命周期</title>
+  <meta name="description" content="由于iOS设备对于系统资源的使用有诸多限制，一个应用程序在前台与后台有不同的行为。为提高电池使用寿命和用户与前台应用程序的体验，操作系统限制应用程序在后台的运行。当应用程序在前台和后台之间进行切换时，操作系统会通知应用来进行相关的处理。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="浅入浅出iOS应用程序的生命周期">
+  <meta name="twitter:description" content="由于iOS设备对于系统资源的使用有诸多限制，一个应用程序在前台与后台有不同的行为。为提高电池使用寿命和用户与前台应用程序的体验，操作系统限制应用程序在后台的运行。当应用程序在前台和后台之间进行切换时，操作系统会通知应用来进行相关的处理。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="浅入浅出iOS应用程序的生命周期">
+  <meta property="og:description" content="由于iOS设备对于系统资源的使用有诸多限制，一个应用程序在前台与后台有不同的行为。为提高电池使用寿命和用户与前台应用程序的体验，操作系统限制应用程序在后台的运行。当应用程序在前台和后台之间进行切换时，操作系统会通知应用来进行相关的处理。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-viewcontroller-lifecycle.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-07-12 22:37:29 +0800" itemprop="datePublished" class="post-meta__date date">2014-07-12</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">浅入浅出iOS应用程序的生命周期</h1>
+  </header>
+
+  <section class="post">
+    <p>由于iOS设备对于系统资源的使用有诸多限制，一个应用程序在前台与后台有不同的行为。为提高电池使用寿命和用户与前台应用程序的体验，操作系统限制应用程序在后台的运行。当应用程序在前台和后台之间进行切换时，操作系统会通知应用来进行相关的处理。</p>
+
+<h3 id="1应用程序的生命周期">1.应用程序的生命周期</h3>
+<p>iOS的应用程序主要由未运行、未激活、激活、后台和挂起这五个状态组成，每个状态具体的描述如下：<br /></p>
+
+<p><img src="/images/ios-viewcontroller-lifecycle/ios_viewcontroller_lifecycle_001.png" alt="iOS应用程序状态切换图" /></p>
+
+<h4 id="状态描述">状态描述</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(1)**未运行(Not Running)**：程序未启动
+
+(2)**未激活(Inactive)**：程序在前台运行，不过没有接收到事件。在没有事件处理情况下程序通常停留在这个状态
+
+(3)**激活(Active)**：程序在前台运行而且接收到了事件,这也是前台的一个正常的模式
+
+(4)**后台(Backgroud)**：程序在后台而且能执行代码，大多数程序进入这个状态后会在这个状态上停留一会。时间到之后会进入挂起状态(Suspended)。有的程序经过特殊的请求后可以长期处于Backgroud状态
+
+(5)**挂起(Suspended)**：程序在后台不能执行代码。系统会自动把程序变成这个状态而且不会发出通知。当挂起时，程序还是停留在内存中的，当系统内存低时，系统就把挂起的程序清除掉，为前台程序提供更多的内存。
+</code></pre></div></div>
+<h4 id="appdelegate回调函数">AppDelegate回调函数</h4>
+
+<p>(1)通知进程已启动但还未进入到状态保存</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+</code></pre></div></div>
+
+<p>(2)通知启动完成程序准备开始运行</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+</code></pre></div></div>
+
+<p>(3)当应用程序将要进入非活动状态，在此期间应用程序不接收消息或事件，如电话来了</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)applicationWillResignActive:(UIApplication *)application
+</code></pre></div></div>
+
+<p>(4)当应用程序进入到活动状态调用</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)applicationDidBecomeActive:(UIApplication *)application
+</code></pre></div></div>
+
+<p>(5)当程序进入到后台时被调用，</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)applicationDidEnterBackground:(UIApplication *)application
+</code></pre></div></div>
+
+<p>(6)当应用程序将要从后台进入到前台的时候调用</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)applicationWillEnterForeground:(UIApplication *)application
+</code></pre></div></div>
+
+<p>(7)当应用程序将要退出，通常用来保存数据和一些退出前的清理工作</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)applicationWillTerminate:(UIApplication *)application
+</code></pre></div></div>
+
+<p>(8)当程序载入后执行</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)applicationDidFinishLaunching:(UIApplication*)application
+</code></pre></div></div>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/change-blog-host-to-gitcafe.html" title="link to 将博客从GitHub迁移到GitCafe">将博客从GitHub迁移到GitCafe</a></h2>
+       <p class="excerpt">最近一直使用Github Pages功能以及Octopress来记录自己在学习和生活中的琐事，之前也写了一篇文章《Hello Octopress》来分享如何在GitHub使用Octopress来搭建博客的技术细节。但是最近发现一个很头疼的问题就是博客的访问速度实在是很慢，虽然做了一部分的优化，比如将GOOGLE的字体和jQuery的链接移除，但整体来看速度还是没有明显的提升，最近看到网上有资料提到可以将博客转移到GitCafe的方法，周末闲来无事就将博客内容镜像到GitCafe上。以下为大...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-13 14:51:57 +0800" class="post-list__meta--date date">2014-07-13</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/change-blog-host-to-gitcafe.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/create-self-signed-ssl-certificates-with-openssl.html" title="link to 使用OpenSSL创建自签名证书">使用OpenSSL创建自签名证书</a></h2>
+       <p class="excerpt">近期苹果把iOS系统更新到了7.1，如果用户更新到这个版本后，用原来的方式下载企业级应用，如果应用的plist文件不是用HTTPS方式部署的，那么会提示服务器上的证书无效，具体的如下图所示：在iOS7.1的企业级部署中需要将plist文件的URL路径设置为HTTPS才能正常下载安装，如果之前使用的是HTTP部署的，那么就需要对服务器的配置做一些改动。网上有提示说把plist文件上传到DropBox类似的文件存储服务器可以解决没有HTTPS服务器的缺憾，这个经过本人测试确实可行。但是对于那些...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-03-29 21:28:24 +0800" class="post-list__meta--date date">2014-03-29</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/create-self-signed-ssl-certificates-with-openssl.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

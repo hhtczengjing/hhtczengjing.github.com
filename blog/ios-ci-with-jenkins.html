@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中使用Jenkins搭建持续集成环境</title>
+  <meta name="description" content="在持续集成(Continuous integration，简称CI)这块，Jenkins无疑是目前使用的比较多的一个开源框架。本文就如何快速搭建一个iOS的持续集成环境进行介绍。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中使用Jenkins搭建持续集成环境">
+  <meta name="twitter:description" content="在持续集成(Continuous integration，简称CI)这块，Jenkins无疑是目前使用的比较多的一个开源框架。本文就如何快速搭建一个iOS的持续集成环境进行介绍。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中使用Jenkins搭建持续集成环境">
+  <meta property="og:description" content="在持续集成(Continuous integration，简称CI)这块，Jenkins无疑是目前使用的比较多的一个开源框架。本文就如何快速搭建一个iOS的持续集成环境进行介绍。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-ci-with-jenkins.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-02-25 19:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-02-25</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中使用Jenkins搭建持续集成环境</h1>
+  </header>
+
+  <section class="post">
+    <p>在持续集成(Continuous integration，简称CI)这块，<a href="https://jenkins.io">Jenkins</a>无疑是目前使用的比较多的一个开源框架。本文就如何快速搭建一个iOS的持续集成环境进行介绍。</p>
+
+<p><img src="/images/ios-jenkins/jenkins-logo.png" alt="jenkins-logo.png" /></p>
+
+<h3 id="jenkins安装">Jenkins安装</h3>
+
+<p>系统要求：必须安装JDK 1.5以上版本，推荐安装最新版本的JDK。可以通过<code class="highlighter-rouge">java -version</code>查看是否安装JDK。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ java -version 
+java version "1.8.0_91"
+Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+</code></pre></div></div>
+
+<h4 id="1下载jenkins">1、下载Jenkins</h4>
+
+<p>到官网<code class="highlighter-rouge">https://jenkins.io</code>选择下载最新版本的war包，推荐下载LTS(Long-Term Support，稳定版本)版本。</p>
+
+<p><img src="/images/ios-jenkins/jenkins-download.png" alt="jenkins-download.png" /></p>
+
+<h4 id="2运行jenkins">2、运行Jenkins</h4>
+
+<p>下载完成之后只有一个文件<code class="highlighter-rouge">jenkins.war</code>，运行Jenkins相当的方便，可以通过命令行直接运行，也可以将war包丢在Tomcat的webapp目录下面。</p>
+
+<p>在测试阶段可以使用命令行方式进行启动，在终端执行</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java -jar jenkins.war
+</code></pre></div></div>
+<p>默认的端口号是8080，如果需要指定其他端口号可以使用如下方式(示例指定了9999端口号)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java -jar jenkins.war --httpPort=9999  
+</code></pre></div></div>
+
+<h3 id="配置jenkins">配置Jenkins</h3>
+
+<p>第一次运行启动<code class="highlighter-rouge">Jenkins</code>，在浏览器打开<code class="highlighter-rouge">http://localhost:9999</code>，会出现如下界面，提示需要填写指定路径文件里面的内容（该内容也可以在终端上面看到）。</p>
+
+<p><img src="/images/ios-jenkins/unlock-jenkins.png" alt="unlock-jenkins.png" /></p>
+
+<p>输入完成之后点击<code class="highlighter-rouge">continue</code>进入到插件安装页面，为了避免后续出现一些问题建议选择安装推荐的插件(<code class="highlighter-rouge">install suggested plugins</code>).</p>
+
+<p><img src="/images/ios-jenkins/customize-jenkins.png" alt="customize-jenkins.png" /></p>
+
+<p>选择安装推荐的插件(<code class="highlighter-rouge">install suggested plugins</code>)后会出现安装进度界面，如下图所示：</p>
+
+<p><img src="/images/ios-jenkins/suggested-plugin-install.png" alt="suggested-plugin-install.png" /></p>
+
+<p>插件安装完成之后就可以创建管理员用户了</p>
+
+<p><img src="/images/ios-jenkins/create-admin-account.png" alt="create-admin-account.png" /></p>
+
+<p>全部做完之后就可以愉快的使用了</p>
+
+<p><img src="/images/ios-jenkins/install-success.png" alt="install-success.png" /></p>
+
+<h3 id="配置slave">配置slave</h3>
+
+<p>公司目前有几台Mac Mini，另外考虑到后续希望Android、Java Web开发的同事也能接入进来，目前是将Jenkins部署在CentOS上面，通过配置Slave的方式将Windows/MacOS/Linux进行统一管理，实现iOS、Android项目各自使用指定的节点。</p>
+
+<p>点击<code class="highlighter-rouge">系统管理</code> -&gt; <code class="highlighter-rouge">管理节点</code>进入到节点管理界面，可以查看和管理目前系统配置的所有节点。</p>
+
+<p><img src="/images/ios-jenkins/node-manage.png" alt="node-manage.png" /></p>
+
+<h4 id="创建节点">创建节点</h4>
+
+<p>（1）选择“新建节点”的菜单按钮，进入到节点的创建界面。</p>
+
+<p><img src="/images/ios-jenkins/create-slave-node-1.png" alt="create-slave-node-1.png" /></p>
+
+<p>（2）填写节点的一些基本信息</p>
+
+<p><img src="/images/ios-jenkins/create-slave-node-2.png" alt="create-slave-node-2.png" /></p>
+
+<p>说明：标签这个字段比较重要，这个字段用于识别是哪一个节点，在配置项目的时候会用到</p>
+
+<h3 id="使用">使用</h3>
+
+<p>正在完善中…</p>
+
+<h4 id="1常见问题">1、常见问题</h4>
+
+<p>（1）和fastlane一起使用的时候报字符集错误</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export LANG=en_US.UTF-8
+</code></pre></div></div>
+
+<p>（2）执行脚本的时候报错</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>security unlock-keychain "-p" "YOUR_KEYCHAIN_PWD" "/Users/YOUR_NAME/Library/Keychains/login.keychain" 
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html">持续集成是什么？</a></p>
+
+<p>2、<a href="https://jenkins.io">Jenkins 官网</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/java-restful-with-jersey.html" title="link to 使用Jersey开发REST服务">使用Jersey开发REST服务</a></h2>
+       <p class="excerpt">REST 是英文 Representational State Transfer 的缩写，有中文翻译为“表述性状态转移”。REST 这个术语是由 Roy Fielding 在他的博士论文 《 Architectural Styles and the Design of Network-based Software Architectures 》中提出的。REST 并非标准，而是一种开发 Web 应用的架构风格，可以将其理解为一种设计模式。REST 基于 HTTP，URI，以及 XML 这些...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-03-18 18:00:00 +0800" class="post-list__meta--date date">2017-03-18</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/blog/java-restful-with-jersey.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-fastlane-in-action.html" title="link to iOS中fastlane的使用">iOS中fastlane的使用</a></h2>
+       <p class="excerpt">对于一个iOS APP的发布上线，一般来说都需要经历:编译打包 -&gt; 截图 -&gt; 填写一些说明文字 -&gt; 上传ipa到itunes connect -&gt; 提交供审核。每次都要进行这么多“繁琐”的步骤，对于某些步骤可能一次还不能执行成功需要等着界面提示上传错误然后手动重新再来一次（想想都觉得可怕）。在日常开发中，打包也是最后上线不可缺少的环节，如果需要生成ipa文件通常需要在Xcode里点击Product -&gt; Archive，然后在弹出来的Organizer中...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-01-15 21:00:00 +0800" class="post-list__meta--date date">2017-01-15</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-fastlane-in-action.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

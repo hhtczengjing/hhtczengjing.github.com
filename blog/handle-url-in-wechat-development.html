@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>微信公众平台开发之URL处理</title>
+  <meta name="description" content="在微信公众平台开发中会遇到很多地方需要向客户端返回一个URL地址，比如用户点击了界面上的菜单，触发了菜单的事件，后台检测到这个事件之后需要想用户返回一些信息，如果信息是以一段文本来展示的而且里面包含一个阅读更多的超链接，这个该怎么处理呢？">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="微信公众平台开发之URL处理">
+  <meta name="twitter:description" content="在微信公众平台开发中会遇到很多地方需要向客户端返回一个URL地址，比如用户点击了界面上的菜单，触发了菜单的事件，后台检测到这个事件之后需要想用户返回一些信息，如果信息是以一段文本来展示的而且里面包含一个阅读更多的超链接，这个该怎么处理呢？">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="微信公众平台开发之URL处理">
+  <meta property="og:description" content="在微信公众平台开发中会遇到很多地方需要向客户端返回一个URL地址，比如用户点击了界面上的菜单，触发了菜单的事件，后台检测到这个事件之后需要想用户返回一些信息，如果信息是以一段文本来展示的而且里面包含一个阅读更多的超链接，这个该怎么处理呢？">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/handle-url-in-wechat-development.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-10-27 22:28:12 +0800" itemprop="datePublished" class="post-meta__date date">2014-10-27</time> &#8226; <span class="post-meta__tags tags">WeChat</span>
+    </div>
+    <h1 class="post-title">微信公众平台开发之URL处理</h1>
+  </header>
+
+  <section class="post">
+    <p>在微信公众平台开发中会遇到很多地方需要向客户端返回一个URL地址，比如用户点击了界面上的菜单，触发了菜单的事件，后台检测到这个事件之后需要想用户返回一些信息，如果信息是以一段文本来展示的而且里面包含一个阅读更多的超链接，这个该怎么处理呢？</p>
+
+<p>熟悉HTML的朋友对超链接一定不会陌生，只要用<code class="highlighter-rouge">&lt;a href="URL地址"&gt;这是超链接&lt;/a&gt;</code>这样的形式写一段代码就可以实现一个简单的超链接，用户点击之后会跳转到<code class="highlighter-rouge">href</code>属性里配置的URL地址。今天主要介绍的是在微信中如何使用超链接和URL的相关处理。</p>
+
+<p>###在文本消息中使用超链接</p>
+
+<p>对于响应给用户的文本消息的消息内容格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+	&lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+	&lt;FromUserName&gt;&lt;![CDATA[fromUser]]&gt;&lt;/FromUserName&gt;
+	&lt;CreateTime&gt;12345678&lt;/CreateTime&gt;
+	&lt;MsgType&gt;&lt;![CDATA[text]]&gt;&lt;/MsgType&gt;
+	&lt;Content&gt;&lt;![CDATA[Hello]]&gt;&lt;/Content&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+<p>如果我们在返回给用户的文本内容中使用超链接，我们需要在Content的节点的CDATA中拼接相应的HTML代码如我们想要返回给用户如下内容：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>很感谢您的关注，您需要先进行注册才能使用更多的服务.【点此开始注册】
+</code></pre></div></div>
+
+<p>用户在点击点此开始注册之后就可以进行注册了，那么可以把返回的内容设置为如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>很感谢您的关注，您需要先进行注册才能使用更多的服务.&lt;a href="http://wechat.devzeng.com/register"&gt;【点此开始注册】&lt;/a&gt;
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>（1）超链接写成下面的两种形式都是不规范的，可能在HTML中这样写是正确的，但是在微信中不推荐这样使用：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href=http://blog.devzeng.com&gt;曾静的技术博客&lt;/a&gt;
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href=http://blog.devzeng.com&gt;曾静的技术博客&lt;/a&gt;
+</code></pre></div></div>
+
+<p>正确的写法应该是使用双引号将URL地址括起来：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href="http://blog.devzeng.com"&gt;曾静的技术博客&lt;/a&gt;
+</code></pre></div></div>
+
+<p>（2）有的时候这个href里面要写的URL会很长，通常我们需要传递微信用户的OpenID用来标识这个用户，有的时候可能还需要一些其他的附加信息，比如服务的安全校验码等等很多信息，那么这样一来这个URL就会变得很长，会导致整个文本内容的长度也会变得很大（微信的文本消息的接口文档中明确表示：回复的消息内容长度不超过2048字节）。下面的部分会介绍使用短网址来解决URL过长的问题。</p>
+
+<p>###短网址</p>
+
+<p>短网址服务，可能很多朋友都已经不再陌生，特别是在微博应用中十分普遍，比如，当我们在腾讯、新浪微博发微博时有时发很长的网址连接，但由于微博只限制140个字，所以微博就自动把您发的长网址给转换成短网址了。</p>
+
+<p>其实，个人认为短网址不一定真的好记，几位数字+字符的组合，甚至很难记忆。但无可否认在微博和手机短信提醒等限制字数的地方来使用短网址，的确是一个不错的方案。短网址通常使用“比较少字符的网址”+“/”+“代码”，打开短网址网页通常会直接跳转到你要缩短的网址（常见），或者几秒广告后在跳转。比如向百度短网址可以自定义后缀，有些短网址还可以进行泛域名解析，十分方便大家使用。</p>
+
+<p>下面重点介绍如何将一个我们的长URL地址转换成一个短网址的方法，我们是采用第三方的生成工具来处理的，具体如下：</p>
+
+<p>1、使用Baidu的短网址服务</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static String baidu(String url) {
+	String apiUrl = "http://www.dwz.cn/create.php";
+	try {
+		String json = WeChatHttpHelper.post(apiUrl, "url=" + url, false);
+		Map&lt;String, Object&gt; map = JSON.parseObject(json, Map.class);
+		int status = Integer.parseInt(map.get("status").toString());
+		if(status == 0) {
+			return map.get("tinyurl").toString();
+		} else {
+			LOGGER.info("【生成短网址出错,使用原网址:】" + map.get("err_msg").toString());
+			return url;
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	return url;
+}
+</code></pre></div></div>
+
+<p>上面生成的短网址如<code class="highlighter-rouge">http://dwz.cn/sample</code>这样的格式，一般来说使用IP地址的网址都被百度认为是非法地址不能生成。</p>
+
+<p>2、使用Tinyurl的短网址服务</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static String tinyurl(String url) {
+		Map&lt;String, String&gt; param = new HashMap&lt;String, String&gt;();
+		param.put("url", url);
+		String apiUrl = "http://tinyurl.com/api-create.php";
+		try {
+			String json = WeChatHttpHelper.get(apiUrl, param, false);
+			if(StringUtils.isEmpty(json)) {
+				return url;
+			} else {
+				return json;
+			}
+		} catch (Exception e) {
+			LOGGER.info("【生成短网址出错,使用原网址:】" + e.getMessage());
+			e.printStackTrace();
+		}
+		return url;
+	}
+</code></pre></div></div>
+
+<p>这个是本人推荐的一个短网址生成的工具，生成的URL如<code class="highlighter-rouge">http://tinyurl.com/weme2013</code>这样的形式.</p>
+
+<p>3、使用Tencent的短网址服务</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static String tencent(String url) {
+	Map&lt;String, String&gt; param = new HashMap&lt;String, String&gt;();
+	param.put("url", url);
+	String apiUrl = "http://vwz.me/API.php";
+	try {
+		String json = WeChatHttpHelper.get(apiUrl, param, false);
+		Map&lt;String, Object&gt; map = JSON.parseObject(json, Map.class);
+		String status = map.get("status").toString();
+		if("exist".equals(status) || "ok".equals(status)) {
+			return map.get("msg").toString();
+		} else {
+			LOGGER.info("【生成短网址出错,使用原网址:】" + map.get("msg").toString());
+			return url;
+		}
+	} catch (Exception e) {
+		LOGGER.info("【生成短网址出错,使用原网址:】" + e.getMessage());
+		e.printStackTrace();
+	}
+	return url;
+}
+</code></pre></div></div>
+
+<p>上面生成的网址如<code class="highlighter-rouge">http://vwz.me/sample</code>这样的形式，跳转会稍微慢一些不过整体上来说还是不错的。</p>
+
+<p>4、使用新浪的短网址服务</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static String sina(String url) {
+	//TODO:我们做了一个艰难的决定:暂不支持Sina(t.cn)
+	return url;
+}
+</code></pre></div></div>
+
+<p>5、使用Google的短网址服务</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static String google(String url) {
+	//TODO:无法翻越长城，我们做了一个艰难的决定:暂不支持Google(goo.ly)
+	return url;
+}
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>（1）由于新浪和接口服务调用需要进行申请就没有使用感兴趣的朋友可以自行研究一下；</p>
+
+<p>（2）由于GWF的原因Google经常出现问题所以也没有使用，这里只是列出有这样服务提供</p>
+
+<p>（3）上面使用的JSON解析工具是fastJSON，发送HTTP请求的工具（WeChatHttpHelper）是自己封装的稍后会进行介绍。</p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://mp.weixin.qq.com/wiki/index.php?title=发送被动响应消息#.E5.9B.9E.E5.A4.8D.E6.96.87.E6.9C.AC.E6.B6.88.E6.81.AF">《发送被动响应消息》</a></p>
+
+<p>2、<a href="http://blog.csdn.net/lyq8479/article/details/9157455">《 [032] 微信公众帐号开发教程第8篇-文本消息中使用网页超链接》</a></p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/github-code-repository.html" title="link to 使用GitHub进行项目托管">使用GitHub进行项目托管</a></h2>
+       <p class="excerpt">Git 是由 Linux 之父 Linus Tovalds 为了更好地管理linux内核开发而创立的分布式版本控制／软件配置管理软件。目前支持 Windows 、MacOSX 、Linux 等多种主流平台，特点为快速、高效及易于使用。###在GitHub上创建一个新的repository1、在浏览器中输入https://github.com/login登录GitHub.2、登录完成后，点击页面的右上角的加号，选择New repository.3、为repository创建一个简短的、易记的...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-01 14:55:26 +0800" class="post-list__meta--date date">2014-11-01</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/github-code-repository.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/startssl-free-certificate.html" title="link to 在StartSSL上申请免费SSL证书">在StartSSL上申请免费SSL证书</a></h2>
+       <p class="excerpt">跟VeriSign一样，StartSSL（http://www.startssl.com，公司名：StartCom）也是一家CA机构，它的根证书很久之前就被一些具有开源背景的浏览器支持（Firefox浏览器、谷歌Chrome浏览器、苹果Safari浏览器等）。在去年9月份，StartSSL竟然搞定了微软：微软在升级补丁中，更新了通过Windows根证书认证程序（Windows Root Certificate Program）的厂商清单，并首次将StartCom公司列入了该认证清单，这是微...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-10-20 22:18:54 +0800" class="post-list__meta--date date">2014-10-20</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/startssl-free-certificate.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

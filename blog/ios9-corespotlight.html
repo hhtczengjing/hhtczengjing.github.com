@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>在iOS9中使用CoreSpotlight</title>
+  <meta name="description" content="在iOS9之前，用户可以通过Spotlight中输入关键字来查找App。在iOS9中Apple随之发布了一套全新的iOS9 Search APIs之后，开发者不但可以自由的将App的部分内容建立索引，还能对Spotlight上的搜索结果以及点击不同的结果显示的内容进行设置。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在iOS9中使用CoreSpotlight">
+  <meta name="twitter:description" content="在iOS9之前，用户可以通过Spotlight中输入关键字来查找App。在iOS9中Apple随之发布了一套全新的iOS9 Search APIs之后，开发者不但可以自由的将App的部分内容建立索引，还能对Spotlight上的搜索结果以及点击不同的结果显示的内容进行设置。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="在iOS9中使用CoreSpotlight">
+  <meta property="og:description" content="在iOS9之前，用户可以通过Spotlight中输入关键字来查找App。在iOS9中Apple随之发布了一套全新的iOS9 Search APIs之后，开发者不但可以自由的将App的部分内容建立索引，还能对Spotlight上的搜索结果以及点击不同的结果显示的内容进行设置。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios9-corespotlight.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-10-18 16:37:38 +0800" itemprop="datePublished" class="post-meta__date date">2015-10-18</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">在iOS9中使用CoreSpotlight</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS9之前，用户可以通过Spotlight中输入关键字来查找App。在iOS9中Apple随之发布了一套全新的iOS9 Search APIs之后，开发者不但可以自由的将App的部分内容建立索引，还能对Spotlight上的搜索结果以及点击不同的结果显示的内容进行设置。</p>
+
+<p><img src="/images/ios9_corespotlight/apple_search_demo.png" alt="apple_search_demo.png" /></p>
+
+<p>###三种搜索的API简介</p>
+
+<p>####NSUserActivity</p>
+
+<p><code class="highlighter-rouge">NSUserActivity</code>是iOS8专为Handoff推出的API，在iOS9得到了提升。现在用户只需要提供元数据(metadata)就能搜索到不同的活动(Activity)了。也就是说Spotlight可以将Activity加入到索引，而NSUserActivity就好比网页浏览器的历史堆栈(history stack, 可以理解为最近使用的App，或者是近期常用联系人等)，用户可以通过Spotlight搜索到最近的Activity.</p>
+
+<p>####Web Markup</p>
+
+<p><code class="highlighter-rouge">Web Markup</code>在网页上显示App的内容并建立Spotlight索引，如此一来即便没有安装某个App，苹果的索引器也能在网页上搜索特别的标记（markup），在Safari或Spotlight上显示搜索结果。</p>
+
+<p>####CoreSpotlight</p>
+
+<p><code class="highlighter-rouge">NSUserActivity</code>帮助储存用户历史，而全新的<code class="highlighter-rouge">CoreSpotlight</code>则能为App中的任何内容创建索引，实质是在用户设备上提供基础的<code class="highlighter-rouge">CoreSpotlight</code>索引渠道，满足用户另外一个需求。最典型的一个例子是印象笔记和iOS自带的Note，用户无需打开对应的App通过Spotlight就能搜索到笔记的内容，然后快速打开。</p>
+
+<p>###使用CoreSpotlight APIs</p>
+
+<p>####1、引入CoreSpotlight.framework</p>
+
+<p><img src="/images/ios9_corespotlight/corespotlight_framework.png" alt="corespotlight_framework" /></p>
+
+<p>####2、创建索引</p>
+
+<p>#####（1）创建索引所需的元数据</p>
+
+<p>为了让内容可以被搜索，首先需要创建一个包含元数据的属性</p>
+
+<p><img src="/images/ios9_corespotlight/searchable_attributes.png" alt="searchable_attributes.png" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CSSearchableItemAttributeSet *attributeSet = [[CSSearchableItemAttributeSet alloc] initWithItemContentType:@"contact"];
+attributeSet.title = @"标题";
+attributeSet.contentDescription = @"内容";
+attributeSet.keywords = @[@"关键字1", @"关键字2"];
+attributeSet.thumbnailData = UIImagePNGRepresentation([UIImage imageNamed:@"缩略图"]);
+</code></pre></div></div>
+
+<p>#####（2）创建索引</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CSSearchableItem *searchableItem = [[CSSearchableItem alloc] initWithUniqueIdentifier:@"" domainIdentifier:@"" attributeSet:attributeSet];
+searchableItem.expirationDate = [NSDate dateWithTimeIntervalSinceNow:3600];
+</code></pre></div></div>
+<p>注意：</p>
+
+<p>1)uniqueIdentifier:在应用程序中这个值是唯一的，由于这个可以用于索引的更新、删除索引是唯一的，推荐使用UUID或者是搜索的条目的主键。</p>
+
+<p>2)domainIdentifier:一个可选的标识符，用来表示item的域(domain)或者所有者，这个可能用一个账户的邮箱作为identifier来索引数据，并且当账户删除的时候可以根据这个来删除数据，一般情况下domainIdentifier应该是这种格式<account-id>.<mailbox-id>并且不能包含时间。</mailbox-id></account-id></p>
+
+<p>3)expirationDate:过期的日期，默认过期的日期是一个月</p>
+
+<p>#####（3）将索引加入到CoreSpotlight</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[CSSearchableIndex defaultSearchableIndex] indexSearchableItems:@[searchableItem] completionHandler:^(NSError * _Nullable error) {
+	if(error) {
+		NSLog(@"%@", [error localizedDescription]);
+	}
+}];
+</code></pre></div></div>
+
+<p>####3、配置用户点击搜索结果的处理动作</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void(^)(NSArray * __nullable restorableObjects))restorationHandler {
+	if([userActivity.activityType isEqualToString:CSSearchableItemActionType]) {
+		NSString *uniqueIdentifier = userActivity.userInfo[CSSearchableItemActivityIdentifier];
+        //这里根据这个uniqueIdentifier可以跳转到详细信息页面
+        return YES;
+    }
+    return YES;
+}
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/index.html">《App Search Programming Guide》</a></p>
+
+<p>2、<a href="https://www.shinobicontrols.com/blog/ios9-day-by-day-day1-search-apis">《iOS9 Day-by-Day :: Day 1 :: Search APIs》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/mengxiangyue/article/details/46575977">《CoreSpotlight.framework注释翻译》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios9-3d-touch.html" title="link to 在iOS9中使用3D Touch">在iOS9中使用3D Touch</a></h2>
+       <p class="excerpt">在iPhone 6s和iPhone 6s Plus中Apple引入了3D Touch技术。3D Touch的触控技术，被苹果称为新一代多点触控技术。其实，就是此前在Apple Watch上采用的Force Touch，屏幕可感应不同的感压力度。iOS9提供了四类API（Home Screen Quick Action、UIKit Peek &amp; Pop 、WebView Peek &amp; Pop 和UITouch Force Properties）用于操作3D Touch(Pre...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-10-24 21:19:25 +0800" class="post-list__meta--date date">2015-10-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios9-3d-touch.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/encrypt-sqlite-with-sqlcipher.html" title="link to 使用SQLCipher加密SQLite数据库">使用SQLCipher加密SQLite数据库</a></h2>
+       <p class="excerpt">在iOS应用程序开发中经常需要使用SQLite来存储数据，很多时候需要加密保存一部分的数据。常见的做法是将要存储的内容先加密然后存到数据库中，使用的时候将数据进行解密，这样就会有大量的性能消耗在数据的加解密上（性能主要取决于加解密的算法和CPU的能力）。  SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.SQL...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-07-19 20:02:54 +0800" class="post-list__meta--date date">2015-07-19</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/encrypt-sqlite-with-sqlcipher.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

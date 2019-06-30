@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中的URL Scheme</title>
+  <meta name="description" content="在iOS的SDK中提供了一个非常有意思的功能，它能将iOS的Application同自定义的URL Schema绑定，同时可以通过URL Scheme在浏览器或者是其他应用中启动这个Application。本文主要介绍如何通过URL Scheme的方式启动应用和参数的传递。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中的URL Scheme">
+  <meta name="twitter:description" content="在iOS的SDK中提供了一个非常有意思的功能，它能将iOS的Application同自定义的URL Schema绑定，同时可以通过URL Scheme在浏览器或者是其他应用中启动这个Application。本文主要介绍如何通过URL Scheme的方式启动应用和参数的传递。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中的URL Scheme">
+  <meta property="og:description" content="在iOS的SDK中提供了一个非常有意思的功能，它能将iOS的Application同自定义的URL Schema绑定，同时可以通过URL Scheme在浏览器或者是其他应用中启动这个Application。本文主要介绍如何通过URL Scheme的方式启动应用和参数的传递。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-url-scheme.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-11 19:07:27 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-11</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中的URL Scheme</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS的SDK中提供了一个非常有意思的功能，它能将iOS的Application同自定义的URL Schema绑定，同时可以通过<code class="highlighter-rouge">URL Scheme</code>在浏览器或者是其他应用中启动这个Application。本文主要介绍如何通过URL Scheme的方式启动应用和参数的传递。</p>
+
+<p>##创建URL Scheme</p>
+
+<p>1、首先在*-Info.plist中添加一行,选择<code class="highlighter-rouge">URL types</code>，效果如下图所示：</p>
+
+<p><img src="/images/ios_url_scheme/ios_url_scheme_001.png" alt="ios_url_scheme_001.png" /></p>
+
+<p>2、在展开的Item 0中填写<code class="highlighter-rouge">URL identifier</code>,这个用来唯一标识用户自定义的URL Scheme，推荐使用域名的反转形式，如:com.devzeng.demo</p>
+
+<p><img src="/images/ios_url_scheme/ios_url_scheme_002.png" alt="ios_url_scheme_002.png" /></p>
+
+<p>3、在Item 0中添加新的一行，选择<code class="highlighter-rouge">URL Schemes</code></p>
+
+<p><img src="/images/ios_url_scheme/ios_url_scheme_003.png" alt="ios_url_scheme_003.png" /></p>
+
+<p>4、展开<code class="highlighter-rouge">URL Schemes</code>，在Item 0中输入自定义的Scheme的名称。在这里只需要输入自定义的Scheme的名称即可，不需要加上<code class="highlighter-rouge">://</code>，例如这里输入的是<code class="highlighter-rouge">devzeng</code>,那么对应的自定义的URL就是<code class="highlighter-rouge">devzeng://</code>，这里可以输入多个。</p>
+
+<p><img src="/images/ios_url_scheme/ios_url_scheme_004.png" alt="ios_url_scheme_004.png" /></p>
+
+<p>5、最后一个完整的示例效果图：</p>
+
+<p><img src="/images/ios_url_scheme/ios_url_scheme_005.png" alt="ios_url_scheme_005.png" /></p>
+
+<p>对应的源码配置文件为:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;CFBundleURLTypes&lt;/key&gt;
+	&lt;array&gt;
+		&lt;dict&gt;
+			&lt;key&gt;CFBundleURLName&lt;/key&gt;
+			&lt;string&gt;com.devzeng.demo.urlschema&lt;/string&gt;
+			&lt;key&gt;CFBundleURLSchemes&lt;/key&gt;
+			&lt;array&gt;
+				&lt;string&gt;devzeng&lt;/string&gt;
+			&lt;/array&gt;
+		&lt;/dict&gt;
+	&lt;/array&gt;
+</code></pre></div></div>
+
+<p>##使用URL Scheme</p>
+
+<p>1、在Safari中使用</p>
+
+<p>在Safari中直接在浏览器的地址栏中输入<code class="highlighter-rouge">devzeng://</code>,即可启动刚才的应用</p>
+
+<p>2、在其他的应用程序中使用</p>
+
+<p>在需要调用的地方使用下面的代码即可实现调用</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *customURL = @"devzeng://";
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:customURL]];
+</code></pre></div></div>
+
+<p>3、参数的传递</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)openOtherApp
+{
+    NSString *customURL = @"devzeng://?token=123abct&amp;registered=1";
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:customURL]];
+}
+</code></pre></div></div>
+
+<p>在AppDelegate中可以实现下面的两个方法</p>
+
+<p><code class="highlighter-rouge">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url</code></p>
+
+<p><code class="highlighter-rouge">- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation</code></p>
+
+<p>说明:</p>
+
+<p>(1)上面的两个函数作用是一致的只是参数不同而已，函数的返回值是BOOL,如果为YES表示可以打开，NO表示不可以打开应用程序</p>
+
+<p>(2)参数可以通过<code class="highlighter-rouge">[url query]</code>来获取，比如使用的是<code class="highlighter-rouge">devzeng://?token=123abct&amp;registered=1</code>那么通过<code class="highlighter-rouge">[url query]</code>获取到的值是<code class="highlighter-rouge">token=123abct&amp;registered=1</code>,然后可以通过这些数据再作相应的处理.</p>
+
+<p>(3)调用的应用程序的Bundle ID可以通过<code class="highlighter-rouge">sourceApplication</code>参数获取</p>
+
+<p>(4)通过<code class="highlighter-rouge">[url scheme]</code>可以获取到请求的URL Scheme，比如是通过<code class="highlighter-rouge">devzeng://</code>打开的那么<code class="highlighter-rouge">[url scheme]</code>的值就是<code class="highlighter-rouge">devzeng</code>。可以通过不同的参数来判断来源的合法性</p>
+
+<p>(5)示例</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    if ([sourceApplication isEqualToString:@"com.devzeng.demo.urlscheme"])
+    {
+        NSLog(@"调用的应用程序的Bundle ID是: %@", sourceApplication);
+        NSLog(@"URL scheme:%@", [url scheme]);
+        NSLog(@"URL query: %@", [url query]);
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
+</code></pre></div></div>
+
+<p>##参考资料
+1、<a href="http://blog.csdn.net/ba_jie/article/details/6884818">《通过自定义的URL Scheme启动你的App》</a></p>
+
+<p>2、<a href="http://iosdevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html">《The Complete Tutorial on iOS/iPhone Custom URL Schemes》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-cocoapods-dependency-manager.html" title="link to 使用CocoaPods管理iOS项目中的依赖库">使用CocoaPods管理iOS项目中的依赖库</a></h2>
+       <p class="excerpt">一种开发语言发展到一定的程度就会出现相应的依赖管理工具（Dependency Manager）或者是中央代码仓库，例如：  Java: Maven，Ivy  Ruby: gems  Python: pip, easy_install  Node.js: npm随着iOS开发者的增加，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫做：CocoaPods。CocoaPods是一个负责管理iOS项目中第三方开源代码的工具，其源码在Github上托管。该项目开始于2011年8月12日，经过...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-13 23:13:28 +0800" class="post-list__meta--date date">2014-08-13</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-cocoapods-dependency-manager.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-qrcode-scan.html" title="link to iOS中的二维码扫描">iOS中的二维码扫描</a></h2>
+       <p class="excerpt">二维码（Two-dimensional code），又称二维条码，它是用特定的几何图形按一定规律在平面（二维方向）上分布的黑白相间的图形，是所有信息数据的一把钥匙。在现代商业活动中，可实现的应用十分广泛，如：产品防伪/溯源、广告推送、网站链接、数据下载、商品交易、定位/导航、电子凭证、车辆管理、信息传递、名片交流、wifi共享等。如今智能手机扫一扫功能的应用使得二维码更加普遍。##ZXing   ZXing是一个开源的条码生成和扫描库，支持众多的条码格式，而且有各种语言的实现版本，支持的语...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-09 17:44:36 +0800" class="post-list__meta--date date">2014-08-09</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-qrcode-scan.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

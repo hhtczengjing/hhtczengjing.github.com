@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用GitHub进行项目托管</title>
+  <meta name="description" content="Git 是由 Linux 之父 Linus Tovalds 为了更好地管理linux内核开发而创立的分布式版本控制／软件配置管理软件。目前支持 Windows 、MacOSX 、Linux 等多种主流平台，特点为快速、高效及易于使用。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用GitHub进行项目托管">
+  <meta name="twitter:description" content="Git 是由 Linux 之父 Linus Tovalds 为了更好地管理linux内核开发而创立的分布式版本控制／软件配置管理软件。目前支持 Windows 、MacOSX 、Linux 等多种主流平台，特点为快速、高效及易于使用。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用GitHub进行项目托管">
+  <meta property="og:description" content="Git 是由 Linux 之父 Linus Tovalds 为了更好地管理linux内核开发而创立的分布式版本控制／软件配置管理软件。目前支持 Windows 、MacOSX 、Linux 等多种主流平台，特点为快速、高效及易于使用。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/github-code-repository.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-11-01 14:55:26 +0800" itemprop="datePublished" class="post-meta__date date">2014-11-01</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">使用GitHub进行项目托管</h1>
+  </header>
+
+  <section class="post">
+    <p>Git 是由 Linux 之父 Linus Tovalds 为了更好地管理linux内核开发而创立的分布式版本控制／软件配置管理软件。目前支持 Windows 、MacOSX 、Linux 等多种主流平台，特点为快速、高效及易于使用。</p>
+
+<p>###在GitHub上创建一个新的repository</p>
+
+<p>1、在浏览器中输入<code class="highlighter-rouge">https://github.com/login</code>登录GitHub.</p>
+
+<p><img src="/images/github_code_repository/github_login.png" alt="github_login.png" /></p>
+
+<p>2、登录完成后，点击页面的右上角的加号，选择<code class="highlighter-rouge">New repository</code>.</p>
+
+<p><img src="/images/github_code_repository/repo-create.png" alt="repo-create.png" /></p>
+
+<p>3、为repository创建一个简短的、易记的名称。例如”CocoaPodsSample”.</p>
+
+<p><img src="/images/github_code_repository/create-repository-name.png" alt="create-repository-name.png" /></p>
+
+<p>说明：</p>
+
+<p>（1）<code class="highlighter-rouge">Repository name</code>:表示的是代码仓库的名称.</p>
+
+<p>（2）<code class="highlighter-rouge">Description</code>:表示对仓库的描述，可选.</p>
+
+<p>（3）<code class="highlighter-rouge">Public/Private</code>:表示该仓库是否对外公开.</p>
+
+<p>（4）勾选<code class="highlighter-rouge">Initialize this repository with a README</code>表示默认创建一个README文件</p>
+
+<p>填写上面的内容完成之后点击<code class="highlighter-rouge">Create repository</code>的按钮后仓库就创建了，创建的repository的SSHClone路径是：<code class="highlighter-rouge">git@github.com:hhtczengjing/CocoaPodsSample.git</code>。</p>
+
+<p>###Git基本操作</p>
+
+<p>1、clone仓库到本地</p>
+
+<p><code class="highlighter-rouge">git clone git@github.com:hhtczengjing/CocoaPodsSample.git</code></p>
+
+<p>2、提交代码</p>
+
+<p>（1）拷贝源码到上面克隆出来的目录下面，拷贝前需要清除git信息</p>
+
+<p><code class="highlighter-rouge">find . -type d -name ".git"|xargs rm -rf</code></p>
+
+<p>（2）查看文件的git状态</p>
+
+<p>cd到上面的克隆的目录下面，输入下面的命令可以查看git的状态：</p>
+
+<p><code class="highlighter-rouge">git status</code></p>
+
+<p>git的状态示例如下：</p>
+
+<p><img src="/images/github_code_repository/git_status.png" alt="git_status.png" /></p>
+
+<p>（3）按照git status状态提示的将指定的文件添加到git管理，命令如下：</p>
+
+<p><code class="highlighter-rouge">git add DevZeng/</code></p>
+
+<p>（4）将代码提交到本地仓库，-m后面的是提交的注释信息</p>
+
+<p><code class="highlighter-rouge">git commit -m "第一次提交"</code></p>
+
+<p>（5）提交本地仓库的代码到服务器主分支</p>
+
+<p><code class="highlighter-rouge">git push origin master</code></p>
+
+<p>（6）更新代码</p>
+
+<p><code class="highlighter-rouge">git pull</code></p>
+
+<p>###Git 常用命令</p>
+
+<p>1、创建版本库</p>
+
+<p>（1）克隆远程版本库</p>
+
+<p><code class="highlighter-rouge">git clone &lt;url&gt;</code></p>
+
+<p>（2）初始化本地版本库</p>
+
+<p><code class="highlighter-rouge">git init</code></p>
+
+<p>2、修改和提交</p>
+
+<p>（1）查看状态</p>
+
+<p><code class="highlighter-rouge">git status</code></p>
+
+<p>（2）查看变更内容</p>
+
+<p><code class="highlighter-rouge">git diff</code></p>
+
+<p>（3）跟踪所有改动过的文件</p>
+
+<p><code class="highlighter-rouge">git add .</code></p>
+
+<p>（4）跟踪指定的文件</p>
+
+<p><code class="highlighter-rouge">git add &lt;file&gt;</code></p>
+
+<p>（5）文件改名</p>
+
+<p><code class="highlighter-rouge">git mv &lt;old&gt; &lt;new&gt;</code></p>
+
+<p>（6）删除文件</p>
+
+<p><code class="highlighter-rouge">git rm &lt;file&gt;</code></p>
+
+<p>（7）停止跟踪文件但不删除</p>
+
+<p><code class="highlighter-rouge">git rm --cached &lt;file&gt;</code></p>
+
+<p>（8）提交所有更新过的文件</p>
+
+<p><code class="highlighter-rouge">git commit -m “commit message”</code></p>
+
+<p>（9）修改最后一次提交</p>
+
+<p><code class="highlighter-rouge">git commit --amend</code></p>
+
+<p>3、查看提交历史</p>
+
+<p>（1）查看提交历史</p>
+
+<p><code class="highlighter-rouge">git log</code></p>
+
+<p>（2）查看指定文件的提交历史</p>
+
+<p><code class="highlighter-rouge">git log -p &lt;file&gt;</code></p>
+
+<p>（3）以列表方式查看指定文件的提交历史</p>
+
+<p><code class="highlighter-rouge">git blame &lt;file&gt;</code></p>
+
+<p>4、撤消</p>
+
+<p>（1）撤消工作目录中所有未提交文件的修改内容</p>
+
+<p><code class="highlighter-rouge">git reset --hard HEAD</code></p>
+
+<p>（2）撤消指定的未提交文件的修改内容</p>
+
+<p><code class="highlighter-rouge">git checkout HEAD &lt;file&gt;</code></p>
+
+<p>（3）撤消指定的提交</p>
+
+<p><code class="highlighter-rouge">git revert &lt;commit&gt;</code></p>
+
+<p>5、分支与标签</p>
+
+<p>（1）显示所有本地分支</p>
+
+<p><code class="highlighter-rouge">git branch</code></p>
+
+<p>（2）切换到指定分支或标签</p>
+
+<p><code class="highlighter-rouge">git checkout &lt;branch/tag&gt;</code></p>
+
+<p>（3）创建新分支</p>
+
+<p><code class="highlighter-rouge">git branch &lt;new-branch&gt;</code></p>
+
+<p>（4）删除本地分支</p>
+
+<p><code class="highlighter-rouge">git branch -d &lt;branch&gt;</code></p>
+
+<p>（5）列出所有本地标签</p>
+
+<p><code class="highlighter-rouge">git tag</code></p>
+
+<p>（6）基于最新提交创建标签</p>
+
+<p><code class="highlighter-rouge">git tag &lt;tagname&gt;</code></p>
+
+<p>（7）删除标签</p>
+
+<p><code class="highlighter-rouge">git tag -d &lt;tagname&gt;</code></p>
+
+<p>6、合并与衍合</p>
+
+<p>（1）合并指定分支到当前分支</p>
+
+<p><code class="highlighter-rouge">git merge &lt;branch&gt;</code></p>
+
+<p>（2）衍合指定分支到当前分支</p>
+
+<p><code class="highlighter-rouge">git rebase &lt;branch&gt;</code></p>
+
+<p>7、远程操作</p>
+
+<p>（1）查看远程版本库信息</p>
+
+<p><code class="highlighter-rouge">git remote -v</code></p>
+
+<p>（2）查看指定远程版本库信息</p>
+
+<p><code class="highlighter-rouge">git remote show &lt;remote&gt;</code></p>
+
+<p>（3）添加远程版本库</p>
+
+<p><code class="highlighter-rouge">git remote add &lt;remote&gt; &lt;url&gt; </code></p>
+
+<p>（4）从远程库获取代码</p>
+
+<p><code class="highlighter-rouge">git fetch &lt;remote&gt;</code></p>
+
+<p>（5）下载代码及快速合并</p>
+
+<p><code class="highlighter-rouge">git pull &lt;remote&gt; &lt;branch&gt;</code></p>
+
+<p>（6）上传代码及快速合并</p>
+
+<p><code class="highlighter-rouge">git push &lt;remote&gt; &lt;branch&gt;</code></p>
+
+<p>（7）删除远程分支或标签</p>
+
+<p><code class="highlighter-rouge">git push &lt;remote&gt; :&lt;branch/tag-name&gt;</code></p>
+
+<p>（8）上传所有标签</p>
+
+<p><code class="highlighter-rouge">git push --tags</code></p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://help.github.com/articles/create-a-repo/">《Create A Repo》</a></p>
+
+<p>2、<a href="https://progit.org/book/zh/">《Pro Git (中文版)》</a></p>
+
+<p>3、<a href="http://gitbook.liuhui998.com/index.html">《Git Community Book (中文版)》</a></p>
+
+<p>4、<a href="/images/github_code_repository/Git_Cheat_Sheet.png">Git常用命令速查表</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-settings-bundle.html" title="link to iOS开发中Settings.bundle的使用">iOS开发中Settings.bundle的使用</a></h2>
+       <p class="excerpt">在iOS开发中很多时候开发者需要让用户自行设置一些系统的配置项目，比如让用户设置是否支持在3G模式下加载数据，或者是让用户自己设置支不支持网络数据缓存的功能。另外在企业级应用开发中经常有需要对后台的访问地址进行调整那么需要用户自行的进行配置，下面是爱奇艺和招商银行的设置配置项：###Settings.bundle配置说明在Settings.bundle中支持如下几种配置项：1、GroupGroup类似于UITableView中的Group分组，用来表示一组设置项，配置如下所示：配置项说明：...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-16 16:35:48 +0800" class="post-list__meta--date date">2014-11-16</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-settings-bundle.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/handle-url-in-wechat-development.html" title="link to 微信公众平台开发之URL处理">微信公众平台开发之URL处理</a></h2>
+       <p class="excerpt">在微信公众平台开发中会遇到很多地方需要向客户端返回一个URL地址，比如用户点击了界面上的菜单，触发了菜单的事件，后台检测到这个事件之后需要想用户返回一些信息，如果信息是以一段文本来展示的而且里面包含一个阅读更多的超链接，这个该怎么处理呢？熟悉HTML的朋友对超链接一定不会陌生，只要用&lt;a href="URL地址"&gt;这是超链接&lt;/a&gt;这样的形式写一段代码就可以实现一个简单的超链接，用户点击之后会跳转到href属性里配置的URL地址。今天主要介绍的是在微信中如何使用超链...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-10-27 22:28:12 +0800" class="post-list__meta--date date">2014-10-27</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/handle-url-in-wechat-development.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

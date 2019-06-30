@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>微信企业号开发之开启回调模式</title>
+  <meta name="description" content="企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="微信企业号开发之开启回调模式">
+  <meta name="twitter:description" content="企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="微信企业号开发之开启回调模式">
+  <meta property="og:description" content="企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/wechat-qiyehao-developement-with-url-config-and-verify.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-11-24 19:53:17 +0800" itemprop="datePublished" class="post-meta__date date">2014-11-24</time> &#8226; <span class="post-meta__tags tags">WeChat</span>
+    </div>
+    <h1 class="post-title">微信企业号开发之开启回调模式</h1>
+  </header>
+
+  <section class="post">
+    <p><a href="https://qy.weixin.qq.com">企业号</a>是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。</p>
+
+<p><img src="/images/wechat_qyh_url_config/wechat_qyh.jpg" alt="wechat_qyh.jpg" /></p>
+
+<p>本文主要介绍如何使用Java语言进行回调模式的URL验证等内容。</p>
+
+<p>###开启回调模式配置</p>
+
+<p>1、到应用中心选择需要使用回调模式开发的应用，点击进入后会有如下的模式可供选择：</p>
+
+<p><img src="/images/wechat_qyh_url_config/wechat_qyh_url_config_001.png" alt="wechat_qyh_url_config_001" /></p>
+
+<p>2、选择回调模式点击进入回调模式的配置界面，如下图所示：</p>
+
+<p><img src="/images/wechat_qyh_url_config/wechat_qyh_url_config_002.png" alt="wechat_qyh_url_config_002" /></p>
+
+<p>当你开启应用的回调模式时，企业号会要求你填写应用的URL、Token、EncodingAESKey三个参数，各个参数说明如下：</p>
+
+<p>（1）URL是企业应用接收企业号推送请求的访问协议和地址，支持http或https协议(目前只支持80/443端口)。</p>
+
+<p>（2）Token可由企业任意填写，用于生成签名。</p>
+
+<p>（3）EncodingAESKey用于消息体的加密，是AES密钥的Base64编码。</p>
+
+<p>###验证回调URL及密钥</p>
+
+<p>当提交前面的信息时，企业号将发送GET请求到填写的URL上，GET请求携带四个参数，企业在获取时需要做urldecode处理，否则会验证不成功。</p>
+
+<p><img src="/images/wechat_qyh_url_config/wechat_qyh_url_config_003.png" alt="wechat_qyh_url_config_003" /></p>
+
+<p>企业通过参数msg_signature对请求进行校验，如果确认此次GET请求来自企业号，那么企业应用对echostr参数解密并原样返回echostr明文(不能加引号)，则接入验证生效，回调模式才能开启。后续回调企业时都会在请求URL中带上以上参数（echostr除外），校验方式与首次验证URL一致。</p>
+
+<p>开发步骤如下：</p>
+
+<p>####下载官方加解密库及示例</p>
+
+<p>1、<a href="http://qydev.weixin.qq.com/java.zip">到官方指定的地址下载</a>后解压java.zip文件，解压后的文件里面包含Java版本的加解密的类和示例程序，说明如下：</p>
+
+<p>（1）com\qq\weixin\mp\aes目录下是用户需要用到的接入企业微信的接口，其中WXBizMsgCrypt.java文件提供的WXBizMsgCrypt类封装了用户接入企业微信的三个接口，其它的类文件用户用于实现加解密，用户无须关心。sample.java文件提供了接口的使用示例。</p>
+
+<p>（2）WXBizMsgCrypt封装了VerifyURL, DecryptMsg, EncryptMsg三个接口，分别用于开发者验证回调url、接收消息的解密以及开发者回复消息的加密过程。使用方法可以参考Sample.java文件。</p>
+
+<p>（3）请开发者使用jdk1.6或以上的版本。针对org.apache.commons.codec.binary.Base64，需要导入jar包commons-codec-1.9（或comm ons-codec-1.8等其他版本），我们有提供，官方下载地址：http://commons.apache.org/proper/commons-codec/download_codec.cgi</p>
+
+<p>（4）异常<code class="highlighter-rouge">java.security.InvalidKeyException:illegal Key Size</code>的解决方案：</p>
+
+<p>在官方网站下载JCE无限制权限策略文件，下载后解压，可以看到<code class="highlighter-rouge">local_policy.jar</code>和<code class="highlighter-rouge">US_export_policy.jar</code>以及<code class="highlighter-rouge">readme.txt</code>这样三个文件。如果安装了JRE，将两个jar文件放到<code class="highlighter-rouge">%JRE_HOME%\lib\security</code>目录下覆盖原来的文件。如果安装了JDK，将两个jar文件放到<code class="highlighter-rouge">%JDK_HOME%\jre\lib\security</code>目录下覆盖原来文件。</p>
+
+<p>附Java加密框架Jasypt依赖的JCE文件下载地址：</p>
+
+<ul>
+  <li>
+    <p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jce-6-download-429243.html">JDK6对应版本，点此下载</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jce-7-download-432124.html">JDK7对应版本，点此下载</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html">JDK8对应版本，点此下载</a></p>
+  </li>
+</ul>
+
+<p>####验证URL有效性的步骤</p>
+
+<p>（1）从GET过来的URL中获取msg_signature、timestamp、nonce和echostr四个参数，需要对URL进行URLDecoder，示例代码如下所示：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String req_msg_signature = request.getParameter("msg_signature");
+String req_timestamp = request.getParameter("timestamp");
+String req_nonce = request.getParameter("nonce");
+String req_echostr = request.getParameter("echostr");
+String sVerifyMsgSig = URLDecoder.decode(req_msg_signature, "UTF-8");
+String sVerifyTimeStamp = URLDecoder.decode(req_timestamp, "UTF-8");
+String sVerifyNonce = URLDecoder.decode(req_nonce, "UTF-8");
+String sVerifyEchoStr = URLDecoder.decode(req_echostr, "UTF-8");
+</code></pre></div></div>
+
+<p>（2）使用网站上配置的Token和EncodingAESKey，以及CorpID，初始化加解密验证工具。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String sToken = "Token";//配置URL时配置的Token
+String sCorpID = "CorpID";//企业号的CorpID
+String sEncodingAESKey = "EncodingAESKey";//配置URL时配置的EncodingAESKey
+WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(sToken, sEncodingAESKey, sCorpID);
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>1）如何获取CorpID，CorpID是表示企业号的唯一标识码，相当于微信服务号/订阅号的AppID，在后台管理界面中的<code class="highlighter-rouge">设置</code>中可以看到，如下图所示：</p>
+
+<p><img src="/images/wechat_qyh_url_config/wechat_qyh_url_config_004.jpg" alt="wechat_qyh_url_config_004" /></p>
+
+<p>2）WXBizMsgCrypt是前面下载的示例代码中由官方提供的加解密的工具类，可以直接使用。</p>
+
+<p>（3）验证URL的有效性</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String sEchoStr = wxcpt.VerifyURL(sVerifyMsgSig, sVerifyTimeStamp, sVerifyNonce, sVerifyEchoStr);
+</code></pre></div></div>
+
+<p>验证URL有效性的函数各个参数说明：</p>
+
+<p><img src="/images/wechat_qyh_url_config/wechat_qyh_url_config_005.png" alt="wechat_qyh_url_config_005" /></p>
+
+<p>（4）响应微信服务器验证结果（将echostr参数解密并原样返回echostr明文，不能加引号）</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>request.setCharacterEncoding("UTF-8");
+response.setContentType("text/xml;charset=UTF-8");
+response.getWriter().write(sEchoStr);
+</code></pre></div></div>
+
+<p>####验证完成后企业号的配置</p>
+
+<p>验证通过后可以支持用户自定义菜单、用户状态变更通知、用户消息上报和上报用户地理位置几个方面的配置，如下图示所示：</p>
+
+<p><img src="/images/wechat_qyh_url_config/wechat_qyh_url_config_006.png" alt="wechat_qyh_url_config_006" /></p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://qydev.weixin.qq.com/wiki/index.php?title=回调模式">《回调模式》</a></p>
+
+<p>2、<a href="http://qydev.weixin.qq.com/wiki/index.php?title=加解密库下载与返回码">《加解密库下载与返回码》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/wechat-qiehao-development-of-message-receive.html" title="link to 微信企业号开发之消息与事件的接收">微信企业号开发之消息与事件的接收</a></h2>
+       <p class="excerpt">企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。将应用设置在回调模式时，企业可以通过回调URL接收员工回复的消息，以及员工关注、点击菜单、上报地理位置等事件。在接收到事件后，企业可以发送被动响应消息，实现员工与企业的互动。企业在接收消息，以及发送被动响应消息时，数据包以xml格式组成，以AES方式加密传输。本文主要介绍如何处...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-25 20:52:05 +0800" class="post-list__meta--date date">2014-11-25</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-qiehao-development-of-message-receive.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios8-today-extension.html" title="link to iOS8中Today Extension的使用">iOS8中Today Extension的使用</a></h2>
+       <p class="excerpt">扩展（Extension）是iOS 8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。iOS 8系统有6个支持扩展的系统区域，分别是Today、Share、Action、Photo Editing、Storage Provider、Custom keyboard。支持扩展的系统区域也被称为扩展点。对于赛事比分，股票、天气、快递这类需要实时获取的信息，可以在通知中心的Today视图中创建一个Today扩展实现。...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-22 23:49:18 +0800" class="post-list__meta--date date">2014-11-22</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios8-today-extension.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

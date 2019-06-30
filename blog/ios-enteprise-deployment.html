@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS企业级应用部署</title>
+  <meta name="description" content="在iOS开发计划中有一种是iOS Developer Enterprise Program(iOS开发者企业级计划)，对于这种开发者证书发布的应用程序是无法上传到Apple App Store上的，目前对于这种企业级开发的应用程序最好的分发方式是部署到内网服务器上通过网络进行下载。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS企业级应用部署">
+  <meta name="twitter:description" content="在iOS开发计划中有一种是iOS Developer Enterprise Program(iOS开发者企业级计划)，对于这种开发者证书发布的应用程序是无法上传到Apple App Store上的，目前对于这种企业级开发的应用程序最好的分发方式是部署到内网服务器上通过网络进行下载。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS企业级应用部署">
+  <meta property="og:description" content="在iOS开发计划中有一种是iOS Developer Enterprise Program(iOS开发者企业级计划)，对于这种开发者证书发布的应用程序是无法上传到Apple App Store上的，目前对于这种企业级开发的应用程序最好的分发方式是部署到内网服务器上通过网络进行下载。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-enteprise-deployment.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-07-20 18:07:16 +0800" itemprop="datePublished" class="post-meta__date date">2014-07-20</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS企业级应用部署</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS开发计划中有一种是<code class="highlighter-rouge">iOS Developer Enterprise Program(iOS开发者企业级计划)</code>，对于这种开发者证书发布的应用程序是无法上传到Apple App Store上的，目前对于这种企业级开发的应用程序最好的分发方式是部署到内网服务器上通过网络进行下载。</p>
+
+<h4 id="in-house应用程序分发">IN-HOUSE应用程序分发</h4>
+
+<p>下面介绍下使用网络方式进行部署的方式,用户直接在iPhone/iPad的Safari浏览器里面输入URL地址即可安装，如在浏览器输入<code class="highlighter-rouge">http://www.itools.cn</code>能出现如下的网页，点击下载安装即可安装iTools这款软件。</p>
+
+<p><img src="/images/ios_enterprise_deploy/ios_enterprise_deploy.png" alt="下载iTools" /></p>
+
+<h5 id="前提条件">前提条件</h5>
+
+<p>(1)已鉴定的用户可以访问的安全Web服务器，对于iOS7.1以上的设备必须有HTTPS的服务器</p>
+
+<p>(2).ipa格式的iOS应用程序，经构建用于发布/生产(使用了企业级预制描述文件)</p>
+
+<p>(3)关于应用程序描述的清单文件(.plist)</p>
+
+<p>(4)使用了<code class="highlighter-rouge">itms-services://?action=download-manifest&amp;url=</code>形式的HTML超链接</p>
+
+<h5 id="部署步骤">部署步骤</h5>
+
+<p>(1)打包ipa文件</p>
+
+<p>使用Xcode的<code class="highlighter-rouge">Product-&gt;Archive</code>来进行打包，在选择发布的方式上选择<code class="highlighter-rouge">Save for Enterprise or Ad- Hoc Deployment</code>,生成IPA文件即可。</p>
+
+<p>(2)配置plist文件
+在plist文件中必须配置IPA文件的下载路径、应用的名称和应用的<code class="highlighter-rouge">bundle-identifier</code>(需要和Xcode中的配置一致)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;dict&gt;</span>
+   <span class="nt">&lt;key&gt;</span>items<span class="nt">&lt;/key&gt;</span>
+   <span class="nt">&lt;array&gt;</span>
+       <span class="nt">&lt;dict&gt;</span>
+           <span class="nt">&lt;key&gt;</span>assets<span class="nt">&lt;/key&gt;</span>
+           <span class="nt">&lt;array&gt;</span>
+	           <span class="cp">&lt;!— 必填项，ipa文件 —&gt;</span>
+               <span class="nt">&lt;dict&gt;</span>
+                   <span class="nt">&lt;key&gt;</span>kind<span class="nt">&lt;/key&gt;</span>
+                   <span class="nt">&lt;string&gt;</span>software-package<span class="nt">&lt;/string&gt;</span>
+                   <span class="nt">&lt;key&gt;</span>url<span class="nt">&lt;/key&gt;</span>
+                   <span class="nt">&lt;string&gt;</span>http://www.example.com/apps/foo.ipa<span class="nt">&lt;/string&gt;</span>
+               <span class="nt">&lt;/dict&gt;</span>
+               <span class="c">&lt;!-- 可选项display-image: 在下载过程中显示的图标.—&gt;
+               &lt;dict&gt;
+                   &lt;key&gt;kind&lt;/key&gt;
+                   &lt;string&gt;display-image&lt;/string&gt;
+                   &lt;!-- optional.indicates if icon needs shine effect applied.--&gt;</span>
+                   <span class="nt">&lt;key&gt;</span>needs-shine<span class="nt">&lt;/key&gt;</span>
+                   <span class="nt">&lt;true/&gt;</span>
+                   <span class="nt">&lt;key&gt;</span>url<span class="nt">&lt;/key&gt;</span>
+                   <span class="nt">&lt;string&gt;</span>http://www.example.com/image.57x57.png<span class="nt">&lt;/string&gt;</span>
+               <span class="nt">&lt;/dict&gt;</span>
+               <span class="c">&lt;!-- 可选项，full-size-image:(512x512)在iTunes使用的图标.--&gt;</span>
+               <span class="nt">&lt;dict&gt;</span>
+                   <span class="nt">&lt;key&gt;</span>kind<span class="nt">&lt;/key&gt;</span>
+                   <span class="nt">&lt;string&gt;</span>full-size-image<span class="nt">&lt;/string&gt;</span>
+                   <span class="nt">&lt;key&gt;</span>needs-shine<span class="nt">&lt;/key&gt;</span>
+                   <span class="nt">&lt;true/&gt;</span>
+                   <span class="nt">&lt;key&gt;</span>url<span class="nt">&lt;/key&gt;</span>
+		   			<span class="nt">&lt;string&gt;</span>http://www.example.com/image.512x512.jpg<span class="nt">&lt;/string&gt;</span>
+               <span class="nt">&lt;/dict&gt;</span>
+           <span class="nt">&lt;/array&gt;&lt;key&gt;</span>metadata<span class="nt">&lt;/key&gt;</span>
+           <span class="nt">&lt;dict&gt;</span>
+               <span class="c">&lt;!-- 必填项，应用程序的indentifier&gt;
+               &lt;key&gt;bundle-identifier&lt;/key&gt;
+               &lt;string&gt;com.example.fooapp&lt;/string&gt;
+               &lt;!-- 可选项，应用程序的版本号 --&gt;</span>
+               <span class="nt">&lt;key&gt;</span>bundle-version<span class="nt">&lt;/key&gt;</span>
+               <span class="nt">&lt;string&gt;</span>1.0<span class="nt">&lt;/string&gt;</span>
+               <span class="c">&lt;!-- —必填项 下载类型默认为software -—&gt;
+               &lt;key&gt;kind&lt;/key&gt;
+               &lt;string&gt;software&lt;/string&gt;
+               &lt;!-- 可选项 在提示下载时显示，一般为公司的名称 --&gt;</span>
+               <span class="nt">&lt;key&gt;</span>subtitle<span class="nt">&lt;/key&gt;</span>
+               <span class="nt">&lt;string&gt;</span>Apple<span class="nt">&lt;/string&gt;</span>
+               <span class="c">&lt;!-- 必填项，在下载的过程中显示.—&gt;
+               &lt;key&gt;title&lt;/key&gt;
+               &lt;string&gt;Example Corporate App&lt;/string&gt;
+           &lt;/dict&gt;
+       &lt;/dict&gt;
+   &lt;/array&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</span></code></pre></div></div>
+
+<p>(3)编写下载页面，其中URL指向的是plist文件的路径，对于iOS7.1以上的系统这里的plist的路径必须是HTTPS的，iOS7.1以前的则不需强制使用HTTPS</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href="itms-services://?action=download-manifest&amp;url=http://www.example.com/test.plist"&gt;下载应用&lt;/a&gt;
+</code></pre></div></div>
+
+<p>(4)设定服务器MIME类型</p>
+
+<p>对于OS X Server,将以下MIME类型添加到WEB服务的“MIME TYPES”设置中：</p>
+
+<p><code class="highlighter-rouge">application/octet-stream ipa</code></p>
+
+<p><code class="highlighter-rouge">text/xml plist</code></p>
+
+<p>对于IIS，使用IIS Manager在服务器的“属性”页面中添加MIME类型</p>
+
+<p><code class="highlighter-rouge">.ipa application/octet-stream</code></p>
+
+<p><code class="highlighter-rouge">.plist text/xml</code></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/dont-use-retaincount.html" title="link to 不要使用retainCount">不要使用retainCount</a></h2>
+       <p class="excerpt">Objective-C通过引用计数来管理内存，每个对象都有一个计数器，其值表明还有多少个对象同此对象之间存在引用关系。每个对象在创建之际其retainCount设置为1，retain/copy会使引用计数递增，而release则会使其引用计数递减。在NSObject协议中定义了retainCount的方法，用于查询对象当前的引用计数，方法的定义如下：-(NSUInteger)retainCount虽然说在ARC的情况下该方法已经被废弃，这和在ARC中使用retain、release、aut...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-24 22:22:02 +0800" class="post-list__meta--date date">2014-07-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/dont-use-retaincount.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-ipa-recodesign.html" title="link to iOS应用程序ipa安装包重签名">iOS应用程序ipa安装包重签名</a></h2>
+       <p class="excerpt">在日常的工作中经常遇到需要将一些应用程序IPA安装包【已经上架到apple app store,或者是别人写的IPA】发给别人来安装，获取是其他渠道获取来的IPA版本，对于普通人来说安装这些ipa文件有点麻烦，需要使用iTools/iFunBox这些软件来进行安装，不能像企业级的IN-HOUSE方式进行部署，直接在网页上下载。最近看到iTools/同步推这样的应用可以直接下载应用程序，而且使用的是企业级证书发布的，排除部分企业是特殊渠道分发的，但是其中一份仍然是使用其他公司的证书进行发布打...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-20 17:24:52 +0800" class="post-list__meta--date date">2014-07-20</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-ipa-recodesign.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

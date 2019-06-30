@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中ARC下block的循环引用</title>
+  <meta name="description" content="在iOS4.2时，Apple推出ARC的内存管理机制。这是一种编译期的内存管理方式，在编译期间，编译器会判断对象的使用情况，并适当的加上retain和release，使得对象的内存被合理的管理。所以，从本质上说ARC和MRC在本质上是一样的，都是通过引用计数的内存管理方式。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中ARC下block的循环引用">
+  <meta name="twitter:description" content="在iOS4.2时，Apple推出ARC的内存管理机制。这是一种编译期的内存管理方式，在编译期间，编译器会判断对象的使用情况，并适当的加上retain和release，使得对象的内存被合理的管理。所以，从本质上说ARC和MRC在本质上是一样的，都是通过引用计数的内存管理方式。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中ARC下block的循环引用">
+  <meta property="og:description" content="在iOS4.2时，Apple推出ARC的内存管理机制。这是一种编译期的内存管理方式，在编译期间，编译器会判断对象的使用情况，并适当的加上retain和release，使得对象的内存被合理的管理。所以，从本质上说ARC和MRC在本质上是一样的，都是通过引用计数的内存管理方式。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-arc-block-retain-cycle.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-03-22 18:07:19 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-22</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中ARC下block的循环引用</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS4.2时，Apple推出ARC的内存管理机制。这是一种编译期的内存管理方式，在编译期间，编译器会判断对象的使用情况，并适当的加上retain和release，使得对象的内存被合理的管理。所以，从本质上说ARC和MRC在本质上是一样的，都是通过引用计数的内存管理方式。</p>
+
+<p>使用ARC虽然可以简化内存管理，但是ARC并不是万能的，有些情况程序为了能够正常运行，会隐式地持有或者复制对象，如果不加以注意，便会造成内存泄露。在ARC下，当block获取到外部变量时，由于编译器无法预测获取到的变量何时会被突然释放，为了保证程序能够正确运行，让block持有获取到的变量。</p>
+
+<p>本文主要通过一个例子来介绍在ARC情况下使用Block不当会导致的内存泄露的问题。</p>
+
+<p>###示例代码</p>
+
+<p>示例代码来源于《Effective Objective-C 2.0》(编写高质量iOS与OS X代码的52个有效方法)。</p>
+
+<p>（1）<code class="highlighter-rouge">EOCNetworkFetcher.h</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>typedef void (^EOCNetworkFetcherCompletionHandler)(NSData *data);
+
+@interface EOCNetworkFetcher : NSObject
+
+@property (nonatomic, strong, readonly) NSURL *url;
+
+- (id)initWithURL:(NSURL *)url;
+
+- (void)startWithCompletionHandler:(EOCNetworkFetcherCompletionHandler)completion;
+
+@end
+</code></pre></div></div>
+
+<p>（2）<code class="highlighter-rouge">EOCNetworkFetcher.m</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@interface EOCNetworkFetcher ()
+
+@property (nonatomic, strong, readwrite) NSURL *url;
+@property (nonatomic, copy) EOCNetworkFetcherCompletionHandler completionHandler;
+@property (nonatomic, strong) NSData *downloadData;
+
+@end
+
+@implementation EOCNetworkFetcher
+
+- (id)initWithURL:(NSURL *)url {
+    if(self = [super init]) {
+        _url = url;
+    }
+    return self;
+}
+
+- (void)startWithCompletionHandler:(EOCNetworkFetcherCompletionHandler)completion {
+    self.completionHandler = completion;
+    //开始网络请求
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        _downloadData = [[NSData alloc] initWithContentsOfURL:_url];
+        dispatch_async(dispatch_get_main_queue(), ^{
+        	 //网络请求完成
+            [self p_requestCompleted];
+        });
+    });
+}
+
+- (void)p_requestCompleted {
+    if(_completionHandler) {
+        _completionHandler(_downloadData);
+    }
+}
+
+@end
+</code></pre></div></div>
+
+<p>（3）<code class="highlighter-rouge">EOCClass.m</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@implementation EOCClass {
+    EOCNetworkFetcher *_networkFetcher;
+    NSData *_fetchedData;
+}
+
+- (void)downloadData {
+    NSURL *url = [NSURL URLWithString:@"http://www.baidu.com"];
+    _networkFetcher = [[EOCNetworkFetcher alloc] initWithURL:url];
+    [_networkFetcher startWithCompletionHandler:^(NSData *data) {
+        _fetchedData = data;
+    }];
+}
+@end
+</code></pre></div></div>
+
+<p>代码分析：</p>
+
+<p>1、<code class="highlighter-rouge">completion handler</code>块因为要设置<code class="highlighter-rouge">_fetchedData</code>实例变量的值，所以它必须捕获self变量，也就是说handler块保留了EOCClass实例；</p>
+
+<p>2、而<code class="highlighter-rouge">EOCClass</code>实例通过strong实例变量保留了<code class="highlighter-rouge">EOCNetworkFetcher</code>，最后EOCNetworkFetcher实例对象又保留了handler块。</p>
+
+<p>引用关系如下下图所示：</p>
+
+<p><img src="/images/arc_block_retain_cycle/arc_block_retain_cycle.png" alt="arc_block_retain_cycle.png" /></p>
+
+<p>###解决办法</p>
+
+<p>要想打破保留环</p>
+
+<p>1、方法一：使用完EOCNetworkFetcher对象之后就没有必要在保留该对象了，在block里面将对象释放即可打破保留环。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)downloadData {
+    NSURL *url = [NSURL URLWithString:@"http://www.baidu.com"];
+    _networkFetcher = [[EOCNetworkFetcher alloc] initWithURL:url];
+    [_networkFetcher startWithCompletionHandler:^(NSData *data) {
+        _fetchedData = data;
+        _networkFetcher = nil;//加上此行，此处是为了打破循环引用
+    }];
+}
+</code></pre></div></div>
+
+<p>2、方法二：上面的方法需要调用者自己来将对象手动设置为nil，对于使用者来说会造成很多困恼，如果忘记将对象设置为nil就会造成循环引用。在运行完completion handler之后将block释放即可。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)p_requestCompleted {
+    if(_completionHandler) {
+        _completionHandler(_downloadData);
+    }
+    self.completionHandler = nil;//加上此行，此处是为了打破循环引用
+}
+</code></pre></div></div>
+
+<p>3、方法三：将引用的一方变成weak，从而避免循环引用。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)downloadData {
+   __weak __typeof(self) weakSelf = self;
+   NSURL *url = [NSURL URLWithString:@"http://www.baidu.com"];
+   _networkFetcher = [[EOCNetworkFetcher alloc] initWithURL:url];
+   [_networkFetcher startWithCompletionHandler:^(NSData *data) {
+   		//如果想防止 weakSelf 被释放，可以再次强引用
+    	__typeof(&amp;*weakSelf) strongSelf = weakSelf;
+    	if (strongSelf) {
+    		strongSelf.fetchedData = data;
+    	}
+   }];
+}
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://www.zybuluo.com/MicroCai/note/67734">《ARC 下内存泄露的那些点》</a></p>
+
+<p>2、<a href="http://rocry.com/2012/12/18/objective-c-type-of/">《Weakself的一种写法》</a></p>
+
+<p>3、<a href="http://blog.cnbang.net/tech/2085/">《[iOS]ARC下循环引用的问题》</a></p>
+
+<p>4、《Effective Objective-C 2.0》(Tips:40)、《iOS开发进阶》（P190）</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios8-safari-action-extension.html" title="link to iOS8中的Safari Action Extension">iOS8中的Safari Action Extension</a></h2>
+       <p class="excerpt">扩展（Extension）是iOS8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。前面介绍过关于Today Widget的使用，本文介绍Action Extension在iOS8中的开发。###创建Action Extension1、使用Xcode6创建一个iOS工程，菜单栏File-&gt;New-&gt;Target出现下面的可选项，选择Action Extension:2、配置Extension的Pr...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-29 20:12:53 +0800" class="post-list__meta--date date">2015-03-29</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios8-safari-action-extension.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-custom-font-in-ios.html" title="link to 在iOS开发中使用自定义字体">在iOS开发中使用自定义字体</a></h2>
+       <p class="excerpt">在iOS的项目开发中经常遇到需要使用一些自定义的字体文件，比如仿宋_GB2312、方正小标宋_GBK等。之前我们为了使用这些自定义的字体，在应用的资源包中放入这些字体文件。因为字体文件通常比较大，有的一个字库就达到10M以上（拿方正小标宋_GBK这个字库来说就有13M之多），这样打包后的ipa文件的体积就可能会变得很大，对于只有个别的模块需要特殊的字体样式的应用来说很不划算，那么在iOS6.0以后苹果就开放了动态加载字体的权限。下面就iOS中使用字体的这两种方式进行介绍。###使用静态字体...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-02-26 20:26:45 +0800" class="post-list__meta--date date">2015-02-26</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/using-custom-font-in-ios.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

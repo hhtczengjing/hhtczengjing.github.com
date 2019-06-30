@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>GitLab的简单使用</title>
+  <meta name="description" content="GitLab是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GitLab的简单使用">
+  <meta name="twitter:description" content="GitLab是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="GitLab的简单使用">
+  <meta property="og:description" content="GitLab是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/simple-usage-of-gitlab.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-07-12 04:05:48 +0800" itemprop="datePublished" class="post-meta__date date">2015-07-12</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">GitLab的简单使用</h1>
+  </header>
+
+  <section class="post">
+    <p><a href="https://about.gitlab.com">GitLab</a>是一个利用<code class="highlighter-rouge">Ruby on Rails</code>开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。</p>
+
+<p><img src="/images/gitlab_usage/logo.png" alt="logo.png" /></p>
+
+<p>它拥有与Github类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。团队成员可以利用内置的简单聊天程序(Wall)进行交流。它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找。开源中国代码托管平台<code class="highlighter-rouge">git.oschina.net</code>就是基于GitLab项目搭建。</p>
+
+<p>###添加新项目</p>
+
+<p>1、选择创建新项目</p>
+
+<p>登录成功后，点击导航条上的 “+” 就可以进入创建项目的页面</p>
+
+<p><img src="/images/gitlab_usage/new_project_1.png" alt="new_project_1.png" /></p>
+
+<p>2、填写项目的信息</p>
+
+<p>在创建工程的页面，按照要求填写项目的名称和可见性等信息。</p>
+
+<p><img src="/images/gitlab_usage/new_project_2.png" alt="new_project_2.png" /></p>
+
+<p>（1）Project path：项目的路径，一般可以认为是项目的名称</p>
+
+<p>（2）Import prject from：从哪导入项目，提供Github/Bitbucket等几个选项</p>
+
+<p>（3）Description（项目的描述）：可选项，对项目的简单描述</p>
+
+<p>（4）Visibility Level（项目可见级别）：提供Private（私有的，只有你自己或者组内的成员能访问）/Internal（所有登录的用户）/Public(公开的，所有人都可以访问)三种选项。</p>
+
+<p>###添加和配置SSH公钥</p>
+
+<p>SSH（Secure Shell）是一种安全协议，在你的电脑与GitLab服务器进行通信时，我们使用SSH密钥（SSH Keys）认证的方式来保证通信安全。你可以在网络上搜索到关于SSH密钥的更多介绍；下面我们重点讲解如何创建 SSH密钥，并将密钥中的公钥添加到GitLab，以便我们通过SSH协议来访问Git仓库。</p>
+
+<p><img src="/images/gitlab_usage/add_sshkey_3.gif" alt="add_sshkey_3.gif" /></p>
+
+<p>SSH 密钥的创建需要在终端（命令行）环境下进行，我们首先进入命令行环境。通常在OS X和Linux平台下我们使用终端工具（Terminal），在Windows平台中，可以使用Git Bash工具。</p>
+
+<p>进入命令行环境后，我们执行以下操作来创建 SSH 密钥。</p>
+
+<p>####1.进入SSH目录</p>
+
+<p><code class="highlighter-rouge">cd  ~/.ssh</code></p>
+
+<p>（1）如果还没有 ~/.ssh 目录，可以手工创建一个(<code class="highlighter-rouge">mkdir ~/.ssh</code>)，之后再通过<code class="highlighter-rouge">cd ~/.ssh</code>进入SSH目录</p>
+
+<p>（2）可以通过<code class="highlighter-rouge">ls -l</code>命令查看SSH目录下的文件，来确认你是否已经生成过SSH密钥；如果SSH目录为空，我们开始第二步，生成 SSH 密钥；如果存在id_rsa.pub这个文件，说明你之前生成过SSH密钥，后面有介绍如何添加多个sshkey</p>
+
+<p>####2.生成SSH密钥</p>
+
+<p>我们通过下面的命令生成密钥，请将命令中的<code class="highlighter-rouge">YOUR_EMAIL@YOUREMAIL.COM</code>替换为你自己的<code class="highlighter-rouge">Email</code>地址。</p>
+
+<p><code class="highlighter-rouge">ssh-keygen -t rsa -C "YOUR_EMAIL@YOUREMAIL.COM"</code></p>
+
+<p>在SSH生成过程中会出现以下信息，按屏幕的提示操作即可；</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ssh-keygen -t rsa -C "YOUR_EMAIL@YOUREMAIL.COM"
+Generating public/private rsa key pair.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /Users/USERNAME/.ssh/id_rsa.
+Your public key has been saved in /Users/USERNAME/.ssh/id_rsa.pub.
+The key fingerprint is:
+15:81:d2:7a:c6:6c:0f:ec:b0:b6:d4:18:b8:d1:41:48 YOUR_EMAIL@YOUREMAIL.COM
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>（1）一般情况下，在命令行中输入密码、口令一类的信息时是没有信息回显的。在我们这一步的操作中，输入passphrase口令时，命令行界面上不会随着键盘敲入密码而有什么反馈。</p>
+
+<p>（2）当提示<code class="highlighter-rouge">Enter passphrase (empty for no passphrase) : </code>时，可以直接按两次回车键输入一个空的 passphrase；也可以选择输入一个 passphrase 口令，如果此时你输入了一个<code class="highlighter-rouge">passphrase</code>，请牢记，之后每次提交时都需要输入这个口令来确认。</p>
+
+<p>####3.获取SSH公钥信息</p>
+
+<p>SSH密钥生成结束后，你可以在SSH目录下看到私钥<code class="highlighter-rouge">id_rsa</code>和公钥<code class="highlighter-rouge">id_rsa.pub</code>这两个文件，不要把私钥文件<code class="highlighter-rouge">id_rsa</code>的信息透露给任何人。我们可以通过文本编辑器或<code class="highlighter-rouge">cat</code>命令来查看<code class="highlighter-rouge">id_rsa.pub</code>公钥信息。</p>
+
+<p>（1）通过编辑器。使用你熟悉的文本编辑器，比如 记事本、Sublime Text等软件打开<code class="highlighter-rouge">id_rsa.pub</code>，复制里面的所有内容以备下一步使用。</p>
+
+<p>（2）通过cat命令。在命令行中敲入<code class="highlighter-rouge">cat id_rsa.pub</code>，回车执行后命令行界面中会显示<code class="highlighter-rouge">id_rsa.pub</code>文件里的内容，复制后在下一步使用。</p>
+
+<p>（3）通过直接使用命令将<code class="highlighter-rouge">id_rsa.pub</code>文件里的内容复制到剪切板中</p>
+
+<ul>
+  <li>
+    <p>Windows: <code class="highlighter-rouge">clip &lt; ~/.ssh/id_rsa.pub</code></p>
+  </li>
+  <li>
+    <p>Mac: <code class="highlighter-rouge">pbcopy &lt; ~/.ssh/id_rsa.pub</code></p>
+  </li>
+  <li>
+    <p>GNU/Linux (requires xclip): <code class="highlighter-rouge">xclip -sel clip &lt; ~/.ssh/id_rsa.pub</code></p>
+  </li>
+</ul>
+
+<p>####4.添加SSH公钥到gitlab</p>
+
+<p>（1）打开<code class="highlighter-rouge">https://gitlab.com/profile</code>Profile配置页面，选择SSH Keys.</p>
+
+<p><img src="/images/gitlab_usage/add_sshkey_1.png" alt="add_sshkey_1.png" /></p>
+
+<p>（2）添加SSH公钥</p>
+
+<p>按照要求填写Title和Key，其中Title是Key的描述信息（如My_work_computer等），Key是上面复制的SSH公钥的内容，直接粘贴到输入框中保存即可。</p>
+
+<p><img src="/images/gitlab_usage/add_sshkey_2.png" alt="add_sshkey_2.png" /></p>
+
+<p>####5.测试SSH连接</p>
+
+<p><code class="highlighter-rouge">ssh -T git@gitlab.com</code></p>
+
+<p>如果连接成功的话，会出现以下信息。</p>
+
+<p><code class="highlighter-rouge">Welcome to GitLab, USERNAME!</code></p>
+
+<p>###如何同时使用多个SSH公钥</p>
+
+<p>如果你已经有了一套ssh(笔者的电脑上就有好几套如github/gitcafe/gitlab,三者各不一样)，为了保证各个服务能正常使用需要配置多个SSH Key。可以按照以下的步骤来实现多套SSH Key的共同工作：</p>
+
+<p>####1.生成SSH密钥</p>
+
+<p>假设你已经有了一套名为id_rsa的公秘钥，将要生成的公秘钥名称为gitlab，你也可以使用任何你喜欢的名字。记得把以下命令中的<code class="highlighter-rouge">YOUR_EMAIL@YOUREMAIL.COM</code>改为你的<code class="highlighter-rouge">Email</code>地址</p>
+
+<p><code class="highlighter-rouge">ssh-keygen -t rsa -C "YOUR_EMAIL@YOUREMAIL.COM" -f ~/.ssh/gitlab</code></p>
+
+<p>说明：</p>
+
+<p>（1）<code class="highlighter-rouge">-f</code>后面的参数是自定义的SSH Key的存放路径，将来生成的公秘钥的名字分别是gitlab.pub和gitlab</p>
+
+<p>（2）其他的和上面生成密钥的步骤相同，只是多了下面的配置的步骤</p>
+
+<p>####2.配置自定义的公秘钥名称</p>
+
+<p>在SSH用户配置文件~/.ssh/config中指定对应服务所使用的公秘钥名称，如果没有config文件的话就新建一个(<code class="highlighter-rouge">vim ~/.ssh/config</code>)，并输入以下内容(可以添加多个)：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host gitlab.com www.gitlab.com
+  IdentityFile ~/.ssh/gitlab
+</code></pre></div></div>
+
+<p>###导入项目或提交代码</p>
+
+<p>1、初始上传代码</p>
+
+<p>（1）可以先将项目clone到本地然后将文件拷贝到目录下面再提交上去</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone git@gitlab.com:USERNAME/PROJECTNAME.git
+cd WatchDemo
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin master
+</code></pre></div></div>
+
+<p>（2）如果项目存在需要导入到gitlab可以直接将项目导入上去</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd existing_folder
+git init
+git remote add origin git@gitlab.com:USERNAME/PROJECTNAME.git
+git push -u origin master
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>（1）请将上面的USERNAME和PROJECTNAME替换成用户名和项目的名称</p>
+
+<p>（2）existing_folder指的是项目在本地的路径（根路径）</p>
+
+<p>2、其他使用请参考<a href="http://blog.devzeng.com/blog/github-code-repository.html">《使用GitHub进行项目托管》</a>，或者是到网络上查看Git的相关资料</p>
+
+<blockquote>
+  <p>感谢<a href="https://gitcafe.com">GitCafe</a>，一个非常优秀的代码托管平台，本文很多资料来源于GitCafe官方提供的<a href="https://help.gitcafe.com/manuals/help">帮助手册</a>。</p>
+</blockquote>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://gitlab.com/help/">《GitLab Help》</a></p>
+
+<p>2、<a href="https://help.gitcafe.com/manuals/help/ssh-key">《Gitcafe Help》</a></p>
+
+<p>3、<a href="http://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/">《Gitlab的使用》</a></p>
+
+<p>4、<a href="http://segmentfault.com/a/1190000000345686">《用GitLab搭建自己的私有GitHub》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/simple-usage-of-realm-in-ios.html" title="link to iOS中Realm数据库的基本用法">iOS中Realm数据库的基本用法</a></h2>
+       <p class="excerpt">Realm是由Y Combinator公司孵化的一款支持运行在手机、平板和可穿戴设备上的嵌入式数据库（旨在取代CoreData和Sqlite）。Realm并不是对Core Data的简单封装，相反地，Realm并不是基于Core Data，也不是基于SQLite所构建的。它拥有自己的数据库存储引擎，可以高效且快速地完成数据库的构建操作。Realm可以轻松地移植到项目当中，并且绝大部分常用的功能（比如说插入、查询等等）都可以用一行简单的代码轻松完成！目前支持Objective-C、Swift...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-07-12 19:10:40 +0800" class="post-list__meta--date date">2015-07-12</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/simple-usage-of-realm-in-ios.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/apple-watch-development-at-glance.html" title="link to 初识Apple Watch应用开发">初识Apple Watch应用开发</a></h2>
+       <p class="excerpt">自发布iOS8.2 SDK和Xcode6.2来，大家对于WatchKit的关注就不绝于耳。特别随着Apple Watch的发售一大批的Apple Watch的应用就如雨后春笋一般涌入AppStore。本文对《WatchKit Programming Guide》中提到的相关概念结合目前的各方资料进行整理，重点介绍在Apple Watch开发中的一些基本概念和数据通信方面的内容。###配置Xcode添加Watch应用1、使用最新的Xcode(Xcode 6.2及以上)打开现有的iOS项目2、...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-07-08 22:35:09 +0800" class="post-list__meta--date date">2015-07-08</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/apple-watch-development-at-glance.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

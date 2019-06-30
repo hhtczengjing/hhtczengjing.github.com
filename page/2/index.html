@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>曾静的博客</title>
+  <meta name="description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="曾静的博客">
+  <meta name="twitter:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="曾静的博客">
+  <meta property="og:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/page/2/">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover " style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list hidden">
+
+  <ol class="post-list">
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/selenium-captcha-recognition.html" title="访问 使用Selenium获取验证码并识别">使用Selenium获取验证码并识别</a></h2>
+      <p class="excerpt">最近项目组提了个需求要求我这边帮他们实现一个网站的数据采集并对接到指定的数据库表里面，记录下使用的在线API识别验证码的过程：由于验证码在每次加载页面的时候都会刷新，也就是说每次打开登录界面都是不同的验证码，所以需要将打开的登录界面截图然后从里面扣取验证码对应的内容再提交到服务器进行识别。1、对登录界面进行截图url = ''driver = webdriver.PhantomJS()driver.get(url)driver.set_window_size(1200, 800) #此处一...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-06-24 11:46:29 +0800" class="post-list__meta--date date">2018-06-24</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/selenium-captcha-recognition.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/centos-remote-disk-mounted.html" title="访问 CentOS如何挂载远程盘">CentOS如何挂载远程盘</a></h2>
+      <p class="excerpt">前段时间公司要迁移gitlab服务器，由于服务器剩余的空间不太多了，无法直接执行备份，考虑到Linux下面可以挂载其他机器的目录来直接使用，记录下整个操作的过程：安装环境(1) 检查nfs是否安装rpm -qa | grep nfs如果没有安装：yum install nfs-utils -y(2) 检查rpcbind是否安装rpm -qa | grep rpcbind如果没有安装：yum install rpcbind  -y服务端配置vi /etc/exports/home/data ...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-05-25 11:46:29 +0800" class="post-list__meta--date date">2018-05-25</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/centos-remote-disk-mounted.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/python-convert-word-to-pdf.html" title="访问 使用Python批量将Word文档转换为PDF">使用Python批量将Word文档转换为PDF</a></h2>
+      <p class="excerpt">最近一直在整理数据，刚好有一批Word文档需要批量另存为PDF格式的文档，使用win32com操作Word，写了个Python的脚本用于批量进行转换。1、环境准备(1) 安装pip install pywin32(2) 初始化由于我的机器上面安装的是Office 2010, 安装完成pywin32之后，进入到Python安装路径\Lib\site-packages\win32com\client的目录下面执行如下代码：python makepy.py -d "Microsoft Word ...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-04-25 11:46:29 +0800" class="post-list__meta--date date">2018-04-25</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/python-convert-word-to-pdf.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/create-a-private-gem.html" title="访问 如何创建一个私有的Gem库">如何创建一个私有的Gem库</a></h2>
+      <p class="excerpt">近期看了下Cocoapods的一部分代码，结合之前做的iOS项目脚手架工具，突发奇想能不能做一个内部的工具库呢（类似于Cocoapods）。首先要解决的问题就是怎么样发布自己写的工具库，有没有类似于RubyGems这样的托管平台呢？查了一番资料找到了一个开源的项目- geminabox， 可以搭建一个托管的平台。搭建Gem私服前提条件是需要有Docker的环境，如果没有的话可以参考：CentOS安装Docker。(1) 创建并运行容器docker run -d -v /home/docke...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-03-12 19:29:36 +0800" class="post-list__meta--date date">2018-03-12</time> &#8226; <span class="post-list__meta--tags tags">Ruby</span><a class="btn-border-small" href=/blog/create-a-private-gem.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/hello-nwjs.html" title="访问 使用NW.js开发桌面应用程序">使用NW.js开发桌面应用程序</a></h2>
+      <p class="excerpt">前段时间要写一个桌面的应用，做一个简单的输入框供用户输入验证码的小功能，程序最开始是用Python写的，那么GUI一开始就考虑使用wxPython，虽然实现了功能但是总觉得太过于麻烦。之前了解过关于Node.js开发桌面应用的技术，目前使用的比较多的都是nw.js 和 electron，由于下载electron的时候出现了一些问题所以就选择了nw.js来学习。NW.js（之前叫做node-webkit)能够通过DOM直接调用Node.js模块，实现通过Web技术来编写应用程序。环境搭建  ...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-02-06 21:28:24 +0800" class="post-list__meta--date date">2018-02-06</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/hello-nwjs.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/python-version-manage-with-anaconda.html" title="访问 使用Anaconda管理Python环境">使用Anaconda管理Python环境</a></h2>
+      <p class="excerpt">Python好用但是在使用过程中发现还是有很多问题的，其中一个就是版本管理（Python2和Python3的切换）。相比于Ruby的版本管理有rvm，可以使用rvm use 2.4.0这样的命令来快速切换Ruby的版本。出于历史原因目前还是有很多Python的程序是运行在Python2.7，经常需要在Python3的环境下面执行一些实例切换起来非常麻烦，刚好最近了解到Anaconda，Anaconda 是一个可用于科学计算的 Python 发行版，支持 Linux、Mac、Windows系...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-01-05 13:08:00 +0800" class="post-list__meta--date date">2018-01-05</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/python-version-manage-with-anaconda.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/npm-repo-with-verdaccio.html" title="访问 使用Verdaccio搭建npm仓库">使用Verdaccio搭建npm仓库</a></h2>
+      <p class="excerpt">Verdaccio是一个轻量级的私有NPM的Registry（从Sinopiafork过来的，sinopia最后一次更新是在几年前了）。最开始是打算使用cnpmjs这个来搭建私有的npm仓库但是搭建完成之后存在一些问题，所以使用了Sinopia，本文记录下来搭建的过程。直接安装npm install verdaccio -g安装完成之后直接执行命令即可完成启动：verdaccio对于服务器上面部署可以使用pm2更多关于PM2的用法的可以参考：https://wohugb.gitbooks....&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-12-24 13:08:00 +0800" class="post-list__meta--date date">2017-12-24</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/npm-repo-with-verdaccio.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios-mantle-build-model-layer.html" title="访问 iOS开发中使用Mantle构建模型层">iOS开发中使用Mantle构建模型层</a></h2>
+      <p class="excerpt">在iOS的开发中为了快速的实现产品的迭代和新功能的开发，常常会弱化Model的功能，NSDictionary作为承载业务的数据类型出现在各种地方（SQLite，Model Object,API Service…）,直接使用objectForKey的方式进行数据的读取，参数和值的正确性完全没有经过编译器检查，字符串很容易写错，极容易导致在运行阶段出现低级bug.1、Property名称转换由于API使用的开发语言与iOS所使用的Objective-C是截然不同的，所以可能将一些保留关键字作为...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-12-10 13:08:00 +0800" class="post-list__meta--date date">2017-12-10</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/ios-mantle-build-model-layer.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/using-statsvn-analysis-svn-log.html" title="访问 使用StatSVN对SVN日志进行可视化分析">使用StatSVN对SVN日志进行可视化分析</a></h2>
+      <p class="excerpt">StatSVN是一个开源的SVN统计工具(Java语言编写，最近一次更新是2010-01-01)，能够从Subversion版本库中取得信息，然后生成描述项目开发的各种表格和图表（StatSVN生成的报表是一组包括表格与图表的静态HTML文档）。比如：  代码行数的时间线；  针对每个开发者的代码行数；  开发者的活跃程度；  开发者最近所提交的；  文件数量；  平均文件大小；  最大文件；  哪个文件是修改最多次数的；  目录大小；  带有文件数量和代码行数的Repository tr...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-12-06 13:08:00 +0800" class="post-list__meta--date date">2017-12-06</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/using-statsvn-analysis-svn-log.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/python-convert-images-to-pdf.html" title="访问 使用Python合并图片生成PDF文件">使用Python合并图片生成PDF文件</a></h2>
+      <p class="excerpt">最近做了一个小功能，将一个页面上面的所有图片下载下来生成一个PDF文件。发现了一个非常好用的库reportlab, pyPdf。只需要几行代码就能实现功能，如果没有安装可以通过pip安装：pip install reportlab -i https://pypi.douban.com/simplepip install pyPdf -i https://pypi.douban.com/simple注: -i表示使用豆瓣的镜像服务操作过程下面记录下我的处理的过程：（1）如果只是简单的需要将图...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-11-15 10:08:00 +0800" class="post-list__meta--date date">2017-11-15</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/python-convert-images-to-pdf.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+  </ol>
+
+  <hr class="post-list__divider " />
+
+<nav class="pagination" role="navigation">
+    
+        <a class="newer-posts pagination__newer btn btn-small btn-tertiary" href="/#blog">&larr; 最近</a>
+    
+    <span class="pagination__page-number">2 / 11</span>
+    
+        <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/3/#blog">更早 &rarr;</a>
+    
+</nav>
+
+
+</div>
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

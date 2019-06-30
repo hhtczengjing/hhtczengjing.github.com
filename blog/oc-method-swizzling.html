@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Objective-C中的Method Swizzling</title>
+  <meta name="description" content="Objective-C对象在收到消息之后会经过Dynamic Message Dispatch System(动态消息派发系统)来进行处理，该系统会查出消息对应的方法并执行其代码。那么对于给定@selector名称相对应的方法是否可以在运行期可以动态改变呢？如果能善用这个特性，则可发挥出巨大优势，因为我们可以不需...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Objective-C中的Method Swizzling">
+  <meta name="twitter:description" content="Objective-C对象在收到消息之后会经过Dynamic Message Dispatch System(动态消息派发系统)来进行处理，该系统会查出消息对应的方法并执行其代码。那么对于给定@selector名称相对应的方法是否可以在运行期可以动态改变呢？如果能善用这个特性，则可发挥出巨大优势，因为我们可以不需...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Objective-C中的Method Swizzling">
+  <meta property="og:description" content="Objective-C对象在收到消息之后会经过Dynamic Message Dispatch System(动态消息派发系统)来进行处理，该系统会查出消息对应的方法并执行其代码。那么对于给定@selector名称相对应的方法是否可以在运行期可以动态改变呢？如果能善用这个特性，则可发挥出巨大优势，因为我们可以不需...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/oc-method-swizzling.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-07-30 22:59:19 +0800" itemprop="datePublished" class="post-meta__date date">2014-07-30</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">Objective-C中的Method Swizzling</h1>
+  </header>
+
+  <section class="post">
+    <p>Objective-C对象在收到消息之后会经过<code class="highlighter-rouge">Dynamic Message Dispatch System(动态消息派发系统)</code>来进行处理，该系统会查出消息对应的方法并执行其代码。那么对于给定<code class="highlighter-rouge">@selector</code>名称相对应的方法是否可以在运行期可以动态改变呢？如果能善用这个特性，则可发挥出巨大优势，因为我们可以不需要源码也不需要通过继承子类来覆写对应的方法就能改变这个类本身的功能。</p>
+
+<p>没错，Objective-C中确实提供了这样的操作，这就是我们这里会介绍到的Method Swizzling(方法的调配)。在Objective-C中每个类都有一个方法列表，类的方法列表会把<code class="highlighter-rouge">@selector</code>映射到相关的方法实现之上，使得<code class="highlighter-rouge">Dynamic Message Dispatch System(动态消息派发系统)</code>能够根据这个找到应该调用的方法，这些方法均以函数指针（<code class="highlighter-rouge">IMP</code>）的形式来表示,其原型如下：</p>
+
+<p><code class="highlighter-rouge">id (*IMP)(id, SEL, ...)</code></p>
+
+<p>##应用实例
+在实际的应用中，使用<code class="highlighter-rouge">Method Swizzling</code>直接来交换两个方法的实现的意义不大，但是可以通过这一手段来为既有的方法实现添加新增的功能，比如说在调用<code class="highlighter-rouge">lowercaseString</code>方法适合记录某些信息，这个时候可以通过交换方法实现来达成这个目标，我们新增一个方法在此方法中实现所需的附加功能，并调用原有的实现。</p>
+
+<p><code class="highlighter-rouge">NSString+Extension.h</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@interface NSString (Extension)
+
+- (NSString *)devzeng_lowercaseString;
+
+@end
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">NSString+Extension.m</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@implementation NSString (Extension)
+
+- (NSString *)devzeng_lowercaseString
+{
+    NSString *lowercase = [self devzeng_lowercaseString];
+    NSLog(@"【Debug】%@-&gt;%@", self, lowercase);
+    return lowercase;
+}
+
+@end
+</code></pre></div></div>
+
+<p>上面的代码看上去好像会陷入递归调用的死循环，其实不然。此方法是准备和<code class="highlighter-rouge">lowercaseString</code>互换的，所以在运行期<code class="highlighter-rouge">devzeng_lowercaseString</code>其实对应的是<code class="highlighter-rouge">lowercaseString</code>，最后通过下面的代码来实现互换。</p>
+
+<p><code class="highlighter-rouge">main.m</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int main(int argc, const char * argv[])
+{
+
+    @autoreleasepool {
+       
+        Method ori_Method =  class_getInstanceMethod([NSString class], @selector(lowercaseString));
+        Method my_Method = class_getInstanceMethod([NSString class], @selector(devzeng_lowercaseString));
+        method_exchangeImplementations(ori_Method, my_Method);
+        
+        NSString *string = @"Hello, World!";
+        NSString *lowercaseString = [string lowercaseString];    
+    }
+    return 0;
+}
+</code></pre></div></div>
+
+<p>输出结果：<code class="highlighter-rouge">【Debug】Hello, World!-&gt;hello, world!</code></p>
+
+<p>通过上面的示例可以看出，我们可以通过<code class="highlighter-rouge">Method Swizzling</code>为一些不透明的类的某些方法做“黑盒测试”,比如增加一些日志信息等，这样在一定的程度上有利于程序的调试。然而，此做法如果滥用会造成代码变得不易读而且不利于维护。</p>
+
+<p>##Method Swizzling的陷阱</p>
+
+<p>使用<code class="highlighter-rouge">Method Swizzling</code>就好比在厨房用一把锋利的小刀。有些人担心小刀会割伤自己而害怕使用，然而有些人却钟情于使用它。虽然说<code class="highlighter-rouge">Method Swizzling</code>能够让我们写出更好、更高效、更加可维护的代码但是它也可能给我们带来很多很麻烦的bug。下面是一些在使用<code class="highlighter-rouge">Method Swizzling</code>会遇到的让人头疼的陷阱。</p>
+
+<ul>
+  <li>
+    <p>Method swizzling is not atomic</p>
+  </li>
+  <li>
+    <p>Changes behavior of un-owned code</p>
+  </li>
+  <li>
+    <p>Possible naming conflicts</p>
+  </li>
+  <li>
+    <p>Swizzling changes the method’s arguments</p>
+  </li>
+  <li>
+    <p>The order of swizzles matters</p>
+  </li>
+  <li>
+    <p>Difficult to understand (looks recursive)</p>
+  </li>
+  <li>
+    <p>Difficult to debug</p>
+  </li>
+</ul>
+
+<p>关于上面的内容的细致描述请移步<a href="http://blog.csdn.net/yiyaaixuexi/article/details/9374411">《Objective-C的hook方案（一）: Method Swizzling》</a>（中文版本）和 <a href="http://dreamume.blog.163.com/blog/static/184923719201411302817262/">《Swizzle method》</a> (英文版本)</p>
+
+<p>##深度阅读</p>
+
+<p>1、<a href="http://blog.csdn.net/yiyaaixuexi/article/details/9374411">《Objective-C的hook方案（一）: Method Swizzling》</a></p>
+
+<p>2、<a href="http://dreamume.blog.163.com/blog/static/184923719201411302817262/">《Swizzle method》</a></p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-auto-build-by-ant.html" title="link to 使用Ant实现iOS项目的自动编译打包">使用Ant实现iOS项目的自动编译打包</a></h2>
+       <p class="excerpt">Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供维护，目前最新的版本是1.9.4。本文主要介绍如何在iOS开发中使用Ant来提高开发效率，重点涉及到ant的安装、build配置文件的基本语法和iOS build脚本等内容。##安装ANT工具1、到Apache Ant的官网上下载最新的ant工具包可以直接使用浏览器下载，或者是其他下载工具。下载地址也可以使用如下的命令:wget http:...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-02 00:13:17 +0800" class="post-list__meta--date date">2014-08-02</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-auto-build-by-ant.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/oc-associated-objects.html" title="link to Objective-C中的Associated Objects">Objective-C中的Associated Objects</a></h2>
+       <p class="excerpt">Associated Objects(关联对象)或者叫做关联引用(Associated References)，是作为Objective-C 2.0运行时功能被引入到Mac OS 10.6 Snow Leopard(及iOS4)系统。与它相关在&lt;objc/rumtime.h&gt;中有3个C函数，他们可以让对象在运行时关联任何值：(1)用给定的key和policy来为指定对象(object)设置关联对象值(value)void objc_setAssociatedObject(id ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-28 21:50:11 +0800" class="post-list__meta--date date">2014-07-28</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/oc-associated-objects.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用SQLCipher加密SQLite数据库</title>
+  <meta name="description" content="在iOS应用程序开发中经常需要使用SQLite来存储数据，很多时候需要加密保存一部分的数据。常见的做法是将要存储的内容先加密然后存到数据库中，使用的时候将数据进行解密，这样就会有大量的性能消耗在数据的加解密上（性能主要取决于加解密的算法和CPU的能力）。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用SQLCipher加密SQLite数据库">
+  <meta name="twitter:description" content="在iOS应用程序开发中经常需要使用SQLite来存储数据，很多时候需要加密保存一部分的数据。常见的做法是将要存储的内容先加密然后存到数据库中，使用的时候将数据进行解密，这样就会有大量的性能消耗在数据的加解密上（性能主要取决于加解密的算法和CPU的能力）。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用SQLCipher加密SQLite数据库">
+  <meta property="og:description" content="在iOS应用程序开发中经常需要使用SQLite来存储数据，很多时候需要加密保存一部分的数据。常见的做法是将要存储的内容先加密然后存到数据库中，使用的时候将数据进行解密，这样就会有大量的性能消耗在数据的加解密上（性能主要取决于加解密的算法和CPU的能力）。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/encrypt-sqlite-with-sqlcipher.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-07-19 20:02:54 +0800" itemprop="datePublished" class="post-meta__date date">2015-07-19</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">使用SQLCipher加密SQLite数据库</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS应用程序开发中经常需要使用SQLite来存储数据，很多时候需要加密保存一部分的数据。常见的做法是将要存储的内容先加密然后存到数据库中，使用的时候将数据进行解密，这样就会有大量的性能消耗在数据的加解密上（性能主要取决于加解密的算法和CPU的能力）。</p>
+
+<blockquote>
+  <p>SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.</p>
+</blockquote>
+
+<p>SQLite本身是支持加密功能的（免费版本不提供加密功能，商业版本是支持加密模块）。SQLCipher是一个开源的SQLite加密扩展，支持对db文件进行256位的AES加密。</p>
+
+<p>###集成SQLCipher</p>
+
+<p>集成SQLCipher有有两种方法一种是按照<a href="https://www.zetetic.net/sqlcipher/ios-tutorial/">官方</a>的方式一步步的执行，这里就不过多的介绍。配置过程很麻烦，推荐使用下面的方式集成。</p>
+
+<p>1、获取SQLite加密模块(SQLCipher)</p>
+
+<p>在终端(Terminal)中使用<code class="highlighter-rouge">pod search FMDB</code>，在查询的结果中可以看到有个<code class="highlighter-rouge">FMDB/SQLCipher</code>的Sub spec。</p>
+
+<p><img src="/images/sqlcipher-sqlite/sqlcipher-search-fmdb.png" alt="sqlcipher-search-fmdb.png" /></p>
+
+<p>如果使用FMDB和CocoaPods的话直接在你的Podfile中添加<code class="highlighter-rouge">pod 'FMDB/SQLCipher'</code></p>
+
+<p><img src="/images/sqlcipher-sqlite/sqlcipher-podfile.png" alt="sqlcipher-podfile.png" /></p>
+
+<p>如果没有使用CocoaPods的话建议还是安装一个吧，或者是新建一个测试项目安装FMDB和SQLCipher。安装CocoaPods可以参考<a href="http://blog.devzeng.com/blog/ios-cocoapods-dependency-manager.html">《使用CocoaPods管理iOS项目中的依赖库》</a></p>
+
+<p>2、导入SQLCipher</p>
+
+<p>执行<code class="highlighter-rouge">pod install</code>之后会自动获取SQLCipher，其实SQLCipher只有两个文件<code class="highlighter-rouge">sqlite3.h</code>和<code class="highlighter-rouge">sqlite3.m</code>。</p>
+
+<p>拷贝sqlite3.h/sqlite3.m文件到项目中，如果使用CocoaPods方式获取SQLCipher的话，这一步骤就不需要了。</p>
+
+<p>3、配置Xcode设置项</p>
+
+<p>通过查询资料SQLite是否开启加密模块是通过宏(<code class="highlighter-rouge">SQLITE_HAS_CODEC</code>)来配置的。那么就需要在Xcode中配置开启SQLite加密组件的宏（如使用CocoaPods方式则不需要配置）。</p>
+
+<p><img src="/images/sqlcipher-sqlite/sqlite-extension-marco.png" alt="sqlite-extension-marco.png" /></p>
+
+<p>(1)target -&gt; Build Setting -&gt; Other C Flags添加-DSQLITE_HAS_CODEC、-DSQLITE_TEMP_STORE=2、-DSQLITE_THREADSAFE、-DSQLCIPHER_CRYPTO_CC几项配置</p>
+
+<p>(2)target -&gt; Build Setting -&gt; Other Linker Flags添加-framework Security配置</p>
+
+<p>4、如何使用</p>
+
+<p>(1)引入sqlite3加密模块，然后在打开数据库之后加入如下代码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const char *key = [@"devzeng" UTF8String];
+sqlite3_key(_db, key, (int)strlen(key));
+</code></pre></div></div>
+
+<p>如下图：</p>
+
+<p><img src="/images/sqlcipher-sqlite/sqlcipher-sqlite3-open.png" alt="sqlcipher-sqlite3-open.png" /></p>
+
+<p>说明：</p>
+
+<p>1）如果没有添加-DSQLITE_HAS_CODEC配置上面的代码会报错</p>
+
+<p>2）sqlite3_key函数需要指定加密使用的key，推荐使用UUID(可以进行salt处理)并存储到KeyChain中。</p>
+
+<p>3）如使用FMDB，可以在FMDB的open方法之后添加上面的两行代码。</p>
+
+<p>(2)使用了加密模块在提交到App Store时需要指明，具体的操作方法可以参考StackOverflow上面的做法。
+<a href="http://stackoverflow.com/questions/2135081/does-my-application-contain-encryption">Does my application “contain encryption”?</a></p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://www.zetetic.net/sqlcipher/ios-tutorial/">《Adding SQLCipher to Xcode Projects》</a></p>
+
+<p>2、<a href="http://www.2cto.com/kf/201407/315727.html">《ios开发FMDB导入SQLCipher加密数据库》</a></p>
+
+<p>3、<a href="http://blog.itpub.net/14466241/viewspace-752861/">《SQLite数据库加密研究》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios9-corespotlight.html" title="link to 在iOS9中使用CoreSpotlight">在iOS9中使用CoreSpotlight</a></h2>
+       <p class="excerpt">在iOS9之前，用户可以通过Spotlight中输入关键字来查找App。在iOS9中Apple随之发布了一套全新的iOS9 Search APIs之后，开发者不但可以自由的将App的部分内容建立索引，还能对Spotlight上的搜索结果以及点击不同的结果显示的内容进行设置。###三种搜索的API简介####NSUserActivityNSUserActivity是iOS8专为Handoff推出的API，在iOS9得到了提升。现在用户只需要提供元数据(metadata)就能搜索到不同的活动(...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-10-18 16:37:38 +0800" class="post-list__meta--date date">2015-10-18</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios9-corespotlight.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/simple-usage-of-realm-in-ios.html" title="link to iOS中Realm数据库的基本用法">iOS中Realm数据库的基本用法</a></h2>
+       <p class="excerpt">Realm是由Y Combinator公司孵化的一款支持运行在手机、平板和可穿戴设备上的嵌入式数据库（旨在取代CoreData和Sqlite）。Realm并不是对Core Data的简单封装，相反地，Realm并不是基于Core Data，也不是基于SQLite所构建的。它拥有自己的数据库存储引擎，可以高效且快速地完成数据库的构建操作。Realm可以轻松地移植到项目当中，并且绝大部分常用的功能（比如说插入、查询等等）都可以用一行简单的代码轻松完成！目前支持Objective-C、Swift...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-07-12 19:10:40 +0800" class="post-list__meta--date date">2015-07-12</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/simple-usage-of-realm-in-ios.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发中Xcode常见使用技巧</title>
+  <meta name="description" content="Xcode是苹果公司开发向开发人员提供的集成开发环境(IDE)，主要用于开发Mac OS X和iOS的应用程序只能运行于Mac操作系统下。本文旨在记录一些在开发中常见的Xcode的配置和使用技巧，后续会持续更新。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发中Xcode常见使用技巧">
+  <meta name="twitter:description" content="Xcode是苹果公司开发向开发人员提供的集成开发环境(IDE)，主要用于开发Mac OS X和iOS的应用程序只能运行于Mac操作系统下。本文旨在记录一些在开发中常见的Xcode的配置和使用技巧，后续会持续更新。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发中Xcode常见使用技巧">
+  <meta property="og:description" content="Xcode是苹果公司开发向开发人员提供的集成开发环境(IDE)，主要用于开发Mac OS X和iOS的应用程序只能运行于Mac操作系统下。本文旨在记录一些在开发中常见的Xcode的配置和使用技巧，后续会持续更新。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-xcode-usage.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-27 23:07:17 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-27</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS开发中Xcode常见使用技巧</h1>
+  </header>
+
+  <section class="post">
+    <p>Xcode是苹果公司开发向开发人员提供的集成开发环境(IDE)，主要用于开发Mac OS X和iOS的应用程序只能运行于Mac操作系统下。本文旨在记录一些在开发中常见的Xcode的配置和使用技巧，后续会持续更新。</p>
+
+<p><img src="/images/xcode_usage/xcode6_welcome.png" alt="xcode6_welcome.png" /></p>
+
+<p>##更新说明</p>
+
+<ul>
+  <li>2014-08-27 v1.0 初稿</li>
+  <li>2014-09-24 V1.1 增加Xcode断点不进调试的相关内容</li>
+  <li>2014-09-26 V1.2 增加Xcode6缺失新建<code class="highlighter-rouge">Empty Application</code>相关模板的问题</li>
+</ul>
+
+<p>##旧版本Xcode支持高版本的设备</p>
+
+<p>问题描述：如何解决Xcode5.0无法识别iOS7.1以上的设备的问题？</p>
+
+<p>解决办法：</p>
+
+<p>(1)首先在终端下进入到Xcode的安装目录下面的DeviceSupport目录下，如下所示：</p>
+
+<p><code class="highlighter-rouge">cd /Applications/Xcode5.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport</code></p>
+
+<p>(2)然后执行下面的代码（目前iOS7最新的版本号是7.1.2 11D257）,如何看当前iOS的最新版本号可以到手机的<code class="highlighter-rouge">设置-&gt;通用-&gt;关于本机-&gt;版本</code>里面看到如<code class="highlighter-rouge">7.1.2(11D257)</code></p>
+
+<p><code class="highlighter-rouge">ln -s ./7.0.3\ \(11B508\) ./7.1.2\ \(11D257\)</code></p>
+
+<p>(3)重启Xcode，下次启动Xcode的时候检查设备耗时会稍微长一些</p>
+
+<p>##安装旧版SDK</p>
+
+<p>有时候在开发过程中需要使用旧版的SDK进行编译，比如之前的博文中有提到为了简化iOS7的适配工作有时候会直接使用iOS7以下的SDK编译打包的程序，下面的步骤介绍如何在Xcode中安装旧版的SDK（<code class="highlighter-rouge">前提条件是安装新版前需要按照下面的要求备份</code>）。</p>
+
+<p>(1)安装新版的Xcode前需要到下面的目录下备份SDK</p>
+
+<p><code class="highlighter-rouge">/Applications/Xcode4.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs</code></p>
+
+<p>如：iOS6.1 SDK(<code class="highlighter-rouge">iPhoneOS6.1.sdk</code>)、iOS7.0 SDK(<code class="highlighter-rouge">iPhoneOS7.0.sdk</code>)</p>
+
+<p>(2)复制上面备份的SDK按照上面的路径</p>
+
+<p><code class="highlighter-rouge">/Applications/Xcode6-Beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs</code></p>
+
+<p>注：Xcode6-Beta.app这个指的是Xcode的名称</p>
+
+<p>##安装旧版模拟器</p>
+
+<p>每次安装新版本的Xcode，默认只会安装最新版本的模拟器，虽然有些模拟器可以在设置里面下载，但是那些更老的版本就无法在Xcode的设置中下载了，而且下载一个旧版的Xcode耗时会非常长。</p>
+
+<p>(1)安装新版的Xcode前需要到下面的目录下备份SDK</p>
+
+<p><code class="highlighter-rouge">/Applications/Xcode5.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/</code></p>
+
+<p>如：iOS6.1 SDK(<code class="highlighter-rouge">iPhoneOS6.1.sdk</code>)、iOS7.0 SDK(<code class="highlighter-rouge">iPhoneOS7.0.sdk</code>)</p>
+
+<p>(2)复制上面备份的SDK按照上面的路径</p>
+
+<p><code class="highlighter-rouge">/Applications/Xcode6-Beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/</code></p>
+
+<p>P.S.<code class="highlighter-rouge">建议每次安装新Xcode的时候，把模拟器和SDK都备份一下。</code></p>
+
+<p>##模拟器中的应用程序数据</p>
+
+<p>使用模拟器开发一段时间后在模拟器上会安装很多我们写的应用程序，那么这些应用程序是存储在哪里呢？
+其实模拟器中的程序存储在：
+<code class="highlighter-rouge">~/Library/Application Support/iPhone Simulator/7.0/Applications</code> 目录下。</p>
+
+<p>如果要删除所安装的程序，也可以直接将Applications目录下的文件夹删掉，也可以直接把模拟器还原(但是设置的数据也被重置了)。</p>
+
+<p>##Xcode调试不进断点的问题</p>
+
+<p>安装多个Xcode后有时候会出现断点调试的时候无法定位到断点指定的位置而是进入堆栈页面,如下图：</p>
+
+<p><img src="/images/xcode_usage/xcode_debug_error_1.png" alt="xcode_debug_error_1.png" /></p>
+
+<p>解决办法是：</p>
+
+<p>将Xcode导航栏<code class="highlighter-rouge">Debug -&gt; Debug Workflow -&gt; Always Show Disassembly</code>前面的勾选去掉即可</p>
+
+<p><img src="/images/xcode_usage/xcode_debug_error_2.png" alt="xcode_debug_error_1.png" /></p>
+
+<p>##Xcode6缺失相关模板的问题</p>
+
+<p>更新到新版本的Xcode6后，新建一个项目发现缺少以前常用的<code class="highlighter-rouge">Empty Application</code>模板，如下所示：</p>
+
+<p><img src="/images/xcode_usage/xcode_new_application_1.png" alt="xcode_new_application_1.png" /></p>
+
+<p>如何在Xcode6中中添加缺失的<code class="highlighter-rouge">Empty Application</code>模板呢？解决的办法如下：</p>
+
+<p>1、到GitHub上下载缺失的模板数据</p>
+
+<p><code class="highlighter-rouge">git clone https://github.com/cDigger/AddMissingTemplates.git</code></p>
+
+<p>2、复制<code class="highlighter-rouge">AddMissingTemplates</code>目录下面的<code class="highlighter-rouge">Empty Application.xctemplate</code>到如下目录</p>
+
+<p><code class="highlighter-rouge">Xcode6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/Project Templates/iOS/Application/</code></p>
+
+<p>重启Xcode后，新建项目效果如下：</p>
+
+<p><img src="/images/xcode_usage/xcode_new_application_2.png" alt="xcode_new_application_2.png" /></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://blog.devtang.com/blog/2012/03/10/xcode4-tips/">《Xcode4使用技巧》</a></p>
+
+<p>2、<a href="http://vbtboy.iteye.com/blog/1956696">《在Xcode中安装低版本的SDK和模拟器》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-xcode-architectures-config.html" title="link to iOS开发之Architectures设置">iOS开发之Architectures设置</a></h2>
+       <p class="excerpt">在iOS开发中经常遇到的一个错误是Undefined symbols for architecture arm64，这个错误表示工程某些地方不支持arm64指令集。本文围绕在iOS开发中经常遇到的关于Architectures方面的设置介绍iOS的指令集方面的知识点。对于iOS设备来说iOS的指令集有armv6、armv7、armv7s、arm64这样四种，不同型号的iOS设备使用不同的指令集，下面是各自的区别：  armv6          iPhone、iPhone 3G      ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-28 22:37:46 +0800" class="post-list__meta--date date">2014-08-28</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-xcode-architectures-config.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-nsoperation-and-nsoperationqueue.html" title="link to iOS多线程之NSOperation和NSOperationQueue">iOS多线程之NSOperation和NSOperationQueue</a></h2>
+       <p class="excerpt">如果对Java或者与Java类似的语言熟悉的话，可以说NSOperation对象很像java.lang.Runnable接口。类似的，在Java的Runnable接口中，NSOperation对象被设计为可以扩展的。还是和Java一样，这里也有一个方法可以被重载次数的最小值。对于NSOpetation来说，这个方法就是-(void)main方法.使用NSOperation的最简单的一种方法是把它加入一个NSOperationQueue。一旦operation被加入了这个队列，队列就马上把它...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-24 18:31:30 +0800" class="post-list__meta--date date">2014-08-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-nsoperation-and-nsoperationqueue.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

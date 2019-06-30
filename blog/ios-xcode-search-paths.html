@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发中的Search Paths设置</title>
+  <meta name="description" content="在iOS开发中经常遇到一些关于路径的设置，比如引入了百度地图的SDK，项目拷贝到其他的电脑上或者多人同时开发的时候容易报Library Not Found的错误，或者是引入第三方库比如ASIHttpRequest/RETableView经常报#include &lt;&gt;的错误这就需要配置一些搜索路径。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发中的Search Paths设置">
+  <meta name="twitter:description" content="在iOS开发中经常遇到一些关于路径的设置，比如引入了百度地图的SDK，项目拷贝到其他的电脑上或者多人同时开发的时候容易报Library Not Found的错误，或者是引入第三方库比如ASIHttpRequest/RETableView经常报#include &lt;&gt;的错误这就需要配置一些搜索路径。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发中的Search Paths设置">
+  <meta property="og:description" content="在iOS开发中经常遇到一些关于路径的设置，比如引入了百度地图的SDK，项目拷贝到其他的电脑上或者多人同时开发的时候容易报Library Not Found的错误，或者是引入第三方库比如ASIHttpRequest/RETableView经常报#include &lt;&gt;的错误这就需要配置一些搜索路径。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-xcode-search-paths.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-09-14 18:34:42 +0800" itemprop="datePublished" class="post-meta__date date">2014-09-14</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS开发中的Search Paths设置</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS开发中经常遇到一些关于路径的设置，比如引入了百度地图的SDK，项目拷贝到其他的电脑上或者多人同时开发的时候容易报<code class="highlighter-rouge">Library Not Found</code>的错误，或者是引入第三方库比如<code class="highlighter-rouge">ASIHttpRequest</code>/<code class="highlighter-rouge">RETableView</code>经常报<code class="highlighter-rouge">#include &lt;&gt;</code>的错误这就需要配置一些搜索路径。</p>
+
+<p><img src="/images/ios-search-paths/ios_search_paths.png" alt="ios-search-paths.png" /></p>
+
+<p>##Framework/Library Search Paths</p>
+
+<p>1、Framework Search Paths</p>
+
+<p>附加到项目中的framework(<code class="highlighter-rouge">.framework</code> bundles)的搜索路径,在iOS开发中使用的不是特别多，通常对于iOS的开发来说一般使用系统内置的framework。</p>
+
+<p>2、Library Search Paths</p>
+
+<p>附加到项目中的第三方Library(<code class="highlighter-rouge">.a files</code>)的搜索路径，Xcode会自动设置拖拽到Xcode中的.a文件的路径，为了便于移植或者是多人协作开发一般会手动设置。</p>
+
+<p>比如对于设置百度的地图的SDK，我们会设置如下：</p>
+
+<p><code class="highlighter-rouge">$(SRCROOT)/../libs/Release$(EFFECTIVE_PLATFORM_NAME)</code>，其中
+<code class="highlighter-rouge">$(SRCROOT)</code>宏代表您的工程文件目录，<code class="highlighter-rouge">$(EFFECTIVE_PLATFORM_NAME)</code>宏代表当前配置是OS还是simulator</p>
+
+<p>##Header Search Path</p>
+
+<p>1、C/C++头文件引用</p>
+
+<p>在C/C++中，include是变异指令，在编译时，编译器会将相对路径替换成绝对路径，因此，头文件的绝对路径等同于<code class="highlighter-rouge">搜索路径+相对路径</code>。</p>
+
+<p>(1)<code class="highlighter-rouge">#include &lt;iostream.h&gt;</code>：引用编译器的类库路径下的头文件</p>
+
+<p>(2)<code class="highlighter-rouge">#include "hello.h"</code>：引用工程目录的相对路径的头文件</p>
+
+<p>2、(User) Header Search Path</p>
+
+<p>（1）<code class="highlighter-rouge">Header Search Path</code>指的是头文件的搜索路径。</p>
+
+<p>（2）<code class="highlighter-rouge">User Header Search Paths</code>指的是用户自定义的头文件的搜索路径</p>
+
+<p>3、Always Search User Paths</p>
+
+<p>如果设置了<code class="highlighter-rouge">Always Search User Paths</code>为<code class="highlighter-rouge">YES</code>,编译器会优先搜索<code class="highlighter-rouge">User Header Search Paths</code>配置的路径，在这种情况下<code class="highlighter-rouge">#include &lt;string.h&gt;</code>,<code class="highlighter-rouge">User Header Search Paths</code>搜索目录下面的文件会覆盖系统的头文件。</p>
+
+<p>##常见配置</p>
+
+<p>1、<code class="highlighter-rouge">libxml/tree.h not found</code>的错误配置</p>
+
+<p>在build setting中的<code class="highlighter-rouge">header search path</code>中加入<code class="highlighter-rouge">${SDK_DIR}/usr/include/libxml2</code></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://stackoverflow.com/questions/8342982/ios-clarify-different-search-paths">《iOS: Clarify different Search Paths》</a></p>
+
+<p>2、<a href="http://www.cnblogs.com/xiaodao/archive/2012/03/28/2422091.html">《xcode4的环境变量，Build Settings参数，workspace及联编设置》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios8-corelocation-framework.html" title="link to iOS8中使用CoreLocation定位">iOS8中使用CoreLocation定位</a></h2>
+       <p class="excerpt">在iOS8中，苹果已经强制开发者在请求定位服务时获得用户的授权，此外iOS状态栏中还有指示图标，提示用户当前应用是否正在使用定位服务。另外在iOS8中，苹果进一步改善了定位服务，让开发者请求定位服务时需要向用户提供更多的透明。此外，iOS8中还支持让应用开发者调用全新的“访问监控”功能，当用户允许后应用才能获得更多的定位数据。##iOS8以前使用CoreLocation定位1、首先定义一个全局的变量用来记录CLLocationManager对象，引入CoreLocation.framewo...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-09-20 20:43:46 +0800" class="post-list__meta--date date">2014-09-20</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios8-corelocation-framework.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-two-version-app-setting-profile.html" title="link to iOS开发之同一应用设置不同图标和名称">iOS开发之同一应用设置不同图标和名称</a></h2>
+       <p class="excerpt">经常在开发中遇到同一个App会有很多渠道版本，比如OTA内部测试版本，AppStore发布版本等。针对这些不同的版本我们通常会选择不同的图标、应用名称等，效果如下图所示：P.S上面使用的两个测试图标分别来源于土巴兔和乐视TV的iPhone版本APP的图标，是两个非常不错的APP，感谢你们。##Bundle IDiOS系统区分不同的App是否相同是根据App的Bundle ID是否相同来判断的。如果想要在一个系统上安装一个App的多个版本其实是需要多个Bundle ID，就是说正式版一个Bu...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-09-06 22:01:47 +0800" class="post-list__meta--date date">2014-09-06</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-two-version-app-setting-profile.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用StatSVN对SVN日志进行可视化分析</title>
+  <meta name="description" content="StatSVN是一个开源的SVN统计工具(Java语言编写，最近一次更新是2010-01-01)，能够从Subversion版本库中取得信息，然后生成描述项目开发的各种表格和图表（StatSVN生成的报表是一组包括表格与图表的静态HTML文档）。比如：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用StatSVN对SVN日志进行可视化分析">
+  <meta name="twitter:description" content="StatSVN是一个开源的SVN统计工具(Java语言编写，最近一次更新是2010-01-01)，能够从Subversion版本库中取得信息，然后生成描述项目开发的各种表格和图表（StatSVN生成的报表是一组包括表格与图表的静态HTML文档）。比如：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用StatSVN对SVN日志进行可视化分析">
+  <meta property="og:description" content="StatSVN是一个开源的SVN统计工具(Java语言编写，最近一次更新是2010-01-01)，能够从Subversion版本库中取得信息，然后生成描述项目开发的各种表格和图表（StatSVN生成的报表是一组包括表格与图表的静态HTML文档）。比如：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/using-statsvn-analysis-svn-log.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-12-06 13:08:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-12-06</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">使用StatSVN对SVN日志进行可视化分析</h1>
+  </header>
+
+  <section class="post">
+    <p><a href="http://www.statsvn.org/">StatSVN</a>是一个开源的SVN统计工具(Java语言编写，最近一次更新是<code class="highlighter-rouge">2010-01-01</code>)，能够从Subversion版本库中取得信息，然后生成描述项目开发的各种表格和图表（StatSVN生成的报表是一组包括表格与图表的静态HTML文档）。比如：</p>
+
+<ul>
+  <li>代码行数的时间线；</li>
+  <li>针对每个开发者的代码行数；</li>
+  <li>开发者的活跃程度；</li>
+  <li>开发者最近所提交的；</li>
+  <li>文件数量；</li>
+  <li>平均文件大小；</li>
+  <li>最大文件；</li>
+  <li>哪个文件是修改最多次数的；</li>
+  <li>目录大小；</li>
+  <li>带有文件数量和代码行数的Repository tree等。</li>
+</ul>
+
+<h3 id="使用步骤">使用步骤</h3>
+
+<h4 id="1下载安装">1、下载安装</h4>
+
+<p>到官网的<code class="highlighter-rouge">http://www.statsvn.org/downloads.html</code>下载最新版本(<code class="highlighter-rouge">v0.7.0</code>)。下载完之后获取<code class="highlighter-rouge">statsvn.jar</code>文件。</p>
+
+<p>由于<code class="highlighter-rouge">statsvn.jar</code>使用的是Java编写的，使用的前提是需要有Java的环境，可以通过<code class="highlighter-rouge">java -version</code>查看是否安装。</p>
+
+<h4 id="2获取svn的日志文件">2、获取SVN的日志文件</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>svn log -v --xml SVN_LINK &gt; svn.log
+</code></pre></div></div>
+
+<p>如果没有安装SVN需要先安装SVN的客户端。(<code class="highlighter-rouge">SVN_LINK</code>指的是SVN仓库的链接地址）</p>
+
+<h4 id="2生成统计文件">2、生成统计文件</h4>
+
+<p>将下载的<code class="highlighter-rouge">statsvn.jar</code>和<code class="highlighter-rouge">svn.log</code>拷贝到一个单独的文件夹下如<code class="highlighter-rouge">test</code>,方便进行下面的操作：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd test
+java -jar statsvn.jar svn.log LOCAL_PATH -charset utf-8 -output-dir DIST_PATH
+</code></pre></div></div>
+<p>说明：</p>
+
+<ul>
+  <li>LOCAL_PATH：替换成仓库checkout到本地的路径</li>
+  <li>DIST_PATH: 替换成生成的统计报表文件存放路径</li>
+</ul>
+
+<p>更多用法可以到官网去看。执行完成后在<code class="highlighter-rouge">DIST_PATH</code>下会自动生成一堆HTML文件双击<code class="highlighter-rouge">index.html</code>可以查看效果：</p>
+
+<p><img src="/images/statsvn-analysis-svn/demo.png" alt="demo.png" /></p>
+
+<p>可以使用自动化的脚本将生成的资源文件放到HTTP服务器上面就能做到在线浏览了。</p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="http://www.statsvn.org">StatSVN官网</a></p>
+
+<p>2、<a href="https://my.oschina.net/myriads/blog/15665">SVN的可视化日志统计工具StatSVN</a></p>
+
+<p>3、<a href="http://chenzhou123520.iteye.com/blog/1436653">使用statsvn统计svn中的代码量</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-mantle-build-model-layer.html" title="link to iOS开发中使用Mantle构建模型层">iOS开发中使用Mantle构建模型层</a></h2>
+       <p class="excerpt">在iOS的开发中为了快速的实现产品的迭代和新功能的开发，常常会弱化Model的功能，NSDictionary作为承载业务的数据类型出现在各种地方（SQLite，Model Object,API Service…）,直接使用objectForKey的方式进行数据的读取，参数和值的正确性完全没有经过编译器检查，字符串很容易写错，极容易导致在运行阶段出现低级bug.1、Property名称转换由于API使用的开发语言与iOS所使用的Objective-C是截然不同的，所以可能将一些保留关键字作为...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-12-10 13:08:00 +0800" class="post-list__meta--date date">2017-12-10</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/ios-mantle-build-model-layer.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/python-convert-images-to-pdf.html" title="link to 使用Python合并图片生成PDF文件">使用Python合并图片生成PDF文件</a></h2>
+       <p class="excerpt">最近做了一个小功能，将一个页面上面的所有图片下载下来生成一个PDF文件。发现了一个非常好用的库reportlab, pyPdf。只需要几行代码就能实现功能，如果没有安装可以通过pip安装：pip install reportlab -i https://pypi.douban.com/simplepip install pyPdf -i https://pypi.douban.com/simple注: -i表示使用豆瓣的镜像服务操作过程下面记录下我的处理的过程：（1）如果只是简单的需要将图...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-11-15 10:08:00 +0800" class="post-list__meta--date date">2017-11-15</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/python-convert-images-to-pdf.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

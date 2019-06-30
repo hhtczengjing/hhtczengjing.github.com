@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Python使用pyexecjs执行JS代码</title>
+  <meta name="description" content="近期在采集一个网站的时候遇到一部分的页面是使用JS代码来填充数据的，代码如下：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Python使用pyexecjs执行JS代码">
+  <meta name="twitter:description" content="近期在采集一个网站的时候遇到一部分的页面是使用JS代码来填充数据的，代码如下：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Python使用pyexecjs执行JS代码">
+  <meta property="og:description" content="近期在采集一个网站的时候遇到一部分的页面是使用JS代码来填充数据的，代码如下：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/execute-js-code-with-execjs.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-07-20 11:46:29 +0800" itemprop="datePublished" class="post-meta__date date">2018-07-20</time> &#8226; <span class="post-meta__tags tags">Python</span>
+    </div>
+    <h1 class="post-title">Python使用pyexecjs执行JS代码</h1>
+  </header>
+
+  <section class="post">
+    <p>近期在采集一个网站的时候遇到一部分的页面是使用JS代码来填充数据的，代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tr&gt;
+    &lt;td width="150px" class="success"&gt;案件级别:&lt;/td&gt;
+    &lt;td colspan="1"&gt;
+        &lt;script&gt;
+            var s = getDictLabel([{"id":"4191c4842b3842749dd467655f90b1fa","isNewRecord":false,"remarks":"案件级别","createDate":"2016-11-29 15:19:34","updateDate":"2016-11-29 15:19:34","value":"1","label":"一般事件","type":"case_grade","description":"案件级别","sort":1,"parentId":"0"},{"id":"5e24fd12f3384f38ab10898013fe25d7","isNewRecord":false,"createDate":"2016-11-29 15:19:35","updateDate":"2016-11-29 15:19:35","value":"2","label":"紧急事件","type":"case_grade","description":"案件级别","sort":2,"parentId":"0"},{"id":"f793a78eb44c405b9fd007359df09579","isNewRecord":false,"createDate":"2016-11-29 15:19:36","updateDate":"2016-11-29 15:19:36","value":"3","label":"一般重复","type":"case_grade","description":"案件级别","sort":3,"parentId":"0"},{"id":"3f2605e3f6e648f688b79da5f730aedb","isNewRecord":false,"createDate":"2016-11-29 15:19:34","updateDate":"2016-11-29 15:19:34","value":"4","label":"紧急重复","type":"case_grade","description":"案件级别","sort":4,"parentId":"0"}], 1, '', true);
+            document.write(s);
+        &lt;/script&gt;
+    &lt;/td&gt;
+    &lt;td width="150px" class="success"&gt;受理时间:&lt;/td&gt;
+    &lt;td colspan="1"&gt;2018-08-05 13:39:22&lt;/td&gt;
+&lt;/tr&gt;
+</code></pre></div></div>
+
+<p>对上下文的源码进行分析，找到<code class="highlighter-rouge">getDictLabel</code>这个JavaScript的函数实现代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function getDictLabel(data, value, defaultValue){
+	for (var i=0; i&lt;data.length; i++){
+		var row = data[i];
+		if (row.value == value){
+			return row.label;
+		}
+	}
+	return defaultValue;
+}
+</code></pre></div></div>
+
+<p>通过一番了解，可以获取到<code class="highlighter-rouge">td</code>标签中间的<code class="highlighter-rouge">script</code>对应的JS代码，通过执行JS代码获取对应的数据。找到了一个Python的库<code class="highlighter-rouge">pyexecjs</code>可以实现，可以通过如下代码进行安装：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install PyExecJS
+</code></pre></div></div>
+
+<p>核心代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import execjs
+
+def exec_js_function(js):
+    # 编译JS代码
+    ctx = execjs.compile("""
+        function getDictLabel(data, value, defaultValue){
+            for (var i = 0; i &lt; data.length; i++){
+                var row = data[i];
+                if (row.value == value){
+                    return row.label;
+                }
+            }
+            return defaultValue;
+        }
+    """)
+    # 删除一些无关的字符
+    jscode = js.replace('document.write(s);', '').replace(', true);', ')').replace('var s =', '')
+    # 执行代码
+    return ctx.eval(jscode)
+</code></pre></div></div>
+
+<p>更多用法可以从参考链接获取</p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://github.com/doloopwhile/PyExecJS">官方主页</a></p>
+
+<p>2、<a href="https://www.jianshu.com/p/729be9639ac7">Python执行Js语句之ExecJs</a></p>
+
+<p>3、<a href="http://www.wisedream.net/2017/11/27/traps/pyexecjs-and-pyv8/">pyexecjs速度慢与pyv8的安装</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/pack-macos-app-to-dmg.html" title="link to 如何将macOS应用程序打包为dmg文件">如何将macOS应用程序打包为dmg文件</a></h2>
+       <p class="excerpt">之前改写过网上开源的一个JSON转Model的Mac APP，当时是直接使用的是将.app格式的文件直接拖到应用里面进行安装的，最近刚好有空就了解了一下dmg文件是怎么打包的，记录下整个的过程方便以后查找。操作步骤1.准备相关文件  (1) 打包生成的.app文件  (2) 一张背景图  (3) Applications文件夹的替身文件(可以到其他的dmg里面去拷贝一个)2.创建空白镜像文件(1) 打开磁盘工具，选择文件 -&gt; 新建映像 -&gt; 空白映像：(2) 在弹出框中填写相...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-08-11 11:46:29 +0800" class="post-list__meta--date date">2018-08-11</time> &#8226; <span class="post-list__meta--tags tags">macOS</span><a class="btn-border-small" href=/blog/pack-macos-app-to-dmg.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/selenium-captcha-recognition.html" title="link to 使用Selenium获取验证码并识别">使用Selenium获取验证码并识别</a></h2>
+       <p class="excerpt">最近项目组提了个需求要求我这边帮他们实现一个网站的数据采集并对接到指定的数据库表里面，记录下使用的在线API识别验证码的过程：由于验证码在每次加载页面的时候都会刷新，也就是说每次打开登录界面都是不同的验证码，所以需要将打开的登录界面截图然后从里面扣取验证码对应的内容再提交到服务器进行识别。1、对登录界面进行截图url = ''driver = webdriver.PhantomJS()driver.get(url)driver.set_window_size(1200, 800) #此处一...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-06-24 11:46:29 +0800" class="post-list__meta--date date">2018-06-24</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/selenium-captcha-recognition.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS多线程之GCD</title>
+  <meta name="description" content="Grand Central Dispatch(简称GCD)是Apple在Mac OS X 10.6和iOS4.0中首次引入的一个多核并行运算的解决方案。GCD是基于C语言的，如果使用GCD完全由系统管理线程，开发者不需要编写线程代码，只需专注定义想要只需的任务，然后添加到适当的Dispatch Queue(调度队列)。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS多线程之GCD">
+  <meta name="twitter:description" content="Grand Central Dispatch(简称GCD)是Apple在Mac OS X 10.6和iOS4.0中首次引入的一个多核并行运算的解决方案。GCD是基于C语言的，如果使用GCD完全由系统管理线程，开发者不需要编写线程代码，只需专注定义想要只需的任务，然后添加到适当的Dispatch Queue(调度队列)。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS多线程之GCD">
+  <meta property="og:description" content="Grand Central Dispatch(简称GCD)是Apple在Mac OS X 10.6和iOS4.0中首次引入的一个多核并行运算的解决方案。GCD是基于C语言的，如果使用GCD完全由系统管理线程，开发者不需要编写线程代码，只需专注定义想要只需的任务，然后添加到适当的Dispatch Queue(调度队列)。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-multithead-of-gcd.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-31 16:04:42 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-31</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS多线程之GCD</h1>
+  </header>
+
+  <section class="post">
+    <p>Grand Central Dispatch(简称GCD)是Apple在<code class="highlighter-rouge">Mac OS X 10.6</code>和<code class="highlighter-rouge">iOS4.0</code>中首次引入的一个多核并行运算的解决方案。GCD是基于C语言的，如果使用GCD完全由系统管理线程，开发者不需要编写线程代码，只需专注定义想要只需的任务，然后添加到适当的Dispatch Queue(调度队列)。</p>
+
+<p>GCD是一个可用来替代<code class="highlighter-rouge">NSThread、NSOperation、NSOperataionQueue</code>等技术的一个非常强大的解决方案。GCD在工作时会自动利用更多的处理器核心以充分利用机器的可用资源。</p>
+
+<p>##Dispatch Queue</p>
+
+<p>GCD编程的核心就是dispatch队列，dispatch block的执行最终都会放进某个队列中去进行，它类似NSOperationQueue但更复杂也更强大，并且可以嵌套使用。所以说，结合block实现的GCD，把函数闭包（Closure）的特性发挥得淋漓尽致。</p>
+
+<p>1、创建队列</p>
+
+<p>(1)创建自定义串行队列</p>
+
+<p><code class="highlighter-rouge">dispatch_queue_t queue = dispatch_queue_create("com.devzeng.gcd.serial", DISPATCH_QUEUE_SERIAL);</code>
+生成一个串行队列，队列中的block按照先进先出（FIFO）的顺序去执行，实际上为单线程执行。第一个参数是队列的名称，在调试程序时会非常有用，所有尽量不要重名了。</p>
+
+<p>(2)创建自定义并发队列</p>
+
+<p><code class="highlighter-rouge">dispatch_queue_t queue = dispatch_queue_create("com.devzeng.gcd.concurrent", DISPATCH_QUEUE_CONCURRENT);</code>
+生成一个并发执行队列，block被分发到多个线程去执行</p>
+
+<p>(3)创建默认缺省的并发队列</p>
+
+<p><code class="highlighter-rouge">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</code></p>
+
+<p>获得程序进程缺省产生的并发队列，可设定优先级来选择高、中、低三个优先级队列。由于是系统默认生成的，所以无法调用dispatch_resume()和dispatch_suspend()来控制执行继续或中断。需要注意的是，三个队列不代表三个线程，可能会有更多的线程。并发队列可以根据实际情况来自动产生合理的线程数，也可理解为dispatch队列实现了一个线程池的管理，对于程序逻辑是透明的。</p>
+
+<p>官网文档解释说共有三个并发队列，但实际还有一个更低优先级的队列，设置优先级为DISPATCH_QUEUE_PRIORITY_BACKGROUND。Xcode调试时可以观察到正在使用的各个dispatch队列。</p>
+
+<p>(4) 获取主线程的队列</p>
+
+<p><code class="highlighter-rouge">dispatch_queue_t queue = dispatch_get_main_queue();</code> 
+获得主线程的dispatch队列，实际是一个串行队列。同样无法控制主线程dispatch队列的执行继续或中断。</p>
+
+<p>2、使用队列</p>
+
+<p>创建好队列后，使用<code class="highlighter-rouge">dispatch_async</code>和<code class="highlighter-rouge">dispatch_sync</code>这两个函数可以执行Block代码。Block函数不返回，一直等到block执行完毕。编译器会根据实际情况优化代码，所以有时候你会发现block其实还在当前线程上执行，并没用产生新线程。</p>
+
+<p>(1)异步执行block，函数立即返回</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_async(queue, ^{
+　　//block具体代码
+});
+</code></pre></div></div>
+
+<p>(2)同步执行block</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_sync(queue, ^{
+　　//block具体代码
+});
+</code></pre></div></div>
+
+<p>(3)避免死锁</p>
+
+<p>实际编程经验告诉我们，尽可能避免使用dispatch_sync，嵌套使用时还容易引起程序死锁。如果queue是一个串行队列的话，这段代码立即产生死锁：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_sync(queue, ^{
+	dispatch_sync(queue, ^{
+		//
+	});
+});
+</code></pre></div></div>
+<p>同样下面的代码也会出现死锁：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_sync(dispatch_get_main_queue(), ^{
+　　//......
+}); 
+</code></pre></div></div>
+
+<p>(4)最佳实践</p>
+
+<p>1)网络请求数据处理示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+　　//子线程中开始网络请求数据
+　　//更新数据模型
+　　dispatch_sync(dispatch_get_main_queue(), ^{
+　　　　//在主线程中更新UI代码
+　　});
+});
+</code></pre></div></div>
+
+<p>2)使用串行队列</p>
+
+<p>dispatch队列是线程安全的，可以利用串行队列实现锁的功能。比如多线程写同一数据库，需要保持写入的顺序和每次写入的完整性，简单地利用串行队列即可实现：</p>
+
+<p><code class="highlighter-rouge">dispatch_queue_t queue1 = dispatch_queue_create("com.devzeng.dispatch.writedb", DISPATCH_QUEUE_SERIAL);
+</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)writeDB:(NSData *)data
+{
+　　dispatch_async(queue1, ^{
+　　　　//write database
+　　});
+} 
+</code></pre></div></div>
+<p>下一次调用<code class="highlighter-rouge">writeDB:</code>必须等到上次调用完成后才能进行，保证<code class="highlighter-rouge">writeDB:</code>方法是线程安全的。</p>
+
+<p>(5)dispatch队列还实现其它一些常用函数</p>
+
+<p>1)重复执行block，需要注意的是这个方法是同步返回，也就是说等到所有block执行完毕才返回，如需异步返回则嵌套在dispatch_async中来使用。多个block的运行是否并发或串行执行也依赖queue的是否并发或串行。</p>
+
+<p><code class="highlighter-rouge">void dispatch_apply(size_t iterations, dispatch_queue_t queue, void (^block)(size_t)); </code></p>
+
+<p>2)这个函数可以设置同步执行的block，它会等到在它加入队列之前的block执行完毕后，才开始执行。在它之后加入队列的block，则等到这个block执行完毕后才开始执行</p>
+
+<p><code class="highlighter-rouge">void dispatch_barrier_async(dispatch_queue_t queue, dispatch_block_t block);</code></p>
+
+<p>3)同上，除了它是同步返回函数</p>
+
+<p><code class="highlighter-rouge">void dispatch_barrier_sync(dispatch_queue_t queue, dispatch_block_t block);</code></p>
+
+<p>4)延迟执行block</p>
+
+<p><code class="highlighter-rouge">void dispatch_after(dispatch_time_t when, dispatch_queue_t queue, dispatch_block_t block);</code></p>
+
+<p>dispatch队列不支持cancel（取消），没有实现dispatch_cancel()函数，不像NSOperationQueue，不得不说这是个小小的缺憾。</p>
+
+<p>##Dispatch Group</p>
+
+<p>1、创建dispatch组</p>
+
+<p><code class="highlighter-rouge">dispatch_group_t group = dispatch_group_create(); </code></p>
+
+<p>2、启动dispatch队列中的block关联到group中</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_group_async(group, queue, ^{ 
+　　// 。。。 
+}); 
+</code></pre></div></div>
+
+<p>3、等待group关联的block执行完毕，也可以设置超时参数</p>
+
+<p><code class="highlighter-rouge">dispatch_group_wait(group, DISPATCH_TIME_FOREVER); </code></p>
+
+<p>4、为group设置通知一个block，当group关联的block执行完毕后，就调用这个block。类似dispatch_barrier_async。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_group_notify(group, queue, ^{
+　　// 。。。 
+}); 
+</code></pre></div></div>
+
+<p>5、手动管理group关联的block的运行状态（或计数），进入和退出group次数必须匹配</p>
+
+<p><code class="highlighter-rouge">dispatch_group_enter(group);</code>和<code class="highlighter-rouge">dispatch_group_leave(group);</code></p>
+
+<p>通常使用的下面的写法</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_group_async(group, queue, ^{ 
+　　// 。。。 
+}); 
+</code></pre></div></div>
+
+<p>等价于</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dispatch_group_enter(group);
+dispatch_async(queue, ^{
+　　//。。。
+　　dispatch_group_leave(group);
+});
+</code></pre></div></div>
+<p>所以，可以利用dispatch_group_enter、 dispatch_group_leave和dispatch_group_wait来实现同步,<a href="http://stackoverflow.com/questions/10643797/wait-until-multiple-operations-executed-including-completion-block-afnetworki/10644282#10644282">具体例子</a>。</p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://www.cnblogs.com/sunfrog/p/3281612.html">《iOS多线程的初步研究（七）– dispatch对象》</a></p>
+
+<p>2、<a href="http://www.cnblogs.com/sunfrog/p/3305614.html">《iOS多线程的初步研究（八）– dispatch队列》</a></p>
+
+<p>3、<a href="http://www.cnblogs.com/sunfrog/p/3308766.html">《iOS多线程的初步研究（九）– dispatch源》</a></p>
+
+<p>4、<a href="http://www.cnblogs.com/sunfrog/p/3313424.html">《iOS多线程的初步研究（十）– dispatch同步》</a></p>
+
+<p>5、<a href="http://blog.csdn.net/q199109106q/article/details/8566300">《多线程编程4 - GCD》</a></p>
+
+<p>6、<a href="http://blog.devtang.com/blog/2012/02/22/use-gcd/">《使用GCD》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-two-version-app-setting-profile.html" title="link to iOS开发之同一应用设置不同图标和名称">iOS开发之同一应用设置不同图标和名称</a></h2>
+       <p class="excerpt">经常在开发中遇到同一个App会有很多渠道版本，比如OTA内部测试版本，AppStore发布版本等。针对这些不同的版本我们通常会选择不同的图标、应用名称等，效果如下图所示：P.S上面使用的两个测试图标分别来源于土巴兔和乐视TV的iPhone版本APP的图标，是两个非常不错的APP，感谢你们。##Bundle IDiOS系统区分不同的App是否相同是根据App的Bundle ID是否相同来判断的。如果想要在一个系统上安装一个App的多个版本其实是需要多个Bundle ID，就是说正式版一个Bu...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-09-06 22:01:47 +0800" class="post-list__meta--date date">2014-09-06</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-two-version-app-setting-profile.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-multiple-version-compatible.html" title="link to iOS开发之多系统版本兼容">iOS开发之多系统版本兼容</a></h2>
+       <p class="excerpt">Apple自2007年发布第一版iOS操作系统以来，差不多以后的每年都会发布新版的操作系统，从最开始的iPhone OS到现在即将正式发布的iOS8。目前市面上能见到的iOS的版本主要是iOS4.3、iOS5、iOS6、iOS7，在实际的开发中遇到很多用户由于各种各样的原因没有升级到最新版，这就给我们开发者带了不少的麻烦。不过值得高兴的是截止到2014年8月24日，目前市面上大部分的iOS设备已经更新到iOS7了(91% of devices are using iOS 7)，对于一些占小...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-30 21:21:51 +0800" class="post-list__meta--date date">2014-08-30</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-multiple-version-compatible.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

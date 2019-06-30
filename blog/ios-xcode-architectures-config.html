@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发之Architectures设置</title>
+  <meta name="description" content="在iOS开发中经常遇到的一个错误是Undefined symbols for architecture arm64，这个错误表示工程某些地方不支持arm64指令集。本文围绕在iOS开发中经常遇到的关于Architectures方面的设置介绍iOS的指令集方面的知识点。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发之Architectures设置">
+  <meta name="twitter:description" content="在iOS开发中经常遇到的一个错误是Undefined symbols for architecture arm64，这个错误表示工程某些地方不支持arm64指令集。本文围绕在iOS开发中经常遇到的关于Architectures方面的设置介绍iOS的指令集方面的知识点。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发之Architectures设置">
+  <meta property="og:description" content="在iOS开发中经常遇到的一个错误是Undefined symbols for architecture arm64，这个错误表示工程某些地方不支持arm64指令集。本文围绕在iOS开发中经常遇到的关于Architectures方面的设置介绍iOS的指令集方面的知识点。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-xcode-architectures-config.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-28 22:37:46 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-28</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS开发之Architectures设置</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS开发中经常遇到的一个错误是<code class="highlighter-rouge">Undefined symbols for architecture arm64</code>，这个错误表示工程某些地方不支持<code class="highlighter-rouge">arm64指令集</code>。本文围绕在iOS开发中经常遇到的关于Architectures方面的设置介绍iOS的指令集方面的知识点。</p>
+
+<p>对于iOS设备来说iOS的指令集有<code class="highlighter-rouge">armv6、armv7、armv7s、arm64</code>这样四种，不同型号的iOS设备使用不同的指令集，下面是各自的区别：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">armv6</code>
+    <ul>
+      <li>iPhone、iPhone 3G</li>
+      <li>iPod 1G、iPod 2G</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">armv7</code>
+    <ul>
+      <li>iPhone 3GS、iPhone 4</li>
+      <li>iPod 3G、iPod 4G、iPod 5G</li>
+      <li>iPad、iPad 2、iPad 3、iPad Mini</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">armv7s</code>
+    <ul>
+      <li>iPhone 5、iPhone 5C</li>
+      <li>iPad 4</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">arm64</code>
+    <ul>
+      <li>iPhone 5S</li>
+      <li>iPad Air, Retina iPad Mini</li>
+    </ul>
+  </li>
+</ul>
+
+<p>在Xcode的<code class="highlighter-rouge">target-&gt;Build Settings</code>中有一个Architectures的分组主要是用来设置Architectures方面的内容，下面重点介绍下面几个设置项的内容。</p>
+
+<p><img src="/images/ios-architectures/ios-architectures-config.png" alt="ios-architectures-config.png" /></p>
+
+<p>##Architectures</p>
+
+<p>该编译选项指定了工程将被编译成支持哪些指令集，支持指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，造成最终编译的包很大。</p>
+
+<p>官方文档说明：</p>
+
+<p>Space-separated list of identifiers. Specifies the architectures (ABIs, processor models) to which the binary is targeted. When this build setting specifies more than one architecture, the generated binary may contain object code for each of the specified architectures.</p>
+
+<p>##Build Active Architectures Only
+该编译项用于设置是否只编译当前使用的设备对应的arm指令集。</p>
+
+<p>当该选项设置成YES时，你连上一个armv7指令集的设备，就算你的Valid Architectures和Architectures都设置成armv7/armv7s/arm64，还是依然只会生成一个armv7指令集的二进制包。</p>
+
+<p>当然该选项起作用的前提是你的Xcode必须成功连接了调试设备。如果你没有任何活跃设备，即Xcode没有成功连接调试设备，就算该设置项设置成YES依然还会编译Valid Architectures和Architectures指定的二进制包。</p>
+
+<p>通常情况下，该编译选项在Debug模式都设成YES，Release模式都设成NO。</p>
+
+<p>官方文档说明：</p>
+
+<p>Boolean value. Specifies whether the product includes only object code for the native architecture.</p>
+
+<p>##Valid Architectures</p>
+
+<p>该编译项指定可能支持的指令集，该列表和Architectures列表的交集，将是Xcode最终生成二进制包所支持的指令集。</p>
+
+<p>比如将Valid Architectures设置支持的arm指令集版本有：armv7、armv7s、arm64，对应的Architectures设置的支持arm指令集版本有：armv7s，这时Xcode只会生成一个armv7s指令集的二进制包。</p>
+
+<p>官方文档说明：</p>
+
+<p>Space-separated list of identifiers. Specifies the architectures for which the binary may be built. During the build, this list is intersected with the value of ARCHS build setting; the resulting list specifies the architectures the binary can run on. If the resulting architecture list is empty, the target generates no binary.</p>
+
+<p>##说明</p>
+
+<p>1、指令集是向下兼容的。比如，armv7s指令集的设备，可以兼容运行使用armv7、armv6编译的程序。</p>
+
+<p>2、不同的Xcode支持的指令集不同，比如Xcode5.1.1支持armv7、armv7s、arm64三个指令集。自Xcode4.5起不再支持armv6。</p>
+
+<p>3、如果想自己的app在各个机器都能够最高效率的运行，则需要将<code class="highlighter-rouge">Build Active Architecture Only</code>设置为<code class="highlighter-rouge">NO</code>，<code class="highlighter-rouge">Valid architectures</code>选择对应的指令集<code class="highlighter-rouge">armv7 armv7s arm64</code>。这个会为各个指令集编译对应的代码，因此最后生成的ipa体积基本翻了3倍。</p>
+
+<p>4、如果想让app体积保持最小，则现阶段应该选择<code class="highlighter-rouge">Valid architectures</code>为<code class="highlighter-rouge">armv7</code>，<code class="highlighter-rouge">Build Active Architecture Only</code>设置YES/NO都无关紧要。</p>
+
+<p>5、如果遇到<code class="highlighter-rouge">Undefined symbols for architecture arm64</code>这样的错误，一般是表示引入的第三方库不支持arm64的指令集，解决这个问题就只需要删除Architectures中的arm64的选项。</p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://wangzz.github.io/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/">《Xcode设置项之Architectures和Valid Architectures》</a></p>
+
+<p>2、<a href="http://justsee.iteye.com/blog/2009954">《xcode5 arm64》</a></p>
+
+<p>3、<a href="https://developer.apple.com/library/ios/documentation/General/Conceptual/CocoaTouch64BitGuide/Introduction/Introduction.html">《64-Bit Transition Guide for Cocoa Touch》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-multiple-version-compatible.html" title="link to iOS开发之多系统版本兼容">iOS开发之多系统版本兼容</a></h2>
+       <p class="excerpt">Apple自2007年发布第一版iOS操作系统以来，差不多以后的每年都会发布新版的操作系统，从最开始的iPhone OS到现在即将正式发布的iOS8。目前市面上能见到的iOS的版本主要是iOS4.3、iOS5、iOS6、iOS7，在实际的开发中遇到很多用户由于各种各样的原因没有升级到最新版，这就给我们开发者带了不少的麻烦。不过值得高兴的是截止到2014年8月24日，目前市面上大部分的iOS设备已经更新到iOS7了(91% of devices are using iOS 7)，对于一些占小...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-30 21:21:51 +0800" class="post-list__meta--date date">2014-08-30</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-multiple-version-compatible.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-xcode-usage.html" title="link to iOS开发中Xcode常见使用技巧">iOS开发中Xcode常见使用技巧</a></h2>
+       <p class="excerpt">Xcode是苹果公司开发向开发人员提供的集成开发环境(IDE)，主要用于开发Mac OS X和iOS的应用程序只能运行于Mac操作系统下。本文旨在记录一些在开发中常见的Xcode的配置和使用技巧，后续会持续更新。##更新说明  2014-08-27 v1.0 初稿  2014-09-24 V1.1 增加Xcode断点不进调试的相关内容  2014-09-26 V1.2 增加Xcode6缺失新建Empty Application相关模板的问题##旧版本Xcode支持高版本的设备问题描述：如何...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-27 23:07:17 +0800" class="post-list__meta--date date">2014-08-27</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-xcode-usage.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

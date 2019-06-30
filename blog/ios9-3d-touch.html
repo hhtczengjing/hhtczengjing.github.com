@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>在iOS9中使用3D Touch</title>
+  <meta name="description" content="在iPhone 6s和iPhone 6s Plus中Apple引入了3D Touch技术。3D Touch的触控技术，被苹果称为新一代多点触控技术。其实，就是此前在Apple Watch上采用的Force Touch，屏幕可感应不同的感压力度。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在iOS9中使用3D Touch">
+  <meta name="twitter:description" content="在iPhone 6s和iPhone 6s Plus中Apple引入了3D Touch技术。3D Touch的触控技术，被苹果称为新一代多点触控技术。其实，就是此前在Apple Watch上采用的Force Touch，屏幕可感应不同的感压力度。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="在iOS9中使用3D Touch">
+  <meta property="og:description" content="在iPhone 6s和iPhone 6s Plus中Apple引入了3D Touch技术。3D Touch的触控技术，被苹果称为新一代多点触控技术。其实，就是此前在Apple Watch上采用的Force Touch，屏幕可感应不同的感压力度。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios9-3d-touch.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-10-24 21:19:25 +0800" itemprop="datePublished" class="post-meta__date date">2015-10-24</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">在iOS9中使用3D Touch</h1>
+  </header>
+
+  <section class="post">
+    <p>在iPhone 6s和iPhone 6s Plus中Apple引入了3D Touch技术。3D Touch的触控技术，被苹果称为新一代多点触控技术。其实，就是此前在Apple Watch上采用的Force Touch，屏幕可感应不同的感压力度。</p>
+
+<p><img src="/images/ios9_3d_touch/ios_3d_touch.png" alt="ios_3d_touch.png" /></p>
+
+<p>iOS9提供了四类API（<code class="highlighter-rouge">Home Screen Quick Action</code>、<code class="highlighter-rouge">UIKit Peek &amp; Pop</code> 、<code class="highlighter-rouge">WebView Peek &amp; Pop</code> 和<code class="highlighter-rouge">UITouch Force Properties</code>）用于操作3D Touch(<code class="highlighter-rouge">Pressure Sensitivity</code> 、 <code class="highlighter-rouge">Peek and Pop</code> 和 <code class="highlighter-rouge">Quick Actions</code>)。不过无论使用哪一种API，首先需要做的事情是检查3D Touch是否可用。</p>
+
+<p>###检测是否支持3D Touch</p>
+
+<p>在iOS9中提供如下的接口用于检查设备是否支持3D Touch：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@property(nonatomic, readonly) UIForceTouchCapability forceTouchCapability;
+</code></pre></div></div>
+
+<p>其中<code class="highlighter-rouge">UIForceTouchCapability</code>是一个枚举类型，具体的描述情况如下：</p>
+
+<ul>
+  <li>UIForceTouchCapability
+    <ul>
+      <li>UIForceTouchCapabilityUnknown         //3D Touch检测失败</li>
+      <li>UIForceTouchCapabilityUnavailable     //3D Touch不可用</li>
+      <li>UIForceTouchCapabilityAvailable       //3D Touch可用</li>
+    </ul>
+  </li>
+</ul>
+
+<p>这3个枚举值就是我们来判断设备是否开启3D Touch功能，可以在UIViewController生命周期的viewWillAppear中做如下判断：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+	//do something
+}
+</code></pre></div></div>
+<p>当然在生命周期内，如果用户有意修改了设备的3D Touch功能，我们还有一个地方来重新检测：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	//do something
+}
+</code></pre></div></div>
+
+<p>####Home Screen Quick Action</p>
+
+<p>在iPhone 6s或者iPhone 6s Plus上面，当用户按压App的Icon图标的时候，会弹出Quick Action，当用户选择其中的Action的时候，App会启动并实现相应的功能。这一过程相当于在PC上面的右键快捷菜单的功能，如下图所示的效果：</p>
+
+<p><img src="/images/ios9_3d_touch/maps_directions_home_2x.png" alt="maps_directions_home" /></p>
+
+<p>####开发环境</p>
+
+<p>官方文档上指出Xcode7.0以上的模拟器不支持3D Touch，必须使用支持3D Touch的设备（iPhone 6s或者iPhone 6s Plus）进行调试。但是这并不能阻止我们在模拟器上面进行调试，GitHub上面早有大神提供了模拟器调试Quick Action的方法，项目的地址是：<code class="highlighter-rouge">https://github.com/DeskConnect/SBShortcutMenuSimulator</code>。下面简单介绍一下安装的步骤：</p>
+
+<p>#####①编译</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/DeskConnect/SBShortcutMenuSimulator.git
+cd SBShortcutMenuSimulat
+make
+</code></pre></div></div>
+
+<p>#####②让SpringBoard支持SBShortcutMenuSimulator</p>
+
+<p>在开启模拟器的情况下，在SBShortcutMenuSimulator目录下面执行如下两行命令：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xcrun simctl spawn booted launchctl debug system/com.apple.SpringBoard --environment DYLD_INSERT_LIBRARIES=$PWD/SBShortcutMenuSimulator.dylib
+xcrun simctl spawn booted launchctl stop com.apple.SpringBoard
+</code></pre></div></div>
+
+<p>#####③预览效果</p>
+
+<p><code class="highlighter-rouge">echo 'com.apple.mobilecal' | nc 127.0.0.1 8000</code>，其中com.apple.mobilecal指的是系统自带的日历的Bundle ID，运行的时候替换成你的应用的Bundle ID即可。</p>
+
+<p>####创建方式</p>
+
+<p>上面的示例图中有四个Action Item，其中每个Action是使用UIApplicationShortcutItem这个对象进行描述的，下面列出每一个UIApplicationShortcutItem中能够包含的信息：</p>
+
+<p><img src="/images/ios9_3d_touch/action_item_desc.png" alt="action_item_desc.png" /></p>
+
+<p>创建Quick Action有两种方式：静态和动态</p>
+
+<p>#####①以静态方式创建</p>
+
+<p>静态创建的方式是在Info.plist文件中进行声明的</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;UIApplicationShortcutItems&lt;/key&gt;
+&lt;array&gt;
+	&lt;dict&gt;
+		&lt;key&gt;UIApplicationShortcutItemType&lt;/key&gt;
+		&lt;string&gt;com.devzeng.homePage&lt;/string&gt;
+		&lt;key&gt;UIApplicationShortcutItemTitle&lt;/key&gt;
+		&lt;string&gt;首页&lt;/string&gt;
+		&lt;key&gt;UIApplicationShortcutItemSubtitle&lt;/key&gt;
+		&lt;string&gt;这是首页&lt;/string&gt;
+		&lt;key&gt;UIApplicationShortcutItemIconFile&lt;/key&gt;
+		&lt;string&gt;icon_home.png&lt;/string&gt;
+		&lt;key&gt;UIApplicationShortcutItemUserInfo&lt;/key&gt;
+		&lt;dict&gt;
+			&lt;key&gt;scheme&lt;/key&gt;
+			&lt;string&gt;devzeng://home&lt;/string&gt;
+		&lt;/dict&gt;
+	&lt;/dict&gt;
+	&lt;dict&gt;
+		&lt;key&gt;UIApplicationShortcutItemType&lt;/key&gt;
+		&lt;string&gt;com.devzeng.about&lt;/string&gt;
+		&lt;key&gt;UIApplicationShortcutItemTitle&lt;/key&gt;
+		&lt;string&gt;关于我们&lt;/string&gt;
+		&lt;key&gt;UIApplicationShortcutItemSubtitle&lt;/key&gt;
+		&lt;string&gt;这是关于我们&lt;/string&gt;
+		&lt;key&gt;UIApplicationShortcutItemIconFile&lt;/key&gt;
+		&lt;string&gt;icon_about.png&lt;/string&gt;
+		&lt;key&gt;UIApplicationShortcutItemUserInfo&lt;/key&gt;
+		&lt;dict&gt;
+			&lt;key&gt;scheme&lt;/key&gt;
+			&lt;string&gt;devzeng://about&lt;/string&gt;
+		&lt;/dict&gt;
+	&lt;/dict&gt;
+&lt;/array&gt;
+</code></pre></div></div>
+
+<p>#####②以动态方式创建</p>
+
+<p>动态创建是在程序初始化的时候用代码动态添加。<code class="highlighter-rouge">UIApplication</code>对象多了一个支持快捷方式的数组（shortcutItems）, 如果需要增加快捷方式，可以赋值给shortcutItems属性。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@property(nonatomic, copy) NSArray &lt;UIApplicationShortcutItem *&gt; *shortcutItems;
+</code></pre></div></div>
+
+<p>示例代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//创建ShortcutItem
+UIApplicationShortcutIcon *icon1 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"icon_register.png"];//创建快捷item的icon即UIApplicationShortcutItemIconFile
+NSDictionary *info1 = @{@"scheme":@"devzeng://register"};//创建快捷item的userinfo即UIApplicationShortcutItemUserInfo
+UIMutableApplicationShortcutItem *item1 = [[UIMutableApplicationShortcutItem alloc] initWithType:@"com.devzeng.registerPage" localizedTitle:@"注册" localizedSubtitle:@"注册新用户" icon:icon1 userInfo:info1];
+//创建ShortcutItem
+UIApplicationShortcutIcon *icon2 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"icon_shop.png"];
+NSDictionary *info2 = @{@"scheme":@"devzeng://shop"};
+UIMutableApplicationShortcutItem *item2 = [[UIMutableApplicationShortcutItem alloc] initWithType:@"com.devzeng.shopPage" localizedTitle:@"购物车" localizedSubtitle:@"查看购物车" icon:icon2 userInfo:info2];
+//创建ShortcutItem
+UIApplicationShortcutIcon *icon3 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"icon_help.png"];
+NSDictionary *info3 = @{@"scheme":@"devzeng://help"};
+UIMutableApplicationShortcutItem *item3 = [[UIMutableApplicationShortcutItem alloc] initWithType:@"com.devzeng.helpPage" localizedTitle:@"帮助" localizedSubtitle:@"帮助手册" icon:icon3 userInfo:info3];
+//注册ShortcutItem
+[UIApplication sharedApplication].shortcutItems = items;
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>1)系统限制每个App最多能够显示4个Action Item，其中包括静态方式和动态方式进行创建的；</p>
+
+<p>2)如果静态和动态方式同时使用的时候，给UIApplication的shortcutItems赋值的时候不会覆盖</p>
+
+<p>####响应回调</p>
+
+<p>当app在后台的时候UIApplication提供了一个回调方法</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler NS_AVAILABLE_IOS(9_0);
+</code></pre></div></div>
+
+<p>我们依据这个回调中的shortcutItem的type和userinfo来做出不同的事件处理,而最后的completionHandler在API的说明中我们看到当应用并非在后台，而是直接重新开进程的时候，直接返回No，那么这个时候，我们的回调会放在</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+</code></pre></div></div>
+
+<p>UIApplication又给我们一个从launchOptions中获取这个shortcutItem的key(UIApplicationLaunchOptionsShortcutItemKey)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>UIApplicationShortcutItem *item = [launchOptions valueForKey:UIApplicationLaunchOptionsShortcutItemKey];
+//根据不同的Action响应不同的事件
+</code></pre></div></div>
+
+<p>在performActionForShortcutItem回调中</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler {
+    if (shortcutItem) {
+        //根据不同的Action响应不同的事件
+    }
+    if (completionHandler) {
+        completionHandler(YES);
+    }
+}
+</code></pre></div></div>
+
+<p>####UIKit Peek &amp; Pop</p>
+
+<p>Peek和Pop手势给了iOS9用户预览和体验内容的全新方法。iPhone6s/iPhone6s Plus可通过用户触摸力度感知需求，并给出更加丰富的操作选项。目前这项功能已经在邮件、照片、日历等应用中启用。</p>
+
+<p>根据苹果的介绍，Peek手势允许用户通过短时间按压屏幕进行操作，可在邮件、照片等应用弹出全新功能菜单，给出预览内容。如果按压力度加大，则是Pop手势功能，会让被点击内容完全呈现，这些内容可以是文字、图像、网页以及其他各种内容。简单来说，Peek专注于预览，Pop可以全面展现内容。</p>
+
+<p><img src="/images/ios9_3d_touch/peek_2x.png" alt="peek_2x.png" /></p>
+
+<p>#####1、检测3D Touch是否可用，如果可用就注册</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)check3DTouchAvailable {
+    // 如果开启了3D touch，注册
+    if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+        [self registerForPreviewingWithDelegate:(id)self sourceView:_label];
+    }
+}
+</code></pre></div></div>
+
+<p>#####2、实现UIViewControllerPreviewingDelegate的Protocol</p>
+
+<p>①Peek手势相关处理:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (UIViewController *)previewingContext:(id&lt;UIViewControllerPreviewing&gt;)context viewControllerForLocation:(CGPoint)point {
+	//防止重复加入
+    if ([self.presentedViewController isKindOfClass:[PeekDemoViewController class]]){
+        return nil;
+    }
+    else {
+        PeekDemoViewController *peekViewController = [[PeekDemoViewController alloc] init];
+        return peekViewController;
+    }
+}
+</code></pre></div></div>
+
+<p>在PeekDemoViewController中添加previewActionItems：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSArray&lt;id&lt;UIPreviewActionItem&gt;&gt; *)previewActionItems {
+
+    // 生成UIPreviewAction
+    UIPreviewAction *action1 = [UIPreviewAction actionWithTitle:@"Action 1" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+        NSLog(@"Action 1 selected");
+    }];
+    
+    UIPreviewAction *action2 = [UIPreviewAction actionWithTitle:@"Action 2" style:UIPreviewActionStyleDestructive handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+        NSLog(@"Action 2 selected");
+    }];
+    
+    UIPreviewAction *action3 = [UIPreviewAction actionWithTitle:@"Action 3" style:UIPreviewActionStyleSelected handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+        NSLog(@"Action 3 selected");
+    }];
+    
+    UIPreviewAction *tap1 = [UIPreviewAction actionWithTitle:@"tap 1" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+        NSLog(@"tap 1 selected");
+    }];
+    
+    UIPreviewAction *tap2 = [UIPreviewAction actionWithTitle:@"tap 2" style:UIPreviewActionStyleDestructive handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+        NSLog(@"tap 2 selected");
+    }];
+    
+    UIPreviewAction *tap3 = [UIPreviewAction actionWithTitle:@"tap 3" style:UIPreviewActionStyleSelected handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+        NSLog(@"tap 3 selected");
+    }];
+    
+    //添加到到UIPreviewActionGroup中
+    NSArray *actions = @[action1, action2, action3];
+    NSArray *taps = @[tap1, tap2, tap3];
+    UIPreviewActionGroup *group1 = [UIPreviewActionGroup actionGroupWithTitle:@"Action Group" style:UIPreviewActionStyleDefault actions:actions];
+    UIPreviewActionGroup *group2 = [UIPreviewActionGroup actionGroupWithTitle:@"Tap Group" style:UIPreviewActionStyleDefault actions:taps];
+    NSArray *group = @[group1,group2];
+    
+    return group;
+}
+</code></pre></div></div>
+
+<p><img src="/images/ios9_3d_touch/peek_quick_actions_2x.png" alt="peek_quick_actions_2x.png" /></p>
+
+<p>②Pop手势相关处理:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)previewingContext:(id&lt;UIViewControllerPreviewing&gt;)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
+    PopDemoViewController *popViewController = [[PopDemoViewController alloc] init];
+    [self showViewController:popViewController sender:self];
+}
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1.<a href="https://developer.apple.com/library/prerelease/ios/documentation/UserExperience/Conceptual/Adopting3DTouchOniPhone/">《Adopting 3D Touch on iPhone》</a></p>
+
+<p>2.<a href="http://pingguohe.net/2015/10/08/3D-Touch-1.html">《浅谈3D Touch（1） – Home screen quick action》</a></p>
+
+<p>3.<a href="http://pingguohe.net/2015/10/12/3D-Touch-2.html">《浅谈3D Touch（2） – UITouch &amp;&amp; Peek &amp;&amp; Pop》</a></p>
+
+<p>4.<a href="http://www.allenchiang.com/2015/09/21/适配3d-touch之quick-actions/">《适配3d-touch》</a></p>
+
+<p>5.<a href="http://www.stringcode.co.uk/add-ios-9s-quick-actions-shortcut-support-in-15-minutes-right-now/?utm_campaign=iOS%2BDev%2BWeekly&amp;utm_medium=email&amp;utm_source=iOS_Dev_Weekly_Issue_216">《Add iOS 9’s Quick Actions shortcut support in 15 minutes right now !》</a></p>
+
+<p>6.<a href="http://mp.weixin.qq.com/s?__biz=MjM5NDMzMTcxMg==&amp;mid=212175593&amp;idx=1&amp;sn=887118aaa63d4d364ccf16be9e807a72#rd">《15分钟搞定iOS9 Quick Actions》</a></p>
+
+<p>7.<a href="http://szulctomasz.com/3d-touch-impressions-and-thoughts/">《iOS: 3D Touch, impressions and thoughts》</a></p>
+
+<p>8.<a href="http://swift.gg/2015/10/23/3d-touch-impressions-and-thoughts/">《3D Touch之我见》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/hello-react-native.html" title="link to React Native开发初探">React Native开发初探</a></h2>
+       <p class="excerpt">Facebook在React.js Conf 2015大会(2015.3.26)上开源了React Native。最开始只支持iOS，2015年9月15日发布了React Native for Android，至此React Native支持主流的两大平台（iOS和Android）。新事物的出现，都会引发行业的热烈讨论，自React Native发布起，一直都是热门的讨论话题。React Native的出现在一定程度上解决了我们目前在移动开发上面临的问题。我们身处在移动互联网的黄金时代，越...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-01-23 18:49:35 +0800" class="post-list__meta--date date">2016-01-23</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/hello-react-native.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios9-corespotlight.html" title="link to 在iOS9中使用CoreSpotlight">在iOS9中使用CoreSpotlight</a></h2>
+       <p class="excerpt">在iOS9之前，用户可以通过Spotlight中输入关键字来查找App。在iOS9中Apple随之发布了一套全新的iOS9 Search APIs之后，开发者不但可以自由的将App的部分内容建立索引，还能对Spotlight上的搜索结果以及点击不同的结果显示的内容进行设置。###三种搜索的API简介####NSUserActivityNSUserActivity是iOS8专为Handoff推出的API，在iOS9得到了提升。现在用户只需要提供元数据(metadata)就能搜索到不同的活动(...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-10-18 16:37:38 +0800" class="post-list__meta--date date">2015-10-18</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios9-corespotlight.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

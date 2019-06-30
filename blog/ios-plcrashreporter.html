@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中使用PLCrashReporter收集Crash</title>
+  <meta name="description" content="iOS应用程序在上线过程中可能会出现各种闪退，如果APP经常出现闪退会让一部分用户选择卸载，这样会带来很大的损失，下图(来自于Bugly)可以看出APP出现崩溃后会带来的影响。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中使用PLCrashReporter收集Crash">
+  <meta name="twitter:description" content="iOS应用程序在上线过程中可能会出现各种闪退，如果APP经常出现闪退会让一部分用户选择卸载，这样会带来很大的损失，下图(来自于Bugly)可以看出APP出现崩溃后会带来的影响。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中使用PLCrashReporter收集Crash">
+  <meta property="og:description" content="iOS应用程序在上线过程中可能会出现各种闪退，如果APP经常出现闪退会让一部分用户选择卸载，这样会带来很大的损失，下图(来自于Bugly)可以看出APP出现崩溃后会带来的影响。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-plcrashreporter.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-05-21 23:40:53 +0800" itemprop="datePublished" class="post-meta__date date">2016-05-21</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中使用PLCrashReporter收集Crash</h1>
+  </header>
+
+  <section class="post">
+    <p>iOS应用程序在上线过程中可能会出现各种闪退，如果APP经常出现闪退会让一部分用户选择卸载，这样会带来很大的损失，下图(来自于Bugly)可以看出APP出现崩溃后会带来的影响。</p>
+
+<p><img src="/images/ios-plcrashreporter/bugly_introduction_1.jpg" alt="bugly介绍" /></p>
+
+<p>对于这些崩溃信息怎么收集分析就是一个很大的问题，通过解析Crash文件可以帮助我们改善APP，修复bug等。收集Crash信息的方式有很多，比较常见的是使用第三方服务，比如友盟、百度统计、Bugly等。(下图为Bugly）</p>
+
+<p><img src="/images/ios-plcrashreporter/bugly_introduction_2.png" alt="bugly介绍" /></p>
+
+<p>###使用系统自带的Crash收集</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//需要捕获的signal
+static int s_fatal_signals[] = {
+    SIGABRT,
+    SIGBUS,
+    SIGFPE,
+    SIGILL,
+    SIGSEGV,
+    SIGTRAP,
+    SIGTERM,
+    SIGKILL
+};
+
+static int s_fatal_signal_num = sizeof(s_fatal_signals)/sizeof(s_fatal_signals[0]);
+
+void UncaughtExceptionHandler(NSException *exception) {
+    NSArray *arr = [exception callStackSymbols];//得到当前调用栈信息
+    NSString *reason = [exception reason];//非常重要，就是崩溃的原因
+    NSString *name = [exception name];//异常类型
+}
+
+void SignalHandler(int code) {
+    NSLog(@"signal handler = %d",code);
+}
+
+void InitCrashReport() {
+    // 1 linux错误信号捕获
+    for (int i = 0; i &lt; s_fatal_signal_num; ++i) {
+        signal(s_fatal_signals[i], SignalHandler);
+    }
+    // 2 objective-c未捕获异常的捕获
+    NSSetUncaughtExceptionHandler(&amp;UncaughtExceptionHandler);
+}
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        InitCrashReport();
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+    }
+}
+</code></pre></div></div>
+
+<p>###使用PLCrashReporter收集</p>
+
+<p><a href="https://www.plcrashreporter.org">PLCrashReporter</a>是一个开源的崩溃日志收集的库，很多崩溃收集的第三方服务都是基于PLCrashReporter来实现的。</p>
+
+<p><img src="/images/ios-plcrashreporter/plcrashreporter_logo.png" alt="plcrashreporter_logo.png" /></p>
+
+<p>(1)使用CocoaPods的方式快速集成</p>
+
+<p><code class="highlighter-rouge">pod ‘PLCrashReporter’, ‘~&gt; 1.2’</code></p>
+
+<p>在Podfile中加入上面的代码，然后执行pod install.</p>
+
+<p>(2)启用PLCrashReporter收集Crash</p>
+
+<p>引入头文件：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#import &lt;CrashReporter/CrashReporter.h&gt;
+#import &lt;CrashReporter/PLCrashReportTextFormatter.h&gt;
+</code></pre></div></div>
+
+<p>在<code class="highlighter-rouge">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions;</code>中添加如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+NSError *error;
+// Check if we previously crashed
+if ([crashReporter hasPendingCrashReport]) {
+	[self handleCrashReport];
+}
+// Enable the Crash Reporter
+if (![crashReporter enableCrashReporterAndReturnError: &amp;error]) {
+	NSLog(@"Warning: Could not enable crash reporter: %@", error);
+}
+</code></pre></div></div>
+
+<p>(3)处理CrashReport</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)handleCrashReport {
+    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+    NSData *crashData;
+    NSError *error;
+    
+    // Try loading the crash report
+    crashData = [crashReporter loadPendingCrashReportDataAndReturnError:&amp;error];
+    if (crashData == nil) {
+        NSLog(@"Could not load crash report: %@", error);
+        [crashReporter purgePendingCrashReport];
+        return;
+    }
+    
+    // We could send the report from here, but we'll just print out some debugging info instead
+    PLCrashReport *report = [[PLCrashReport alloc] initWithData:crashData error:&amp;error];
+    if (report == nil) {
+        NSLog(@"Could not parse crash report");
+        [crashReporter purgePendingCrashReport];
+        return;
+    }
+    
+    //TODO:send the report
+    NSLog(@"Crashed on %@", report.systemInfo.timestamp);
+    NSLog(@"Crashed with signal %@ (code %@, address=0x%" PRIx64 ")", report.signalInfo.name, report.signalInfo.code, report.signalInfo.address);
+    NSString *humanReadText = [PLCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
+    NSLog(@"Crashed Format Text %@", humanReadText);
+    
+    [crashReporter purgePendingCrashReport];
+    return;
+}
+</code></pre></div></div>
+
+<p>###分析Crash Report</p>
+
+<p>####（1）获取PLCrashReporter收集到的crash文件</p>
+
+<p>通过PLCrashReporter的<code class="highlighter-rouge">- (NSData *)loadPendingCrashReportDataAndReturnError:(NSError **)outError;</code>方法获取到的NSData格式的数据是通过protobuf处理过的数据,需要使用工具进行转换处理。</p>
+
+<p>转换代码如下：</p>
+
+<p><code class="highlighter-rouge">./bin/plcrashutil convert --format=iphone example_report.plcrash &gt; crash.log</code></p>
+
+<p>说明：</p>
+
+<ul>
+  <li>
+    <p>1）工具下载地址：<code class="highlighter-rouge">https://www.plcrashreporter.org/static/downloads/PLCrashReporter-1.2.zip</code></p>
+  </li>
+  <li>
+    <p>2）example_report.plcrash文件指的是前面的NSData保存的文件</p>
+  </li>
+</ul>
+
+<p>####（2）获取dsym文件</p>
+
+<p>Xcode编译项目后，我们会看到一个同名的dSYM文件，dSYM是保存16进制函数地址映射信息的中转文件，我们调试的symbols都会包含在这个文件中，并且每次编译项目的时候都会生成一个新的dSYM文件，位于<code class="highlighter-rouge">/Users/&lt;用户名&gt;/Library/Developer/Xcode/Archives</code>目录下，对于每一个发布版本我们都很有必要保存对应的Archives文件.</p>
+
+<p>每一个<code class="highlighter-rouge">xxx.app</code>和<code class="highlighter-rouge">xxx.app.dSYM</code>文件都有对应的UUID，<code class="highlighter-rouge">crash</code>文件(指的是通过工具转换过的文件)也有自己的UUID，只要这三个文件的UUID一致，我们就可以通过他们解析出正确的错误函数信息了。</p>
+
+<p>1）查看xxx.app 文件的 UUID，在terminal中输入命令 ：</p>
+
+<p><code class="highlighter-rouge">dwarfdump --uuid xxx.app/xxx</code> (xxx代表你的项目名)</p>
+
+<p>2）查看xxx.app.dSYM文件的UUID，在terminal中输入命令：</p>
+
+<p><code class="highlighter-rouge">dwarfdump --uuid xxx.app.dSYM</code> (xxx代表你的项目名)</p>
+
+<p>3）crash文件内第一行<code class="highlighter-rouge">Incident Identifier</code>就是该crash文件的UUID。</p>
+
+<p>####（3）使用symbolicatecrash分析</p>
+
+<p>Xcode 7.3中symbolicatecrash工具存放的路径是：</p>
+
+<p><code class="highlighter-rouge">/Applications/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework/Versions/A/Resources/symbolicatecrash</code></p>
+
+<p>建议拷贝出来放到一个专门的文件夹下。</p>
+
+<p>设置DEVELOPER_DIR:</p>
+
+<p><code class="highlighter-rouge">export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer</code></p>
+
+<p><code class="highlighter-rouge">./symbolicatecrash crash.log xxx.app.dSYM &gt; result.log</code> (xxx代表你的项目名)</p>
+
+<p>####（4）</p>
+
+<p><code class="highlighter-rouge">xcrun atos -o xxx.app/xxx -l 0x11111111</code> (xxx代表你的项目名, 0x11111111表示要分析的地址)，推荐使用<code class="highlighter-rouge">dSYM 文件分析工具</code>(下载地址：http://pan.baidu.com/s/1bnkxPvT)</p>
+
+<p><img src="/images/ios-plcrashreporter/dsym_tool.png" alt="dSYM 文件分析工具" /></p>
+
+<p>###参考资料</p>
+
+<p>1.<a href="https://www.plcrashreporter.org/documentation">《PLCrashReporter Documentation》</a></p>
+
+<p>2.<a href="https://everettjf.github.io/2015/09/09/ios-plcrashreporter">《iOS崩溃收集与分析，使用PLCrashReporter》</a></p>
+
+<p>3.<a href="http://www.jianshu.com/p/77660e626874">《iOS开发技巧－崩溃调试》</a></p>
+
+<p>4.<a href="http://answerhuang.duapp.com/index.php/2014/07/06/dsym_tool/">《dSYM 文件分析工具》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-cocoapods-private-repo.html" title="link to 在iOS项目中使用CocoaPods私有库">在iOS项目中使用CocoaPods私有库</a></h2>
+       <p class="excerpt">CocoaPods的出现极大的减轻了我们日常开发的工作量，特别是在做一些繁琐的配置上面，正如CocoaPods官网上面的Get on with building your app, not duplicating code.这句话一样CocoaPods让我们把精力放在打磨我们的产品，而不是把时间浪费在做一些重复的事情上面。在开发项目的过程中引入第三方代码库会涉及到许多内容。有的时候需要配置build phases和linker flags，这样的细节配置会引起许多人为因素的错误导致整个项目...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-06-18 22:36:53 +0800" class="post-list__meta--date date">2016-06-18</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-cocoapods-private-repo.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/hello-cordova-ios.html" title="link to iOS中Cordova开发初探">iOS中Cordova开发初探</a></h2>
+       <p class="excerpt">跨平台开发是我们长久以来都在关注的话题，前段时间写了一篇关于React Native的文章《React Native开发初探》。也在公司的项目中部分使用React Native，虽然React Native的出现带来了很多变革，但是光一个环境搭建就把很多人挡在了门外，另外React Native更新的频率过快差不多两周一个版本，所以目前还是处于观望阶段。Cordova是一个开源的移动应用开发框架，是Adobe贡献给Apache的开源项目，是从PhoneGap中抽出的核心代码，是驱动Phon...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-04-01 22:08:53 +0800" class="post-list__meta--date date">2016-04-01</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/hello-cordova-ios.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

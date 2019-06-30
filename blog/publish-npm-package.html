@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>如何将自己的Node.js包发布到npm上面</title>
+  <meta name="description" content="早前写过一篇《使用Verdaccio搭建npm仓库》介绍如何搭建私有的npm包托管的环境的文章，比较适合将私有的Node.js包发布上去。本文主要记录一下发布一个公开的package到npm的过程。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="如何将自己的Node.js包发布到npm上面">
+  <meta name="twitter:description" content="早前写过一篇《使用Verdaccio搭建npm仓库》介绍如何搭建私有的npm包托管的环境的文章，比较适合将私有的Node.js包发布上去。本文主要记录一下发布一个公开的package到npm的过程。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="如何将自己的Node.js包发布到npm上面">
+  <meta property="og:description" content="早前写过一篇《使用Verdaccio搭建npm仓库》介绍如何搭建私有的npm包托管的环境的文章，比较适合将私有的Node.js包发布上去。本文主要记录一下发布一个公开的package到npm的过程。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/publish-npm-package.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-05-31 18:46:37 +0800" itemprop="datePublished" class="post-meta__date date">2019-05-31</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">如何将自己的Node.js包发布到npm上面</h1>
+  </header>
+
+  <section class="post">
+    <p>早前写过一篇<a href="https://blog.devzeng.com/blog/npm-repo-with-verdaccio.html">《使用Verdaccio搭建npm仓库》</a>介绍如何搭建私有的npm包托管的环境的文章，比较适合将私有的Node.js包发布上去。本文主要记录一下发布一个公开的package到npm的过程。</p>
+
+<p><img src="/images/npm-publish-package/npm-intro.png" alt="npm-intro.png" /></p>
+
+<p>1、注册账号</p>
+
+<p>前往<code class="highlighter-rouge">https://www.npmjs.com</code>注册账号，并按照要求验证邮箱。</p>
+
+<p>2、Node.js包</p>
+
+<p>创建<code class="highlighter-rouge">package.json</code>文件，如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "name": "gitlab-systemhook-handler",
+  "version": "0.1.0",
+  "description": "Web handler / middleware for processing Gitlab System hooks",
+  "main": "gitlab-systemhook-handler.js",
+  "scripts": {
+    "test": "node demo.js"
+  },
+  "keywords": [
+    "gitlab",
+    "systemhook"
+  ],
+  "author": "zengjing &lt;hhtczengjing@gmail.com&gt;",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hhtczengjing/gitlab-systemhook-handler.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bl": "~1.1.2",
+    "buffer-equal-constant-time": "~1.0.1"
+  }
+}
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<ul>
+  <li>（1）name: 包的名字</li>
+  <li>（2）version：版本号</li>
+  <li>（3）main：入口的JS文件名称</li>
+  <li>（4）repository：源码路径</li>
+  <li>（5）dependencies：依赖库</li>
+</ul>
+
+<p>3、登录</p>
+
+<p>命令行输入：<code class="highlighter-rouge">npm login</code>，如果设置了第三方的registry，可以在后面加上<code class="highlighter-rouge">--registry https://registry.npmjs.com/</code>，然后按照要求输入用户名、密码和邮箱即可完成登录。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜ npm login --registry https://registry.npmjs.com/
+Username: zengjing
+Password: 
+Email: (this IS public) hhtczengjing@gmail.com
+Logged in as zengjing on https://registry.npmjs.com/.
+</code></pre></div></div>
+
+<p>4、发布</p>
+
+<p>命令行输入：<code class="highlighter-rouge">npm publish</code>，同上如果设置了第三方的registry，可以在后面加上<code class="highlighter-rouge">--registry https://registry.npmjs.com/</code>。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜ npm publish --registry https://registry.npmjs.com/
+npm notice 
+npm notice 📦  gitlab-systemhook-handler@0.1.0
+npm notice === Tarball Contents === 
+npm notice 582B  package.json                
+npm notice 762B  demo.js                     
+npm notice 2.5kB gitlab-systemhook-handler.js
+npm notice 1.3kB README.md                   
+npm notice === Tarball Details === 
+npm notice name:          gitlab-systemhook-handler               
+npm notice version:       0.1.0                                   
+npm notice package size:  1.9 kB                                  
+npm notice unpacked size: 5.1 kB                                  
+npm notice shasum:        115e54761497edeb3187617f6b683f2300f877b4
+npm notice integrity:     sha512-zNm/3Tzps0HUJ[...]ZoHOcyTeckDuA==
+npm notice total files:   4                                       
+npm notice 
++ gitlab-systemhook-handler@0.1.0
+</code></pre></div></div>
+
+<p>然后到npm的后台可以看到发布成功的package了：</p>
+
+<p><img src="/images/npm-publish-package/packages.png" alt="packages.png" /></p>
+
+<p>如果遇到如下的错误：</p>
+
+<p><img src="/images/npm-publish-package/403_error.png" alt="403_error.png" /></p>
+
+<p>表示没有验证邮箱，请先到注册的邮箱验证，然后重新发布即可</p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://blog.csdn.net/zyg1515330502/article/details/81112653">如何使用npm发布自己的npm包</a></p>
+
+<p>2、<a href="https://www.npmjs.com">npm 官网</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/build-webdav-server-in-docker.html" title="link to 在Docker上搭建WebDAV文件共享服务">在Docker上搭建WebDAV文件共享服务</a></h2>
+       <p class="excerpt">近期由于一些不可抗力因素导致AirDrop被禁用了，平时对文档或者是一些安装包的共享还是有比较多的需求，在此记录一下使用Docker快速搭建WebDAV环境的过程。直接在命令行输入下面的命令即可快速完成安装：docker run -d -v /Users/zengjing/docker/webdav:/var/webdav -e USERNAME=test -e PASSWORD=test -p 8888:80 morrisjobke/webdav安装完成后通过浏览器：http://ip:...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2019-02-25 18:46:37 +0800" class="post-list__meta--date date">2019-02-25</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/build-webdav-server-in-docker.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

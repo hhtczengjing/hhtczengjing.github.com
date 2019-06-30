@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS应用程序ipa安装包重签名</title>
+  <meta name="description" content="在日常的工作中经常遇到需要将一些应用程序IPA安装包【已经上架到apple app store,或者是别人写的IPA】发给别人来安装，获取是其他渠道获取来的IPA版本，对于普通人来说安装这些ipa文件有点麻烦，需要使用iTools/iFunBox这些软件来进行安装，不能像企业级的IN-HOUSE方式进行部署，直接...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS应用程序ipa安装包重签名">
+  <meta name="twitter:description" content="在日常的工作中经常遇到需要将一些应用程序IPA安装包【已经上架到apple app store,或者是别人写的IPA】发给别人来安装，获取是其他渠道获取来的IPA版本，对于普通人来说安装这些ipa文件有点麻烦，需要使用iTools/iFunBox这些软件来进行安装，不能像企业级的IN-HOUSE方式进行部署，直接...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS应用程序ipa安装包重签名">
+  <meta property="og:description" content="在日常的工作中经常遇到需要将一些应用程序IPA安装包【已经上架到apple app store,或者是别人写的IPA】发给别人来安装，获取是其他渠道获取来的IPA版本，对于普通人来说安装这些ipa文件有点麻烦，需要使用iTools/iFunBox这些软件来进行安装，不能像企业级的IN-HOUSE方式进行部署，直接...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-ipa-recodesign.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-07-20 17:24:52 +0800" itemprop="datePublished" class="post-meta__date date">2014-07-20</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS应用程序ipa安装包重签名</h1>
+  </header>
+
+  <section class="post">
+    <p>在日常的工作中经常遇到需要将一些应用程序IPA安装包【已经上架到apple app store,或者是别人写的IPA】发给别人来安装，获取是其他渠道获取来的IPA版本，对于普通人来说安装这些ipa文件有点麻烦，需要使用iTools/iFunBox这些软件来进行安装，不能像企业级的IN-HOUSE方式进行部署，直接在网页上下载。</p>
+
+<p>最近看到iTools/同步推这样的应用可以直接下载应用程序，而且使用的是企业级证书发布的，排除部分企业是特殊渠道分发的，但是其中一份仍然是使用其他公司的证书进行发布打包，这样就提出来一个新的问题关于IPA文件的重签名。</p>
+
+<h4 id="ipa重签名步骤">IPA重签名步骤</h4>
+
+<p>下面以wechat.ipa为例简单介绍下重签名的步骤</p>
+
+<p>(1)解压ipa文件，获取到Payload文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unzip wechat.ipa
+</code></pre></div></div>
+<p>(2)将Payload目录下面的_CodeSignature文件夹删除</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rm -rf Payload/*.app/_CodeSignature/
+</code></pre></div></div>
+
+<p>(3)替换embedded.mobileprovision文件,到一个能正常部署到设备上的程序中拷贝embedded.mobileprovision文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp embedded.mobileprovision Payload/*.app/embedded.mobileprovision
+</code></pre></div></div>
+
+<p>(4)重新签名，“iPhone Distribution: XXXXXX”这个指的是embedded.mobileprovision用到的签名的证书名称</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/bin/codesign -f -s "iPhone Distribution: XXXXXX" --resource-rules Payload/*.app/ResourceRules.plist Payload/*.app/
+</code></pre></div></div>
+<p>(5)重新打包</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zip -r wechat_inhouse.ipa Payload/
+
+rm -rf Payload/
+</code></pre></div></div>
+
+<p>P.S. 可以将上面的几个步骤写成一个Shell脚本方便执行，另外目前只支持在MAC电脑上进行重签名。</p>
+
+<h4 id="in-house部署">IN HOUSE部署</h4>
+
+<p>关于如何使用IN HOUSE方式部署应用程序可以参考<a href="http://blog.devzeng.com/blog/ios-enteprise-deployment.html">《iOS企业级应用部署》</a></p>
+
+<h4 id="参考资料">参考资料</h4>
+
+<p>(1)<a href="http://blog.csdn.net/gtncwy/article/details/10973285">《iOS开发–in house发布和安装（ipa重新签名）》</a></p>
+
+<p>(2)<a href="http://blog.rpplusplus.me/blog/2014/03/03/ipa-re-codesign/">《IPA 重签名》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-enteprise-deployment.html" title="link to iOS企业级应用部署">iOS企业级应用部署</a></h2>
+       <p class="excerpt">在iOS开发计划中有一种是iOS Developer Enterprise Program(iOS开发者企业级计划)，对于这种开发者证书发布的应用程序是无法上传到Apple App Store上的，目前对于这种企业级开发的应用程序最好的分发方式是部署到内网服务器上通过网络进行下载。IN-HOUSE应用程序分发下面介绍下使用网络方式进行部署的方式,用户直接在iPhone/iPad的Safari浏览器里面输入URL地址即可安装，如在浏览器输入http://www.itools.cn能出现如下的...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-20 18:07:16 +0800" class="post-list__meta--date date">2014-07-20</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-enteprise-deployment.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/change-blog-host-to-gitcafe.html" title="link to 将博客从GitHub迁移到GitCafe">将博客从GitHub迁移到GitCafe</a></h2>
+       <p class="excerpt">最近一直使用Github Pages功能以及Octopress来记录自己在学习和生活中的琐事，之前也写了一篇文章《Hello Octopress》来分享如何在GitHub使用Octopress来搭建博客的技术细节。但是最近发现一个很头疼的问题就是博客的访问速度实在是很慢，虽然做了一部分的优化，比如将GOOGLE的字体和jQuery的链接移除，但整体来看速度还是没有明显的提升，最近看到网上有资料提到可以将博客转移到GitCafe的方法，周末闲来无事就将博客内容镜像到GitCafe上。以下为大...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-13 14:51:57 +0800" class="post-list__meta--date date">2014-07-13</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/change-blog-host-to-gitcafe.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用Anaconda管理Python环境</title>
+  <meta name="description" content="Python好用但是在使用过程中发现还是有很多问题的，其中一个就是版本管理（Python2和Python3的切换）。相比于Ruby的版本管理有rvm，可以使用rvm use 2.4.0这样的命令来快速切换Ruby的版本。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用Anaconda管理Python环境">
+  <meta name="twitter:description" content="Python好用但是在使用过程中发现还是有很多问题的，其中一个就是版本管理（Python2和Python3的切换）。相比于Ruby的版本管理有rvm，可以使用rvm use 2.4.0这样的命令来快速切换Ruby的版本。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用Anaconda管理Python环境">
+  <meta property="og:description" content="Python好用但是在使用过程中发现还是有很多问题的，其中一个就是版本管理（Python2和Python3的切换）。相比于Ruby的版本管理有rvm，可以使用rvm use 2.4.0这样的命令来快速切换Ruby的版本。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/python-version-manage-with-anaconda.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-01-05 13:08:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-01-05</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">使用Anaconda管理Python环境</h1>
+  </header>
+
+  <section class="post">
+    <p>Python好用但是在使用过程中发现还是有很多问题的，其中一个就是版本管理（Python2和Python3的切换）。相比于Ruby的版本管理有<code class="highlighter-rouge">rvm</code>，可以使用<code class="highlighter-rouge">rvm use 2.4.0</code>这样的命令来快速切换Ruby的版本。</p>
+
+<p>出于历史原因目前还是有很多Python的程序是运行在<code class="highlighter-rouge">Python2.7</code>，经常需要在Python3的环境下面执行一些实例切换起来非常麻烦，刚好最近了解到Anaconda，Anaconda 是一个可用于科学计算的 Python 发行版，支持 Linux、Mac、Windows系统，内置了常用的科学计算包）解决了官方 Python 的两大痛点：</p>
+
+<ul>
+  <li>提供了包管理功能，Windows 平台安装第三方包经常失败的场景得以解决，</li>
+  <li>提供环境管理的功能，功能类似 Virtualenv，解决了多版本Python并存、切换的问题。</li>
+</ul>
+
+<p><img src="/images/python-anaconda/anaconda-logo.png" alt="python-anaconda" /></p>
+
+<h3 id="安装配置">安装配置</h3>
+
+<p>(1) 下载安装</p>
+
+<p>直接在<a href="https://www.anaconda.com/download/">官网</a>下载安装包， 选择 Python3.6 的安装包进行下载，下载完成后直接安装，安装过程选择默认配置即可。</p>
+
+<p>国内用户可以从：<code class="highlighter-rouge">https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/</code> 下载安装包。</p>
+
+<p>(2) 修改镜像地址</p>
+
+<p>可以修改<code class="highlighter-rouge">~/.condarc</code>文件为如下配置设置下载package的镜像地址：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+  - defaults
+show_channel_urls: true
+ssl_verify: true
+</code></pre></div></div>
+
+<p>或者使用命令的方式设置：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+</code></pre></div></div>
+
+<h3 id="conda命令工具使用">conda命令工具使用</h3>
+
+<p>conda 是 Anaconda 下用于包管理和环境管理的命令行工具，是 pip 和 vitualenv 的组合。安装成功后 conda 会默认加入到环境变量中，因此可直接在命令行窗口运行 conda 命令</p>
+
+<p>（1）查看帮助</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda -h 
+
+usage: conda [-h] [-V] command ...
+
+conda is a tool for managing and deploying applications, environments and packages.
+
+Options:
+
+positional arguments:
+  command
+    info         Display information about current conda install.
+    help         Displays a list of available conda commands and their help
+</code></pre></div></div>
+
+<p>（2）创建管理Python环境</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(1) 基于python3.6版本创建一个名字为python36的环境
+conda create --name python36 python=3.6
+
+(2) 激活此环境
+source activate python36
+
+(3) 退出当前环境
+deactivate python36 
+
+(4) 删除该环境
+conda remove -n python36 --all
+</code></pre></div></div>
+
+<p>同理如果需要创建Python2.7的环境可以直接创建</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda create --name python27 python=2.7
+</code></pre></div></div>
+
+<p>使用的时候<code class="highlighter-rouge">source activate python27</code>即可切换到2.7的版本。</p>
+
+<p>(4) 查看所有安装的环境</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda info -e
+
+# conda environments:
+#
+python27                 /Users/zengjing/Anaconda3/anaconda3/envs/
+python36                 /Users/zengjing/Anaconda3/anaconda3/envs/
+root                  *  /Users/zengjing/Anaconda3/anaconda3
+</code></pre></div></div>
+
+<p>(5) 包管理</p>
+
+<p>conda实现了相当于pip的包管理功能，类似于pip可以直接通过如下方式管理依赖包：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 安装包 
+conda install requests
+
+# 查看已安装的包
+conda list 
+
+# 包更新
+conda update requests
+
+# 删除包
+conda remove requests
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://foofish.net/anaconda-install.html">Anaconda 入门安装教程</a></p>
+
+<p>2、<a href="https://foofish.net/compatible-py2-and-py3.html">用 Anaconda 完美解决 Python2 和 python3 共存问题</a></p>
+
+<p>3、<a href="https://www.jianshu.com/p/2f3be7781451#">Anaconda使用总结</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/hello-nwjs.html" title="link to 使用NW.js开发桌面应用程序">使用NW.js开发桌面应用程序</a></h2>
+       <p class="excerpt">前段时间要写一个桌面的应用，做一个简单的输入框供用户输入验证码的小功能，程序最开始是用Python写的，那么GUI一开始就考虑使用wxPython，虽然实现了功能但是总觉得太过于麻烦。之前了解过关于Node.js开发桌面应用的技术，目前使用的比较多的都是nw.js 和 electron，由于下载electron的时候出现了一些问题所以就选择了nw.js来学习。NW.js（之前叫做node-webkit)能够通过DOM直接调用Node.js模块，实现通过Web技术来编写应用程序。环境搭建  ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-02-06 21:28:24 +0800" class="post-list__meta--date date">2018-02-06</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/hello-nwjs.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/npm-repo-with-verdaccio.html" title="link to 使用Verdaccio搭建npm仓库">使用Verdaccio搭建npm仓库</a></h2>
+       <p class="excerpt">Verdaccio是一个轻量级的私有NPM的Registry（从Sinopiafork过来的，sinopia最后一次更新是在几年前了）。最开始是打算使用cnpmjs这个来搭建私有的npm仓库但是搭建完成之后存在一些问题，所以使用了Sinopia，本文记录下来搭建的过程。直接安装npm install verdaccio -g安装完成之后直接执行命令即可完成启动：verdaccio对于服务器上面部署可以使用pm2更多关于PM2的用法的可以参考：https://wohugb.gitbooks....&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-12-24 13:08:00 +0800" class="post-list__meta--date date">2017-12-24</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/npm-repo-with-verdaccio.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

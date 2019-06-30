@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中KV数据库LevelDB的编译和使用</title>
+  <meta name="description" content="LevelDB是Google公司重量级工程师Jeff Dean和Sanjay Ghemawat发起的开源项目。LevelDB是一个持久化存储的KV系统，和Redis这种内存型的KV系统不同，LevelDB不会像Redis一样狂吃内存，而是将大部分数据存储到磁盘上。目前能够支持billion级别的数据量，在这个数量...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中KV数据库LevelDB的编译和使用">
+  <meta name="twitter:description" content="LevelDB是Google公司重量级工程师Jeff Dean和Sanjay Ghemawat发起的开源项目。LevelDB是一个持久化存储的KV系统，和Redis这种内存型的KV系统不同，LevelDB不会像Redis一样狂吃内存，而是将大部分数据存储到磁盘上。目前能够支持billion级别的数据量，在这个数量...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中KV数据库LevelDB的编译和使用">
+  <meta property="og:description" content="LevelDB是Google公司重量级工程师Jeff Dean和Sanjay Ghemawat发起的开源项目。LevelDB是一个持久化存储的KV系统，和Redis这种内存型的KV系统不同，LevelDB不会像Redis一样狂吃内存，而是将大部分数据存储到磁盘上。目前能够支持billion级别的数据量，在这个数量...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-leveldb.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-07-10 12:15:53 +0800" itemprop="datePublished" class="post-meta__date date">2016-07-10</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中KV数据库LevelDB的编译和使用</h1>
+  </header>
+
+  <section class="post">
+    <p>LevelDB是Google公司重量级工程师<a href="http://research.google.com/people/jeff/index.html"><code class="highlighter-rouge">Jeff Dean</code></a>和<a href="http://research.google.com/people/sanjay/index.html"><code class="highlighter-rouge">Sanjay Ghemawat</code></a>发起的开源项目。LevelDB是一个持久化存储的KV系统，和Redis这种内存型的KV系统不同，LevelDB不会像Redis一样狂吃内存，而是将大部分数据存储到磁盘上。目前能够支持billion级别的数据量，在这个数量级别下还有着非常高的性能，主要归功于它的良好的设计。</p>
+
+<p>LevelDB开源并托管在GitHub上，项目的地址是：<a href="https://github.com/google/leveldb">https://github.com/google/leveldb</a>。</p>
+
+<p>有个来自LevelDB官方对LevelDB、TreeDB和SQLite3进行性能对比分析的测试，测试结果如下图所示：</p>
+
+<p><img src="/images/ios-leveldb/leveldb-speed.png" alt="leveldb-speed.png" /></p>
+
+<p>结果显示，在顺序读写和随机写上，LevelDB 在性能上都遥遥领先。</p>
+
+<p>###编译iOS静态库</p>
+
+<p>####1.下载代码到本地</p>
+
+<p><code class="highlighter-rouge">git clone https://github.com/google/leveldb.git</code></p>
+
+<p>####2.编译项目代码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd leveldb
+CXXFLAGS=-stdlib=libc++ make PLATFORM=IOS
+</code></pre></div></div>
+<p>如果出现如下报错信息：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c++ -stdlib=libc++ -I. -I./include -std=c++0x  -DOS_MACOSX -DLEVELDB_PLATFORM_POSIX -DLEVELDB_ATOMIC_PRESENT -O2 -DNDEBUG -fPIC -c db/builder.cc -o /db/builder.o
+error: unable to open output file '/db/builder.o': 'Operation not permitted'
+1 error generated.
+make: *** [/db/builder.o] Error 1
+</code></pre></div></div>
+<p>使用<code class="highlighter-rouge">sudo CXXFLAGS=-stdlib=libc++ make PLATFORM=IOS</code>这行命令即可。</p>
+
+<p>说明：</p>
+
+<p>（1）编译完成之后在<code class="highlighter-rouge">out-ios-universal</code>这个目录下面会自动生成<code class="highlighter-rouge">libleveldb.a</code>和<code class="highlighter-rouge">libmemenv.a</code>两个文件。</p>
+
+<p>（2）可以用<code class="highlighter-rouge">lipo -info libleveldb.a</code>检测生成的静态库支持的架构情况。默认支持<code class="highlighter-rouge">armv6 armv7 armv7s i386 x86_64 arm64</code>所有的架构</p>
+
+<p>（3）头文件在<code class="highlighter-rouge">include</code>目录下面，后面会用到</p>
+
+<p>###在iOS中使用LevelDB</p>
+
+<p>LevelDB提供的是C++的API，可以在<code class="highlighter-rouge">https://rawgit.com/google/leveldb/master/doc/index.html</code>这里查到具体的使用说明。使用C++确实是不太方便幸好有大神将这些接口使用Objective-C进行了一下包装，使用方式和NSUserDefaults一致，可以参考<a href="http://www.tanhao.me/pieces/1397.html">《轻量级的KV数据库LevelDB在Objective-C上的应用》</a>这篇文章。</p>
+
+<p>为了便于使用和项目集成我将这个和编译好的静态库放在了一起做成一个库。可以直接使用CocoaPods进行集成。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pod 'leveled-pd', :git =&gt; 'https://github.com/hhtczengjing/leveldb-pd.git'
+</code></pre></div></div>
+
+<p>(1)初始化数据库</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+NSString *pageDBPath = [docPath stringByAppendingPathComponent:@"my_leveldb.ldb"];
+THLevelDB *myLevelDB = [THLevelDB levelDBWithPath:pageDBPath];
+</code></pre></div></div>
+
+<p>(2)存储数据</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[myLevelDB setString:@"hello world" forKey:@"username"];
+</code></pre></div></div>
+
+<p>(3)读取数据</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *str = [myLevelDB stringForKey:@"username"];
+</code></pre></div></div>
+
+<p>没错就是这样方便。</p>
+
+<p>###参考资料</p>
+
+<p>1.<a href="https://github.com/google/leveldb">《Github Project Home》</a></p>
+
+<p>2.<a href="https://rawgit.com/google/leveldb/master/doc/index.html">《LevelDB library documentation》</a></p>
+
+<p>3.<a href="http://www.tanhao.me/pieces/1397.html">《轻量级的KV数据库LevelDB在Objective-C上的应用》</a></p>
+
+<p>4.<a href="http://blog.txx.im/blog/2014/01/20/build-leveldb/">《编译leveldb for iOS》</a></p>
+
+<p>5.<a href="http://blog.nosqlfan.com/html/2819.html">《LevelDB、TreeDB、SQLite3性能对比测试》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-nssm-deploy-node-on-windows.html" title="link to 使用NSSM在Windows服务器上部署Node.js应用">使用NSSM在Windows服务器上部署Node.js应用</a></h2>
+       <p class="excerpt">最近使用Node的Express框架做了一个简单的应用，原本是打算部署到CentOS服务器上面的，后来由于种种原因只能部署到Window的服务器上面了。Node.js在Linux上面部署非常的方便，可以使用forever或者pm2来做这个事情，而且使用起来非常的简单，后续有机会会单独介绍如何使用，在Windows下就是稍微有点麻烦了，这两个组件都不支持。找了一些资料发现了nssm这个工具，部署超级简单，而且会监控你安装的node服务，如果node挂了，nssm会自动重启它。下面记录下部署的...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-11-24 10:15:53 +0800" class="post-list__meta--date date">2016-11-24</time> &#8226; <span class="post-list__meta--tags tags">Node</span><a class="btn-border-small" href=/blog/using-nssm-deploy-node-on-windows.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-protobuf.html" title="link to iOS中使用Protocol Buffers">iOS中使用Protocol Buffers</a></h2>
+       <p class="excerpt">Google Protocol Buffer(简称Protobuf)是由Google推出的一种轻便高效的结构化数据存储格式，可以用于结构化数据串行化，或者说序列化。它很适合做数据存储或RPC数据交换格式。可用于通讯协议、数据存储等领域的语言无关、平台无关、可扩展的序列化结构数据格式。  Protocol buffers are a language-neutral, platform-neutral extensible mechanism for serializing structur...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-07-09 09:40:53 +0800" class="post-list__meta--date date">2016-07-09</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-protobuf.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

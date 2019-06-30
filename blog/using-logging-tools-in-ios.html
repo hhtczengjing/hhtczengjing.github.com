@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发中善用日志记录工具</title>
+  <meta name="description" content="在iOS开发中经常需要靠记录日志来调试应用程序，最常见的做法是使用NSLog来输出相关的信息。大量的使用NSLog存在一定的弊端，将设备连接到电脑，打开XCode中的Device-&gt;Console，就可以从console查看到每条日志信息（或者是使用iTools的实时日志,推荐使用）。试想如果将很多核心的算...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发中善用日志记录工具">
+  <meta name="twitter:description" content="在iOS开发中经常需要靠记录日志来调试应用程序，最常见的做法是使用NSLog来输出相关的信息。大量的使用NSLog存在一定的弊端，将设备连接到电脑，打开XCode中的Device-&gt;Console，就可以从console查看到每条日志信息（或者是使用iTools的实时日志,推荐使用）。试想如果将很多核心的算...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发中善用日志记录工具">
+  <meta property="og:description" content="在iOS开发中经常需要靠记录日志来调试应用程序，最常见的做法是使用NSLog来输出相关的信息。大量的使用NSLog存在一定的弊端，将设备连接到电脑，打开XCode中的Device-&gt;Console，就可以从console查看到每条日志信息（或者是使用iTools的实时日志,推荐使用）。试想如果将很多核心的算...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/using-logging-tools-in-ios.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-04-14 23:08:11 +0800" itemprop="datePublished" class="post-meta__date date">2015-04-14</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS开发中善用日志记录工具</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS开发中经常需要靠记录日志来调试应用程序，最常见的做法是使用<code class="highlighter-rouge">NSLog</code>来输出相关的信息。大量的使用NSLog存在一定的弊端，将设备连接到电脑，打开XCode中的Device-&gt;Console，就可以从console查看到每条日志信息（或者是使用iTools的实时日志,推荐使用）。试想如果将很多核心的算法或者是信息都通过NSLog打印到控制台上，那么很有可能会被其他人获取到相关信息造成很多安全隐患，另外这样的应用也极有可能被Apple拒绝审核通过。</p>
+
+<p><img src="/images/ios_logging_tools/console_log.png" alt="console_log.png" /></p>
+
+<p>###使用宏来处理</p>
+
+<p>常用的做法是在PCH文件添加如下的代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#ifdef DEBUG
+#define DebugLog(format, ...) NSLog((@"%s [Line %d] " format), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#define DebugLog(...) do { } while (0)
+#endif
+</code></pre></div></div>
+<p>然后将NSLog替换为DebugLog即可。</p>
+
+<p>###使用CocoaLumberjack替代NSLog</p>
+
+<p><img src="/images/ios_logging_tools/LumberjackLogo.png" alt="LumberjackLogo.png" /></p>
+
+<p>CocoaLumberjack是Mac和iOS上一个集快捷、简单、强大和灵活于一身的日志框架。CocoaLumberjack类似于流行的日志框架（如log4j），但它是专为Objective-C设计的，利用了多线程、GCD（如果可用）、无锁原子操作Objective-C运行时的动态特性。</p>
+
+<p>####CocoaLumberjack基本组件</p>
+
+<p>CocoaLumberjack是由<code class="highlighter-rouge">DDASLLogger</code>、<code class="highlighter-rouge">DDTTYLogger</code>和<code class="highlighter-rouge">DDFileLogger</code>三个Log组件组成，各自的功能描述如下：</p>
+
+<ul>
+  <li>DDASLLogger：支持将调试语句写入到苹果的日志中。一般正对Mac开发。。</li>
+  <li>DDTTYLogger：支持将调试语句写入xCode控制台。在iOS开发中使用。</li>
+  <li>DDFileLogger：支持将调试语句写入到文件系统。。</li>
+</ul>
+
+<p>####1、快速集成</p>
+
+<p>（1）下载CocoaLumberjack，引入CocoaLumberjack的头文件</p>
+
+<p><code class="highlighter-rouge">#import "DDLog.h"</code></p>
+
+<p>（2）指定日志的记录级别</p>
+
+<p><code class="highlighter-rouge">static const int ddLogLevel = LOG_LEVEL_VERBOSE;</code></p>
+
+<p>或者是</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#ifdef DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
+</code></pre></div></div>
+
+<p>日志的级别有如下几种：</p>
+
+<ul>
+  <li>LOG_LEVEL_ERROR：如果设置为LOG_LEVEL_ERROR，仅仅能看到Error相关的日志输出。</li>
+  <li>LOG_LEVEL_WARN：如果设置为LOG_LEVEL_WARN，能看到Error、Warn相关的日志输出。</li>
+  <li>LOG_LEVEL_INFO：如果设置为LOG_LEVEL_INFO，能够看到Error、Warn、Info相关的日志输出。</li>
+  <li>LOG_LEVEL_DEBUG：如果设置为LOG_LEVEL_DEBUG，能够看到Error/Warn/Info/Debug相关的日志输出。</li>
+  <li>LOG_LEVEL_VERBOSE：如果设置为LOG_FLAG_VERBOSE，能够看到所有级别的日志输出。</li>
+  <li>LOG_LEVEL_OFF:不输出日志。</li>
+</ul>
+
+<p>（3）使用DDLogError/DDLogWarn/DDLogDebug/DDLogVerbose来替代NSLog</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DDLogError(@"[Error]:%@", @"输出错误信息");//输出错误信息
+DDLogWarn(@"[Warn]:%@", @"输出警告信息");//输出警告信息
+DDLogInfo(@"[Info]:%@", @"输出描述信息");//输出描述信息
+DDLogDebug(@"[Debug]:%@", @"输出调试信息");//输出调试信息
+DDLogVerbose(@"[Verbose]:%@", @"输出详细信息");//输出详细信息
+</code></pre></div></div>
+
+<p>####2、结合XcodeColor让日志带上颜色</p>
+
+<p>有了解过Android开发的朋友都会知道，在Android开发中LogCat的日志查看功能是十分强大的，特别是不同级别的日志输出显示的颜色是不同的，例如错误信息的颜色是红色的，其实在Xcode中结合XcodeColor插件也是可以实现该效果的，具体的配置步骤如下：</p>
+
+<p>（1）下载安装插件</p>
+
+<p>到<code class="highlighter-rouge">https://github.com/DeepIT/XcodeColors</code>下载XcodeColors插件，直接使用Xcode打开<code class="highlighter-rouge">XcodeColors.xcodeproj</code>文件，然后<code class="highlighter-rouge">Command+B</code>编译项目可以自动将插件安装至<code class="highlighter-rouge">~/Library/Application Support/Developer/Shared/Xcode/Plug-ins/XcodeColors.xcplugin</code>路径下。</p>
+
+<p>也可以使用Alcatraz来安装插件，具体请参考<a href="http://blog.devtang.com/blog/2014/03/05/use-alcatraz-to-manage-xcode-plugins/">《使用Alcatraz来管理Xcode插件》</a>。</p>
+
+<p>（2）重启Xcode，运行测试用例</p>
+
+<p>彻底退出Xcode，重新启动Xcode。再次打开<code class="highlighter-rouge">XcodeColors.xcodeproj</code>运行<code class="highlighter-rouge">TestXcodeColors</code>的target，测试插件是否安装成功。</p>
+
+<p>（2）CocoaLumberjack开启颜色分级</p>
+
+<p><code class="highlighter-rouge">[DDTTYLogger sharedInstance].colorsEnabled = YES;</code></p>
+
+<p>各个的级别的颜色如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DDLogError(@"Error");//红色
+DDLogWarn(@"Warn");//黄色
+DDLogInfo(@"Info");//默认是黑色
+DDLogDebug(@"Debug");//默认是黑色
+DDLogVerbose(@"Verbose");//默认是黑色
+</code></pre></div></div>
+<p>如果要设置不同分级的颜色值，可以使用如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[DDTTYLogger sharedInstance] setForegroundColor:[UIColor orangeColor] backgroundColor:nil forFlag:LOG_FLAG_INFO];//设置INFO级别的日志的颜色为橙色
+</code></pre></div></div>
+
+<p>效果如下图所示：</p>
+
+<p><img src="/images/ios_logging_tools/log_color_level.png" alt="log_color_level.png" /></p>
+
+<p>说明：</p>
+
+<p>可能在Xcode中无法正常显示颜色，需要配置Xcode的环境变量，设置“Edit Scheme”-&gt; “Run” -&gt; “Arguments”(Environment Variabl)环境变量，添加一个叫做<code class="highlighter-rouge">XcodeColors</code>并且设置值为<code class="highlighter-rouge">YES</code>，如下图所示。</p>
+
+<p><img src="/images/ios_logging_tools/xcode_color_config.png" alt="xcode_color_config.png" /></p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://github.com/CocoaLumberjack/CocoaLumberjack/blob/master/Documentation/XcodeColors.md">《XcodeColors.md》</a></p>
+
+<p>2、<a href="http://www.cnblogs.com/liufan9/p/3552832.html">《CocoaLumberjack——带颜色的Log》</a></p>
+
+<p>3、<a href="http://blog.sina.com.cn/s/blog_7b9d64af0101kkiy.html">《iOS第三方库-CocoaLumberjack-DDLog 》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-patch-by-wax.html" title="link to 使用Wax给你的应用程序打补丁">使用Wax给你的应用程序打补丁</a></h2>
+       <p class="excerpt">在iOS开发中经常遇到需要对已经上线的APP进行功能微调，或者是一些紧急的Bug修复。对于需要提交到AppStore的程序来说，每次审核的周期都会较长，在审核过程中很有可能因为各种原因被拒。由于Apple的限制，开发者无法在iOS上动态的加载Objective-C源码，使用脚本语言就可以在一定程度上解决这个问题。比如使用HTML+Javascript的方式，支付宝钱包的彩票等功能就是使用这一方式实现的。另外也可以使用Lua脚本来实现，最初我了解到的Lua是使用在游戏上面的，包括Angry ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-05-09 16:36:36 +0800" class="post-list__meta--date date">2015-05-09</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-patch-by-wax.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios8-safari-action-extension.html" title="link to iOS8中的Safari Action Extension">iOS8中的Safari Action Extension</a></h2>
+       <p class="excerpt">扩展（Extension）是iOS8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。前面介绍过关于Today Widget的使用，本文介绍Action Extension在iOS8中的开发。###创建Action Extension1、使用Xcode6创建一个iOS工程，菜单栏File-&gt;New-&gt;Target出现下面的可选项，选择Action Extension:2、配置Extension的Pr...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-29 20:12:53 +0800" class="post-list__meta--date date">2015-03-29</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios8-safari-action-extension.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

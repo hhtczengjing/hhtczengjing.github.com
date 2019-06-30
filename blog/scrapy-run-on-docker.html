@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>在Docker上运行Scrapy</title>
+  <meta name="description" content="之前使用Scrapy写过一个空气质量的采集程序，最近要切换到另外一台服务器上面去，折腾了几个小时的安装环境还是没跑起来。几次之后就放弃了，刚好那台服务器上面安装了Docker的环境，运行了一个Nexus的服务几个月来一直都很稳定，那为啥不可以把Scrapy也放在上面运行呢？">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在Docker上运行Scrapy">
+  <meta name="twitter:description" content="之前使用Scrapy写过一个空气质量的采集程序，最近要切换到另外一台服务器上面去，折腾了几个小时的安装环境还是没跑起来。几次之后就放弃了，刚好那台服务器上面安装了Docker的环境，运行了一个Nexus的服务几个月来一直都很稳定，那为啥不可以把Scrapy也放在上面运行呢？">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="在Docker上运行Scrapy">
+  <meta property="og:description" content="之前使用Scrapy写过一个空气质量的采集程序，最近要切换到另外一台服务器上面去，折腾了几个小时的安装环境还是没跑起来。几次之后就放弃了，刚好那台服务器上面安装了Docker的环境，运行了一个Nexus的服务几个月来一直都很稳定，那为啥不可以把Scrapy也放在上面运行呢？">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/scrapy-run-on-docker.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-10-10 10:08:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-10-10</time> &#8226; <span class="post-meta__tags tags">Docker</span>
+    </div>
+    <h1 class="post-title">在Docker上运行Scrapy</h1>
+  </header>
+
+  <section class="post">
+    <p>之前使用Scrapy写过一个空气质量的采集程序，最近要切换到另外一台服务器上面去，折腾了几个小时的安装环境还是没跑起来。几次之后就放弃了，刚好那台服务器上面安装了Docker的环境，运行了一个Nexus的服务几个月来一直都很稳定，那为啥不可以把Scrapy也放在上面运行呢？</p>
+
+<h3 id="操作过程">操作过程</h3>
+
+<p>下面记录下我的处理的过程：</p>
+
+<h4 id="1创建dockfile">（1）创建dockfile</h4>
+
+<p>在<code class="highlighter-rouge">scrapy.cfg</code>文件所在的目录下面创建<code class="highlighter-rouge">dockfile</code>，里面的内容如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu
+MAINTAINER hhtczengjing@gmail.com
+RUN apt-get update \
+	&amp;&amp; apt-get -y dist-upgrade \
+	&amp;&amp; apt-get install -y openssh-server  \
+	&amp;&amp; apt-get install -y python2.7-dev python-pip  \
+	&amp;&amp; apt-get install -y zlib1g-dev libffi-dev libssl-dev  \
+	&amp;&amp; apt-get install -y libxml2-dev libxslt1-dev  \
+	&amp;&amp; apt-get install -y libmysqlclient-dev \ 
+	&amp;&amp; pip install setuptools  \
+	&amp;&amp; pip install Scrapy \
+	&amp;&amp; pip install MySQL \ 
+	&amp;&amp; apt-get clean      \
+ 	&amp;&amp; apt-get autoclean  \
+ 	&amp;&amp; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+COPY . /data
+WORKDIR /data
+CMD ["scrapy", "crawl", "aqi"]
+</code></pre></div></div>
+
+<h4 id="2编译镜像">（2）编译镜像</h4>
+
+<p>在命令行进入dockerfile所在目录执行如下(改过程持续时间比较长)：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t aqi:1.0.0 .
+</code></pre></div></div>
+
+<p>编译完成之后可以通过如下的方式运行：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm aqi:1.0.0
+</code></pre></div></div>
+
+<h4 id="3配置crontab">（3）配置Crontab</h4>
+
+<p>在服务器上面创建一个<code class="highlighter-rouge">run.sh</code>的可执行文件，里面的内容如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nb">.</span> /etc/profile
+<span class="nb">.</span> ~/.bash_profile
+docker run <span class="nt">--rm</span> aqi:1.0.0
+</code></pre></div></div>
+
+<p>使用<code class="highlighter-rouge">crontab -e</code>添加一条记录如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0 * * * * sh /home/aqi/run.sh &gt;&gt; /home/aqi/log/log.`date +\%Y\%m\%d\%H\%M\%S` 2&gt;&amp;1
+</code></pre></div></div>
+
+<p>这样下来就实现了一个在Docker上面运行Scrapy采集任务的功能。</p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://docs.docker.com/engine/reference/builder/">Dockerfile reference</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/python-convert-images-to-pdf.html" title="link to 使用Python合并图片生成PDF文件">使用Python合并图片生成PDF文件</a></h2>
+       <p class="excerpt">最近做了一个小功能，将一个页面上面的所有图片下载下来生成一个PDF文件。发现了一个非常好用的库reportlab, pyPdf。只需要几行代码就能实现功能，如果没有安装可以通过pip安装：pip install reportlab -i https://pypi.douban.com/simplepip install pyPdf -i https://pypi.douban.com/simple注: -i表示使用豆瓣的镜像服务操作过程下面记录下我的处理的过程：（1）如果只是简单的需要将图...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-11-15 10:08:00 +0800" class="post-list__meta--date date">2017-11-15</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/python-convert-images-to-pdf.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/install-hadoop-in-centos.html" title="link to CentOS安装Hadoop">CentOS安装Hadoop</a></h2>
+       <p class="excerpt">系统环境下载软件：  （1）JDK  （2）Hadoop  （3）MySQL  （4）Hive  （5）HBase  （6）Zookeeper1、服务器配置（1）修改主机名将192.168.13.1、192.168.13.2 和 192.168.13.3 这三台机器分别命名为hadoop-master、hadoop-slave1 和 hadoop-slave2。1） 修改/etc/sysconfig/network文件修改HOSTNAME=localhost.localdomain为HOS...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-09-10 10:08:00 +0800" class="post-list__meta--date date">2017-09-10</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/install-hadoop-in-centos.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

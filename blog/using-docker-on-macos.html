@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Mac上Docker的安装和使用初探</title>
+  <meta name="description" content="">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Mac上Docker的安装和使用初探">
+  <meta name="twitter:description" content="">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Mac上Docker的安装和使用初探">
+  <meta property="og:description" content="">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/using-docker-on-macos.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-11-25 00:05:53 +0800" itemprop="datePublished" class="post-meta__date date">2016-11-25</time> &#8226; <span class="post-meta__tags tags">Docker</span>
+    </div>
+    <h1 class="post-title">Mac上Docker的安装和使用初探</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="/images/mac-docker-install/docker-logo-compressed.png" alt="docker-logo.png" /></p>
+
+<p><a href="http://www.docker.com/">Docker</a> 是个划时代的开源项目，它彻底释放了虚拟化的威力，极大提高了应用的运行效率，降低了云计算资源供应的成本，同时让应用的部署、测试和分发都变得前所未有的高效和轻松！</p>
+
+<p><a href="http://www.docker.com/">Docker</a> 最初是 dotCloud 公司创始人 Solomon Hykes 在法国期间发起的一个公司内部项目，它是基于 dotCloud 公司多年云服务技术的一次革新，并于2013年3月以 Apache 2.0 授权协议开源，主要项目代码在 <a href="https://github.com/docker/docker">GitHub</a> 上进行维护。Docker 项目后来还加入了 Linux 基金会，并成立推动<a href="https://www.opencontainers.org/">开放容器联盟</a>。</p>
+
+<p>在平时的开发中经常需要在开发机器上面部署一些后台的环境，比如MySQL，Node.js，Python等，本文就以在Mac上面如何安装和配置一个MySQL数据库为基础简单介绍下Docker的初步使用。</p>
+
+<h3 id="下载安装步骤">下载安装步骤</h3>
+
+<p><a href="https://docs.docker.com/docker-for-mac/">Docker for Mac</a> 要求系统最低为 macOS 10.10.3 Yosemite，或者 2010 年以后的 Mac 机型，准确说是带 <a href="https://en.wikipedia.org/wiki/X86_virtualization#Intel-VT-d">Intel MMU 虚拟化</a>的，最低 4GB 内存。如果系统不满足需求，可以考虑安装 <a href="https://docs.docker.com/toolbox/overview/">Docker Toolbox</a>。如果机器安装了 <a href="https://www.virtualbox.org/">VirtualBox</a> 的话，VirtualBox 的版本不要低于 4.3.30。</p>
+
+<h4 id="1下载">1.下载</h4>
+
+<p>通过这个链接下载：<a href="https://download.docker.com/mac/stable/Docker.dmg">https://download.docker.com/mac/stable/Docker.dmg</a></p>
+
+<h4 id="2安装">2.安装</h4>
+
+<p>如同 macOS 其它软件一样，安装非常简单，双击下载的文件，然后将那只叫 <a href="https://blog.docker.com/2013/10/call-me-moby-dock/">Moby</a> 的鲸鱼图标拖拽到 <code class="highlighter-rouge">Application</code> 文件夹即可（其间可能会询问系统密码）。</p>
+
+<p><img src="/images/mac-docker-install/install-mac-dmg.png" alt="install-mac-dmg.png" /></p>
+
+<h4 id="3运行">3.运行</h4>
+
+<p>从应用中找到 Docker 图标并点击运行。</p>
+
+<p><img src="/images/mac-docker-install/install-mac-apps.png" alt="install-mac-apps.png" /></p>
+
+<p>运行之后，会在右上角菜单栏看到多了一个鲸鱼图标，这个图标表明了 Docker 的运行状态。</p>
+
+<p><img src="/images/mac-docker-install/install-mac-menubar.png" alt="install-mac-menubar.png" /></p>
+
+<p>第一次点击图标，可能会看到这个安装成功的界面，点击 “Got it!” 可以关闭这个窗口。</p>
+
+<p><img src="/images/mac-docker-install/install-mac-success.png" alt="install-mac-success.png" /></p>
+
+<p>以后每次点击鲸鱼图标会弹出操作菜单。</p>
+
+<p><img src="/images/mac-docker-install/install-mac-menu.png" alt="install-mac-menu.png" /></p>
+
+<p>在国内使用 Docker 的话，需要配置加速器，在菜单中点击 <code class="highlighter-rouge">Preferences...</code>，然后查看 <code class="highlighter-rouge">Advanced</code> 标签，在其中的 <code class="highlighter-rouge">Registry mirrors</code> 部分里可以点击加号来添加加速器地址。</p>
+
+<p><img src="/images/mac-docker-install/install-mac-preference-advanced.png" alt="install-mac-preference-advanced.png" /></p>
+
+<p>国内很多云服务商都提供了加速器服务，例如：</p>
+
+<ul>
+  <li>
+    <p>(1)<a href="https://cr.console.aliyun.com/#/accelerator"><code class="highlighter-rouge">阿里云加速器</code></a></p>
+  </li>
+  <li>
+    <p>(2)<a href="https://www.daocloud.io/mirror#accelerator-doc"><code class="highlighter-rouge">DaoCloud 加速器</code></a></p>
+  </li>
+  <li>
+    <p>(3)<a href="http://docs.alauda.cn/feature/accelerator.html"><code class="highlighter-rouge">灵雀云加速器</code></a></p>
+  </li>
+</ul>
+
+<p>注册用户并且申请加速器，会获得如 <code class="highlighter-rouge">https://mnt8vkd9.mirror.aliyuncs.com</code> 这样的地址。我们需要将其配置给 Docker 引擎。</p>
+
+<p>安装完成后，在终端执行下面几个命令可以查看Docker的版本信息：</p>
+
+<ul>
+  <li>
+    <p>(1)<code class="highlighter-rouge">docker --version</code></p>
+  </li>
+  <li>
+    <p>(2)<code class="highlighter-rouge">docker-compose --version</code></p>
+  </li>
+  <li>
+    <p>(3)<code class="highlighter-rouge">docker-machine --version</code></p>
+  </li>
+</ul>
+
+<h3 id="安装mysql">安装MySQL</h3>
+
+<h4 id="1下载mysql镜像">1.下载MySQL镜像</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull mysql
+</code></pre></div></div>
+
+<h4 id="2使用镜像创建并启动容器">2.使用镜像创建并启动容器</h4>
+
+<p>Docker以镜像为基础创建启动容器的方式为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+</code></pre></div></div>
+
+<p>启动成功后会在终端输出容器的ID，启动MySQL容器的脚本为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 127.0.0.1:3306:3306 \
+			–-name mysql \
+			-v /Users/zengjing/docker/mysql/data:/var/lib/mysql \
+			-e MYSQL_ROOT_PASSWORD=”123456” mysql:latest
+</code></pre></div></div>
+
+<p>可以通过<code class="highlighter-rouge">docker ps -a</code>查看容器运行的情况。</p>
+
+<p>参数说明：</p>
+
+<ul>
+  <li>(1)  <code class="highlighter-rouge">-d</code>表示容器将以后台模式运行，所有I/O数据只能通过网络资源或者共享卷组来进行交互。</li>
+  <li>(2)  <code class="highlighter-rouge">-p 127.0.0.1:3306:3306</code>将主机（127.0.0.1）的端口3306映射到容器的端口3306中。这样访问主机中的3306端口就等于访问容器中的3306端口。</li>
+  <li>(3) <code class="highlighter-rouge">--name mysql</code>给容器取名为 mysql，这样方便识别。</li>
+  <li>(4) <code class="highlighter-rouge">-v /Users/zengjing/docker/mysql/data:/var/lib/mysql</code>将本机的文件目录挂载到容器对应的目录（<code class="highlighter-rouge">/var/lib/mysql</code>）中。这样可以通过数据卷实现容器中数据的持久化。</li>
+  <li>(5) <code class="highlighter-rouge">-e MYSQL_ROOT_PASSWORD="123456"</code>, <code class="highlighter-rouge">-e</code>表示设置环境变量，此处设置了mysql的root 用户的访问密码为 <code class="highlighter-rouge">123456</code>。</li>
+  <li>(6) <code class="highlighter-rouge">mysql:latest</code>表示使用 mysql 的最新镜像启动一个容器。</li>
+</ul>
+
+<h4 id="3使用mysql">3.使用MySQL</h4>
+
+<p>完成上面的步骤之后就可以使用MySQL的客户端工具使用了,连接信息如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host: 127.0.0.1
+Port: 3306
+UserName: root
+Password: 123456
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1.<a href="https://docs.docker.com">《Docker官方文档》</a></p>
+
+<p>2.<a href="http://beyondvincent.com/2016/09/10/2016-09-10-use-mysql-with-docker/">《在 Docker 中使用 mysql》</a></p>
+
+<p>3.<a href="https://yeasy.gitbooks.io/docker_practice/content/">《Docker — 从入门到实践》</a></p>
+
+<p>4..<a href="http://mp.weixin.qq.com/s?__biz=MjM5ODQ2MDIyMA==&amp;mid=2650712620&amp;idx=1&amp;sn=39b33e0f1dfc335e165051b2983f9192&amp;scene=1&amp;srcid=0908wpvocqwawzRQwEu9N1N7#rd">《在 Mac 上跳舞的容器 — Docker》</a></p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/write-a-spider-with-scrapy.html" title="link to 使用Scrapy开发爬虫初探">使用Scrapy开发爬虫初探</a></h2>
+       <p class="excerpt">近期一直都有关注数据的采集方面的开发，之前也用Python(urllib+BeautifulSoup)写过“爬虫”但是效果不是很好，表现在内存占用过高和做出来的东西不够通用，很多周边的东西（图片下载、缩略图等）都需要自己来实现。趁着近期在公司内部弄到了一台新的CentOS服务器的机会就索性使用Scrapy把前段时间写的空气质量采集的程序改写下，同时把SQLServer换成MySQL，顺便熟悉一下这块的知识。开发环境准备CentOS 6.5自带的是Python 2.6.6,使用Scrapy需...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-12-06 04:40:00 +0800" class="post-list__meta--date date">2016-12-06</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/write-a-spider-with-scrapy.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-nssm-deploy-node-on-windows.html" title="link to 使用NSSM在Windows服务器上部署Node.js应用">使用NSSM在Windows服务器上部署Node.js应用</a></h2>
+       <p class="excerpt">最近使用Node的Express框架做了一个简单的应用，原本是打算部署到CentOS服务器上面的，后来由于种种原因只能部署到Window的服务器上面了。Node.js在Linux上面部署非常的方便，可以使用forever或者pm2来做这个事情，而且使用起来非常的简单，后续有机会会单独介绍如何使用，在Windows下就是稍微有点麻烦了，这两个组件都不支持。找了一些资料发现了nssm这个工具，部署超级简单，而且会监控你安装的node服务，如果node挂了，nssm会自动重启它。下面记录下部署的...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-11-24 10:15:53 +0800" class="post-list__meta--date date">2016-11-24</time> &#8226; <span class="post-list__meta--tags tags">Node</span><a class="btn-border-small" href=/blog/using-nssm-deploy-node-on-windows.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

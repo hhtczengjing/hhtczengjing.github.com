@@ -1,0 +1,1752 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>曾静的博客</title>
+    <description>嗨，我是曾静 (@devzeng)，目前暂居深圳。</description>
+    <link>http://blog.devzeng.com/</link>
+    <atom:link href="http://blog.devzeng.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 30 Jun 2019 21:37:21 +0800</pubDate>
+    <lastBuildDate>Sun, 30 Jun 2019 21:37:21 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>如何将自己的Node.js包发布到npm上面</title>
+        <description>&lt;p&gt;早前写过一篇&lt;a href=&quot;https://blog.devzeng.com/blog/npm-repo-with-verdaccio.html&quot;&gt;《使用Verdaccio搭建npm仓库》&lt;/a&gt;介绍如何搭建私有的npm包托管的环境的文章，比较适合将私有的Node.js包发布上去。本文主要记录一下发布一个公开的package到npm的过程。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/npm-publish-package/npm-intro.png&quot; alt=&quot;npm-intro.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1、注册账号&lt;/p&gt;
+
+&lt;p&gt;前往&lt;code class=&quot;highlighter-rouge&quot;&gt;https://www.npmjs.com&lt;/code&gt;注册账号，并按照要求验证邮箱。&lt;/p&gt;
+
+&lt;p&gt;2、Node.js包&lt;/p&gt;
+
+&lt;p&gt;创建&lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt;文件，如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
+  &quot;name&quot;: &quot;gitlab-systemhook-handler&quot;,
+  &quot;version&quot;: &quot;0.1.0&quot;,
+  &quot;description&quot;: &quot;Web handler / middleware for processing Gitlab System hooks&quot;,
+  &quot;main&quot;: &quot;gitlab-systemhook-handler.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;test&quot;: &quot;node demo.js&quot;
+  },
+  &quot;keywords&quot;: [
+    &quot;gitlab&quot;,
+    &quot;systemhook&quot;
+  ],
+  &quot;author&quot;: &quot;zengjing &amp;lt;hhtczengjing@gmail.com&amp;gt;&quot;,
+  &quot;repository&quot;: {
+    &quot;type&quot;: &quot;git&quot;,
+    &quot;url&quot;: &quot;https://github.com/hhtczengjing/gitlab-systemhook-handler.git&quot;
+  },
+  &quot;license&quot;: &quot;MIT&quot;,
+  &quot;dependencies&quot;: {
+    &quot;bl&quot;: &quot;~1.1.2&quot;,
+    &quot;buffer-equal-constant-time&quot;: &quot;~1.0.1&quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;（1）name: 包的名字&lt;/li&gt;
+  &lt;li&gt;（2）version：版本号&lt;/li&gt;
+  &lt;li&gt;（3）main：入口的JS文件名称&lt;/li&gt;
+  &lt;li&gt;（4）repository：源码路径&lt;/li&gt;
+  &lt;li&gt;（5）dependencies：依赖库&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;3、登录&lt;/p&gt;
+
+&lt;p&gt;命令行输入：&lt;code class=&quot;highlighter-rouge&quot;&gt;npm login&lt;/code&gt;，如果设置了第三方的registry，可以在后面加上&lt;code class=&quot;highlighter-rouge&quot;&gt;--registry https://registry.npmjs.com/&lt;/code&gt;，然后按照要求输入用户名、密码和邮箱即可完成登录。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜ npm login --registry https://registry.npmjs.com/
+Username: zengjing
+Password: 
+Email: (this IS public) hhtczengjing@gmail.com
+Logged in as zengjing on https://registry.npmjs.com/.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;4、发布&lt;/p&gt;
+
+&lt;p&gt;命令行输入：&lt;code class=&quot;highlighter-rouge&quot;&gt;npm publish&lt;/code&gt;，同上如果设置了第三方的registry，可以在后面加上&lt;code class=&quot;highlighter-rouge&quot;&gt;--registry https://registry.npmjs.com/&lt;/code&gt;。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜ npm publish --registry https://registry.npmjs.com/
+npm notice 
+npm notice 📦  gitlab-systemhook-handler@0.1.0
+npm notice === Tarball Contents === 
+npm notice 582B  package.json                
+npm notice 762B  demo.js                     
+npm notice 2.5kB gitlab-systemhook-handler.js
+npm notice 1.3kB README.md                   
+npm notice === Tarball Details === 
+npm notice name:          gitlab-systemhook-handler               
+npm notice version:       0.1.0                                   
+npm notice package size:  1.9 kB                                  
+npm notice unpacked size: 5.1 kB                                  
+npm notice shasum:        115e54761497edeb3187617f6b683f2300f877b4
+npm notice integrity:     sha512-zNm/3Tzps0HUJ[...]ZoHOcyTeckDuA==
+npm notice total files:   4                                       
+npm notice 
++ gitlab-systemhook-handler@0.1.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;然后到npm的后台可以看到发布成功的package了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/npm-publish-package/packages.png&quot; alt=&quot;packages.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果遇到如下的错误：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/npm-publish-package/403_error.png&quot; alt=&quot;403_error.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;表示没有验证邮箱，请先到注册的邮箱验证，然后重新发布即可&lt;/p&gt;
+
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
+
+&lt;p&gt;1、&lt;a href=&quot;https://blog.csdn.net/zyg1515330502/article/details/81112653&quot;&gt;如何使用npm发布自己的npm包&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;https://www.npmjs.com&quot;&gt;npm 官网&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 31 May 2019 18:46:37 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/publish-npm-package.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/publish-npm-package.html</guid>
+        
+        <category>Note</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>在Docker上搭建WebDAV文件共享服务</title>
+        <description>&lt;p&gt;近期由于一些不可抗力因素导致AirDrop被禁用了，平时对文档或者是一些安装包的共享还是有比较多的需求，在此记录一下使用Docker快速搭建WebDAV环境的过程。&lt;/p&gt;
+
+&lt;p&gt;直接在命令行输入下面的命令即可快速完成安装：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -d -v /Users/zengjing/docker/webdav:/var/webdav -e USERNAME=test -e PASSWORD=test -p 8888:80 morrisjobke/webdav
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;安装完成后通过浏览器：&lt;code class=&quot;highlighter-rouge&quot;&gt;http://ip:8888/webdav&lt;/code&gt;进行访问，输入用户名密码&lt;code class=&quot;highlighter-rouge&quot;&gt;test/test&lt;/code&gt;即可&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;(1) &lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;后面的路径是共享的文件存放的路径，需要提前创建好。可以直接将需要共享的文件拷贝到该目录下面其他人就可以直接进行下载使用&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;(2) &lt;code class=&quot;highlighter-rouge&quot;&gt;USERNAME、PASSWORD&lt;/code&gt;分别是用户名密码&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果其他电脑想要上传文件到共享盘上面可以通过：&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Finder -&amp;gt; 前往 -&amp;gt; 连接服务器&lt;/code&gt;，在对话框中输入: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://用户名:密码@IP:端口/webdav&lt;/code&gt;就可以将共享盘挂载到本地，然后像访问本地磁盘文件夹一样直接将需要共享的内容复制进去即可。&lt;/p&gt;
+</description>
+        <pubDate>Mon, 25 Feb 2019 18:46:37 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/build-webdav-server-in-docker.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/build-webdav-server-in-docker.html</guid>
+        
+        <category>Note</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>在Docker上搭建在线表格服务</title>
+        <description>&lt;p&gt;工作中总少不了需要填写表格的情况，特别是对于一些需要收集信息(比如住址和号码)的表格，最近发现了一个很好用的工具&lt;a href=&quot;http://cn.ethercalc.net/&quot;&gt;ethercalc&lt;/a&gt;, 可以很方便的搭建出多人协作的在线表格服务，而且用法和Excel一致。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/ethercalc-docker/hello-ethercalc.png&quot; alt=&quot;hello-ethercalc.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下面记录一下如何快速搭建的过程：&lt;/p&gt;
+
+&lt;p&gt;(1) 安装redis&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run --name redis -d -v /Users/zengjing/docker/redis:/data redis:latest redis-server --appendonly yes
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(2) 安装ethercalc&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -d -p 8000:8000 --link redis:redis --restart=always audreyt/ethercalc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;安装完成之后，在浏览器中输入&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8000&lt;/code&gt;即可。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/ethercalc-docker/overview-ethercalc.png&quot; alt=&quot;hello-ethercalc.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(3) 快速创建&lt;/p&gt;
+
+&lt;p&gt;支持直接将Excel拖拽上去快速创建，另外也支持通过浏览器输入一个地址进行创建，比如想创建一个名字叫做&lt;code class=&quot;highlighter-rouge&quot;&gt;demo&lt;/code&gt;的文档，直接输入&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8000/demo&lt;/code&gt;立即创建完成，并且可以将该文档链接地址发送给其他人进行填写。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/ethercalc-docker/fast-create.png&quot; alt=&quot;hello-ethercalc.png&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 11 Jan 2019 18:46:37 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/build-online-excel-in-docker.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/build-online-excel-in-docker.html</guid>
+        
+        <category>Note</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Docker安装MySQL数据库</title>
+        <description>&lt;p&gt;近期经常需要安装MySQL数据库，在此记录一下：&lt;/p&gt;
+
+&lt;p&gt;1、初始化创建文件夹&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p ~/docker/mysql/conf/
+mkdir -p ~/docker/mysql/data
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、在&lt;code class=&quot;highlighter-rouge&quot;&gt;conf&lt;/code&gt;目录下创建配置文件&lt;code class=&quot;highlighter-rouge&quot;&gt;my.cnf&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[mysqld]
+character-set-server=utf8
+[client]
+default-character-set=utf8
+[mysql]
+default-character-set=utf8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3、安装&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -d -p 3306:3306 \
+    --privileged=true \
+    --restart=always \
+    -v /Users/zengjing/docker/mysql/conf/my.cnf:/etc/mysql/my.cnf \
+    -v /Users/zengjing/docker/mysql/data:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=&quot;123456&quot; \
+    --name mysql57 \
+    mysql:5.7
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;参数说明：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(1) -d (Detached)表示容器将以后台模式运行，所有I/O数据只能通过网络资源或者共享卷组来进行交互。&lt;/li&gt;
+  &lt;li&gt;(2) -p 127.0.0.1:3306:3306将主机（127.0.0.1）的端口 3306 映射到容器的端口 3306 中。这样访问主机中的 3306 端口就等于访问容器中的 3306 端口。&lt;/li&gt;
+  &lt;li&gt;(3) –name mysql57给容器取名为 mysql57，这样方便记忆。&lt;/li&gt;
+  &lt;li&gt;(4) -v /Users/zengjing/docker/mysql/data:/var/lib/mysql 将本机的文件目录挂载到容器对应的目录（/var/lib/mysql）中。这样可以通过数据卷实现容器中数据的持久化。&lt;/li&gt;
+  &lt;li&gt;(6) -e MYSQL_ROOT_PASSWORD=”111111”-e 表示设置环境变量，此处设置了 mysql root 用户的初始密码为 123456。&lt;/li&gt;
+  &lt;li&gt;(7) mysql:5.7表示使用 mysql 5.7 启动一个容器。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Thu, 20 Dec 2018 18:46:37 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/install-mysql-in-docker.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/install-mysql-in-docker.html</guid>
+        
+        <category>Note</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Flutter开发初探</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://flutter.io/&quot;&gt;Flutter&lt;/a&gt;是由谷歌创建的一个框架，用于构建“现代移动应用”。目前它还处于beta阶段，不过它的文档和相关工具十分齐全，有些移动应用已经在使用Flutter。&lt;/p&gt;
+
+&lt;h3 id=&quot;开发环境搭建&quot;&gt;开发环境搭建&lt;/h3&gt;
+
+&lt;p&gt;由于在国内访问Flutter有时可能会受到限制，可以通过如下的配置使用国内的镜像(可以在一定程度上加快下载的速度)：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;1、下载flutter&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 下载
+git clone https://github.com/flutter/flutter.git
+
+# 切换到最新的tag(当前最新的是v0.11.13)
+git checkout v0.11.13
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、设置环境变量&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 设置环境变量
+export PATH=`pwd`/flutter/bin:$PATH
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3、安装依赖&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 安装依赖
+flutter doctor
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如果是第一次使用可能有如下提示：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[!] Android toolchain - develop for Android devices (Android SDK 28.0.1)
+    ✗ Android licenses not accepted.  To resolve this, run: flutter doctor --android-licenses
+[!] iOS toolchain - develop for iOS devices (Xcode 9.4.1)
+    ✗ libimobiledevice and ideviceinstaller are not installed. To install, run:
+        brew install --HEAD libimobiledevice
+        brew install ideviceinstaller
+    ✗ ios-deploy not installed. To install:
+        brew install ios-deploy
+[✓] Android Studio (version 3.1)
+    ✗ Flutter plugin not installed; this adds Flutter specific functionality.
+    ✗ Dart plugin not installed; this adds Dart specific functionality.
+[!] IntelliJ IDEA Ultimate Edition (version 2017.3.3)
+    ✗ Flutter plugin not installed; this adds Flutter specific functionality.
+    ✗ Dart plugin not installed; this adds Dart specific functionality.
+[!] Connected devices
+    ! No devices available
+
+! Doctor found issues in 4 categories.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;按照上面的说明进行处理即可：&lt;/p&gt;
+
+&lt;p&gt;(1) 接受Android开发者协议&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;flutter doctor --android-licenses
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(2) 安装一些必要的iOS的工具&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew install --HEAD libimobiledevice
+brew install ideviceinstaller
+brew install ios-deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、配置IDE&lt;/p&gt;
+
+&lt;p&gt;(1) 配置IDEA/Android Studio&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Preferences -&amp;gt; Plugins&lt;/code&gt;搜索&lt;code class=&quot;highlighter-rouge&quot;&gt;Flutter&lt;/code&gt;并安装插件&lt;/p&gt;
+
+&lt;p&gt;也可以到下面的地址去下载&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://plugins.jetbrains.com/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(2) 配置VS Code&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;View -&amp;gt; Command Palette&lt;/code&gt;输入&lt;code class=&quot;highlighter-rouge&quot;&gt;install&lt;/code&gt;, 然后选择&lt;code class=&quot;highlighter-rouge&quot;&gt;Extensions: Install Extension action&lt;/code&gt;, 在搜索框中输入&lt;code class=&quot;highlighter-rouge&quot;&gt;flutter&lt;/code&gt;在搜索结果列表里面选择&lt;code class=&quot;highlighter-rouge&quot;&gt;Flutter&lt;/code&gt;点击安装(install）即可，安装完成后选择OK重新启动VS Code。&lt;/p&gt;
+
+&lt;p&gt;3、初始化创建项目&lt;/p&gt;
+
+&lt;p&gt;命令行输入：&lt;code class=&quot;highlighter-rouge&quot;&gt;flutter create hello_flutter&lt;/code&gt;，即可快速创建一个Flutter的项目, 创建完成后就可以通过如下方式快速运行：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 进入到工程目录
+cd hello_flutter
+# 打开iPhone模拟器
+open -a Simulator
+# 运行
+flutter run
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;如何编写flutter插件&quot;&gt;如何编写Flutter插件&lt;/h3&gt;
+
+&lt;p&gt;1、创建模板工程&lt;/p&gt;
+
+&lt;p&gt;命令行执行如下命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;flutter create --template=plugin flutter_hybrid_router
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、实现Dart调用的代码&lt;/p&gt;
+
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;lib/flutter_hybrid_router.dart&lt;/code&gt;中实现Flutter端调用的方法逻辑：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Future&amp;lt;void&amp;gt; openURL({String url, List parameters}) async {
+    _channel.invokeMethod('openURL', {&quot;url&quot;: url ?? &quot;&quot;, &quot;parameters&quot;: (parameters ?? [])});
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3、实现iOS端的实现逻辑&lt;/p&gt;
+
+&lt;p&gt;实现&lt;code class=&quot;highlighter-rouge&quot;&gt;handleMethodCall:result:&lt;/code&gt;方法, Flutter端dart代码调用Native的逻辑：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)block {
+    if ([@&quot;openURL&quot; isEqualToString:call.method]) {
+        id arguments = call.arguments;
+        if(arguments &amp;amp;&amp;amp; [arguments isKindOfClass:[NSDictionary class]]) {
+            NSString *pattern = [arguments objectForKey:@&quot;url&quot;];
+            NSArray *parameters = [arguments objectForKey:@&quot;parameters&quot;];
+            if(!pattern || pattern.length &amp;lt;= 0) {
+                !block ? : block(nil);
+                return;
+            }
+            NSString *url = pattern;
+            if(parameters &amp;amp;&amp;amp; [parameters isKindOfClass:[NSArray class]] &amp;amp;&amp;amp; parameters.count &amp;gt; 0) {
+                url = [MGJRouter generateURLWithPattern:pattern parameters:parameters];
+            }
+            if(!url || url.length &amp;lt;= 0) {
+                !block ? : block(nil);
+                return;
+            }
+            [MGJRouter openURL:url completion:^(id result) {
+                !block ? : block(result);
+            }];
+        }
+        else {
+            !block ? : block(nil);
+        }
+    }
+    else {
+        !block ? : block(FlutterMethodNotImplemented);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;集成到现有的项目中&quot;&gt;集成到现有的项目中&lt;/h3&gt;
+
+&lt;p&gt;1、修改Podfile&lt;/p&gt;
+
+&lt;p&gt;修改ios目录下面的Podfile文件，在顶部新增两行配置&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;platform :ios, '8.0'
+use_frameworks!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、执行编译脚本&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;echo &quot;===清理flutter历史编译===&quot;
+flutter clean
+
+echo &quot;===重新生成plugin索引===&quot;
+flutter packages get
+
+echo &quot;===生成App.framework和flutter_assets===&quot;
+flutter build ios --release
+
+echo &quot;===生成各个plugin的二进制库文件===&quot;
+cd ios/Pods
+for plugin_name in &quot;flutter_hybrid_router&quot; &quot;flutter_webview_plugin&quot;
+do
+    echo &quot;生成${plugin_name}.framework...&quot;
+    /usr/bin/env xcrun xcodebuild build -configuration Release ARCHS='arm64 armv7' -target ${plugin_name} BUILD_DIR=../../build/ios -sdk iphoneos -quiet
+    /usr/bin/env xcrun xcodebuild build -configuration Debug ARCHS='x86_64' -target ${plugin_name} BUILD_DIR=../../build/ios -sdk iphonesimulator -quiet
+    echo &quot;合并${plugin_name}.framework...&quot;
+    lipo -create &quot;../../build/ios/Debug-iphonesimulator/${plugin_name}/${plugin_name}.framework/${plugin_name}&quot; &quot;../../build/ios/Release-iphoneos/${plugin_name}/${plugin_name}.framework/${plugin_name}&quot; -o &quot;../../build/ios/Release-iphoneos/${plugin_name}/${plugin_name}.framework/${plugin_name}&quot;
+done
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;脚本执行完成之后，创建一个Flutter的文件夹，将生成的产物拷贝过来，文件结构如下所示：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
+├── FlutterModule.podspec
+└── Pod
+    ├── Assets
+    │   └── flutter_assets
+    └── Framework
+        ├── App.framework
+        ├── Flutter.framework
+        ├── flutter_hybrid_router.framework
+        └── flutter_webview_plugin.framework
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;其中&lt;code class=&quot;highlighter-rouge&quot;&gt;FlutterModule.podspec&lt;/code&gt;文件的内容如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Pod::Spec.new do |s|
+  s.name         = &quot;Flutter&quot;
+  s.version      = &quot;0.1.0&quot;
+  s.summary      = &quot;Flutter Demo&quot;
+  s.description  = &amp;lt;&amp;lt;-DESC
+    Flutter Demo                
+  DESC
+  s.homepage     = &quot;https://blog.devzeng.com&quot;
+  s.license      = &quot;MIT&quot;
+  s.platform = :ios, '8.0'
+  s.author       = { &quot;zengjing&quot; =&amp;gt; &quot;hhtczengjing@gmail.com&quot; }
+  s.source       = { :git =&amp;gt; &quot;&quot;, :tag =&amp;gt; &quot;#{s.version}&quot; }
+  s.resources = &quot;Pod/Assets/*&quot;
+  s.vendored_frameworks = &quot;Pod/Framework/**/*.framework&quot;
+  s.dependency 'MGJRouter', '~&amp;gt; 0.10.0'
+end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;然后就可以直接在代码中引用了。&lt;/p&gt;
+
+&lt;p&gt;3、主工程中注册插件&lt;/p&gt;
+
+&lt;p&gt;(1) &lt;code class=&quot;highlighter-rouge&quot;&gt;AppDelegate&lt;/code&gt;中实现&lt;code class=&quot;highlighter-rouge&quot;&gt;FlutterPluginRegistry&lt;/code&gt;协议&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // 注册插件
+    [FlutterHybridRouterPlugin registerWithRegistrar:[self registrarForPlugin:@&quot;FlutterHybridRouterPlugin&quot;]];
+    
+    // TODO: 给每个插件发送消息
+ 
+    return YES;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(2) 打开Flutter页面&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FlutterViewController *controller = [[FlutterViewController alloc] init];
+[self.navigationController pushViewController:controller animated:YES];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(3) 实现OpenURL的协议&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[MGJRouter registerURLPattern:@&quot;com.devzeng.demo://goback&quot; toHandler:^(NSDictionary *routerParameters) {
+   UIViewController *controller = nil; // 获取当前Flutter页面
+   [controller.navigationController popViewControllerAnimated:YES];
+}];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;最后，本文的demo可以在下面找到：&lt;/p&gt;
+
+&lt;p&gt;(1) Flutter插件示例：&lt;a href=&quot;https://github.com/hhtczengjing/flutter_hybrid_router_plugin.git&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;flutter_hybrid_router&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(2) Flutter示例项目：&lt;a href=&quot;https://github.com/hhtczengjing/flutter_demo.git&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;flutter_demo&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(3) Flutter编译后的模块：&lt;a href=&quot;https://github.com/hhtczengjing/flutter_module_example.git&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;flutter_module_example&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(4) Flutter集成到现有项目中的示例：&lt;a href=&quot;https://github.com/hhtczengjing/flutter_ios_project_integrate.git&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;flutter_ios_project_integrate&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
+
+&lt;p&gt;1、&lt;a href=&quot;https://flutter.io/&quot;&gt;Flutter官网&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;http://www.infoq.com/cn/articles/why-is-flutter-revolutionary&quot;&gt;为什么说Flutter是革命性的？&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3、&lt;a href=&quot;https://www.stephenw.cc/2018/04/20/dart-getting-start/&quot;&gt;认识Dart语言&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4、&lt;a href=&quot;https://www.stephenw.cc/2018/04/21/dart-var-types/&quot;&gt;Dart的变量和类型&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4、&lt;a href=&quot;https://www.stephenw.cc/2018/04/23/dart-func/&quot;&gt;Dart的函数&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;5、&lt;a href=&quot;https://www.stephenw.cc/2018/04/25/dart-class/&quot;&gt;Dart的类&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;6、&lt;a href=&quot;https://www.stephenw.cc/2018/04/27/dart-generics/&quot;&gt;Dart中的泛型&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 11 Nov 2018 18:46:37 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/hello-flutter.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/hello-flutter.html</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>iOS中使用cryptopp进行加解密</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://www.cryptopp.com&quot;&gt;Crypto++&lt;/a&gt;是一个免费开源的加解密库，支持一些非常丰富的加解密算法(如AES/RSA等)。如果要考虑到实现一套跨平台多端加解密效果一致可以考虑使用该库，当然使用各自平台提供的api也能实现。&lt;/p&gt;
+
+&lt;p&gt;目前只提供了源码的方式，如果要集成到iOS的项目里面需要先编译成静态库，下面就&lt;code class=&quot;highlighter-rouge&quot;&gt;5.6.2&lt;/code&gt;这个版本进行介绍：&lt;/p&gt;
+
+&lt;h3 id=&quot;1编译静态库&quot;&gt;1.编译静态库&lt;/h3&gt;
+
+&lt;h4 id=&quot;1-下载源码&quot;&gt;(1) 下载源码&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/weidai11/cryptopp.git
+git checkout CRYPTOPP_5_6_2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;2-准备一个makefile文件&quot;&gt;(2) 准备一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Makefile&lt;/code&gt;文件&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;touch Makefile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;文件内容为：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CXXFLAGS += -g -O2 -Wall -Wno-unused -Wno-unknown-pragmas -DNDEBUG -DCRYPTOPP_DISABLE_ASM -DCRYPTOPP_DISABLE_SSE2 -MMD -MT dependencies
+
+TARGET = libcryptopp.a
+SRCS = $(shell echo *.cpp)
+OBJS = $(SRCS:.cpp=.o)
+
+.phoney: clean
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $@
+
+%.o : %.cpp
+	$(CXX) $(CXXFLAGS) -c $&amp;lt;
+
+clean:
+	$(RM) $(TARGET) $(OBJS)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;3-编写编译脚本&quot;&gt;(3) 编写编译脚本&lt;/h4&gt;
+
+&lt;h5 id=&quot;1-ios平台&quot;&gt;1) iOS平台&lt;/h5&gt;
+
+&lt;p&gt;创建脚本文件：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;touch build-ios.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;脚本内容为：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;XCODE_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;xcode-select &lt;span class=&quot;nt&quot;&gt;-print-path&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;making for iOS&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ARCHS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;x86_64 i386 armv7 armv7s arm64&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;SDK_VERSION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;xcrun &lt;span class=&quot;nt&quot;&gt;--sdk&lt;/span&gt; iphoneos &lt;span class=&quot;nt&quot;&gt;--show-sdk-version&lt;/span&gt; 2&amp;gt; /dev/null&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;MIN_SDK_VERSION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;7.0
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sdk version is: &quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_VERSION&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;IOS_STATIC_ARCHIVES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;ARCH &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCHS&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do
+    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PLATFORM&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;i386&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;x86_64&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+        &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PLATFORM&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;iPhoneSimulator&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else
+        &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PLATFORM&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;iPhoneOS&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fi
+
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DEV_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;XCODE_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Platforms/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PLATFORM&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.platform/Developer&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DEV_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/SDKs/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PLATFORM&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_VERSION&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.sdk&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TOOLCHAIN_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;XCODE_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Toolchains/XcodeDefault.xctoolchain/usr/bin/&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;clang -arch &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ARCH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -fembed-bitcode&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CXX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;clang++
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;AR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TOOLCHAIN_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;libtool
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;RANLIB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TOOLCHAIN_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;ranlib
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-static -o&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LDFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-arch &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -isysroot &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;IOS_BUILD_&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CXXFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-x c++ -arch &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -isysroot &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -I&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -miphoneos-version-min=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MIN_SDK_VERSION&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -mios-simulator-version-min=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MIN_SDK_VERSION&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-pv&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    make &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; Makefile
+    &lt;span class=&quot;nb&quot;&gt;mv&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.o &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;mv&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.d &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;mv &lt;/span&gt;libcryptopp.a &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nv&quot;&gt;IOS_STATIC_ARCHIVES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;IOS_STATIC_ARCHIVES&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/libcryptopp.a&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;done
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Creating universal library...&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; bin/ios
+lipo &lt;span class=&quot;nt&quot;&gt;-create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;IOS_STATIC_ARCHIVES&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-output&lt;/span&gt; bin/ios/libcryptopp.a
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;removing thin archs&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;ARCH &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCHS&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do
+    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;directoryName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;IOS_BUILD_&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;directoryName&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;done
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Build done!&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;2-macos平台&quot;&gt;2) macOS平台&lt;/h5&gt;
+
+&lt;p&gt;创建脚本文件：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;touch build-macOS.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;脚本内容为：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;XCODE_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;xcode-select &lt;span class=&quot;nt&quot;&gt;-print-path&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;making for macOSX&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ARCHS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;x86_64 i386&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;SDK_VERSION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;xcrun &lt;span class=&quot;nt&quot;&gt;--sdk&lt;/span&gt; macosx &lt;span class=&quot;nt&quot;&gt;--show-sdk-version&lt;/span&gt; 2&amp;gt; /dev/null&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;MIN_SDK_VERSION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10.10
+&lt;span class=&quot;nv&quot;&gt;PLATFORM&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;MacOSX&quot;&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sdk version is: &quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_VERSION&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;MACOSX_STATIC_ARCHIVES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;ARCH &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCHS&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DEV_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;XCODE_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Platforms/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PLATFORM&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.platform/Developer&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DEV_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/SDKs/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PLATFORM&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_VERSION&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.sdk&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TOOLCHAIN_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;XCODE_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Toolchains/XcodeDefault.xctoolchain/usr/bin/&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;clang -arch &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ARCH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -fembed-bitcode&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CXX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;clang++
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;AR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TOOLCHAIN_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;libtool
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;RANLIB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TOOLCHAIN_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;ranlib
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-static -o&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LDFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-arch &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -isysroot &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;MACOSX_BUILD_&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CXXFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-x c++ -arch &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -isysroot &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SDK_ROOT&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -I&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -mmacosx-version-min=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MIN_SDK_VERSION&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-pv&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    make &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; Makefile
+    &lt;span class=&quot;nb&quot;&gt;mv&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.o &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;mv&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.d &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;mv &lt;/span&gt;libcryptopp.a &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nv&quot;&gt;MACOSX_STATIC_ARCHIVES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MACOSX_STATIC_ARCHIVES&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUILD_PATH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/libcryptopp.a&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;done
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Creating universal library...&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; bin/macosx
+lipo &lt;span class=&quot;nt&quot;&gt;-create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MACOSX_STATIC_ARCHIVES&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-output&lt;/span&gt; bin/macosx/libcryptopp.a
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;removing thin archs&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;ARCH &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCHS&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do
+    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;directoryName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;MACOSX_BUILD_&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;directoryName&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;done
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Build done!&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2使用&quot;&gt;2.使用&lt;/h3&gt;
+
+&lt;p&gt;下面就MD5加密进行示例如何使用，更多其他的使用方式请参考官方的文档：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// md5
+// 引用头文件`md5.h`
+- (NSString *)getMD5String:(NSString *)str {
+    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    if(!data || data.length &amp;lt;= 0) {
+        return nil;
+    }
+    CryptoPP::MD5 md5;
+    byte digest[CryptoPP::MD5::DIGESTSIZE];
+    md5.CalculateDigest(digest, (const byte*)[data bytes], [data length]);
+    NSData *md5Dat = [NSData dataWithBytes:digest length:sizeof digest];
+    NSMutableString *s = [NSMutableString string];
+    unsigned char *hashValue = (byte *)[md5Dat bytes];
+    int i;
+    for (i = 0; i &amp;lt; [md5Dat length]; i++) {
+        [s appendFormat:@&quot;%02x&quot;, hashValue[i]];
+    }
+    return s;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
+
+&lt;p&gt;1、&lt;a href=&quot;https://www.cnblogs.com/cocoajin/p/6112562.html&quot;&gt;Cryptopp iOS 使用 RSA加密解密和签名验证签名&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;https://www.cryptopp.com/docs/ref/&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 04 Oct 2018 18:46:37 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/ios-cryptopp-encryption.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/ios-cryptopp-encryption.html</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>iOS中Masonry源码分析</title>
+        <description>&lt;p&gt;Masonry是一个轻量级的iOS布局框架，使用一套更加方便的语法来对AutoLayout进行包装。它拥有自己的描述语法(DSL)， 采用更优雅的链式语法封装了AutoLayout，简介明了并具备高可读性。同时支持iOS和macOS。&lt;/p&gt;
+
+&lt;h3 id=&quot;autolayout&quot;&gt;AutoLayout&lt;/h3&gt;
+
+&lt;p&gt;需求：在父视图上面创建一个绿色的视图，要求距父视图的边距都是10，使用代码方式实现方式如下：&lt;/p&gt;
+
+&lt;h4 id=&quot;1-创建视图控件&quot;&gt;(1) 创建视图控件&lt;/h4&gt;
+
+&lt;p&gt;创建一个UIView视图，并把它添加到父视图上面：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;UIView *view1 = [[UIView alloc] init];
+view1.backgroundColor = [UIColor greenColor];
+[self.view addSubview:view1];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;2-设置关闭autoresizing&quot;&gt;(2) 设置关闭Autoresizing&lt;/h4&gt;
+
+&lt;p&gt;因为AutoLayout和Autoresizing不能同时使用，在使用AutoLayout之前必须先设置关闭
+Autoresizing：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;view1.translatesAutoresizingMaskIntoConstraints = NO;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;3-创建并添加约束&quot;&gt;(3) 创建并添加约束&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NSLayoutConstraint *topC = [NSLayoutConstraint constraintWithItem:view1
+                                 attribute:NSLayoutAttributeTop
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:self.view
+                                 attribute:NSLayoutAttributeTop
+                                multiplier:1.0
+                                  constant:10];
+                                  
+NSLayoutConstraint *leftC = [NSLayoutConstraint constraintWithItem:view1
+                                 attribute:NSLayoutAttributeLeft
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:self.view
+                                 attribute:NSLayoutAttributeLeft
+                                multiplier:1.0
+                                  constant:10];
+
+NSLayoutConstraint *bottomC = [NSLayoutConstraint constraintWithItem:view1
+                                 attribute:NSLayoutAttributeBottom
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:self.view
+                                 attribute:NSLayoutAttributeBottom
+                                multiplier:1.0
+                                  constant:-10];
+
+NSLayoutConstraint *rightC = [NSLayoutConstraint constraintWithItem:view1
+                                 attribute:NSLayoutAttributeRight
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:self.view
+                                 attribute:NSLayoutAttributeRight
+                                multiplier:1.0
+                                  constant:-10];
+                                  
+[self.view addConstraints:@[topC, leftC, bottomC, rightC]];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如果使用Masonry实现方式如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;UIEdgeInsets padding = UIEdgeInsetsMake(10, 10, 10, 10);
+
+[view1 mas_makeConstraints:^(MASConstraintMaker *make) {
+    make.top.equalTo(self.view.mas_top).with.offset(padding.top);
+    make.left.equalTo(self.view.mas_left).with.offset(padding.left);
+    make.bottom.equalTo(self.view.mas_bottom).with.offset(-padding.bottom);
+    make.right.equalTo(self.view.mas_right).with.offset(-padding.right);
+}];
+
+或者是：
+
+[view1 mas_makeConstraints:^(MASConstraintMaker *make) {
+    make.edges.equalTo(self.view).with.insets(padding);
+}];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;源码分析&quot;&gt;源码分析&lt;/h3&gt;
+
+&lt;p&gt;相比使用原生的AutoLayout使用Masonry代码更加的简洁，接下来从源码的方式来看下Masonry是如何处理的，首先Masonry提供了一个Category(&lt;code class=&quot;highlighter-rouge&quot;&gt;UIView+MASAdditions&lt;/code&gt;)， 该Category实现了如下几个方法，分别用于约束的创建、更新和重置：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 创建约束
+- (NSArray *)mas_makeConstraints:(void(NS_NOESCAPE ^)(MASConstraintMaker *make))block;
+
+// 更新约束
+- (NSArray *)mas_updateConstraints:(void(NS_NOESCAPE ^)(MASConstraintMaker *make))block;
+
+// 重置约束
+- (NSArray *)mas_remakeConstraints:(void(NS_NOESCAPE ^)(MASConstraintMaker *make))block;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;以创建约束为例，里面的具体实现代码为：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (NSArray *)mas_makeConstraints:(void(^)(MASConstraintMaker *))block {
+	 // 关闭Autoresizing
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    MASConstraintMaker *constraintMaker = [[MASConstraintMaker alloc] initWithView:self];
+    block(constraintMaker);
+    return [constraintMaker install];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;从上面的代码可以看出来，创建约束的时候首先会关闭Autoresizing，然后会创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;MASConstraintMaker&lt;/code&gt;对象，然后暴露给开发者一个block，在block里面实现具体的约束，最后调用&lt;code class=&quot;highlighter-rouge&quot;&gt;install&lt;/code&gt;安装约束。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// MASConstraintMaker
+- (id)initWithView:(MAS_VIEW *)view {
+    self = [super init];
+    if (!self) return nil;
+    
+    self.view = view;
+    self.constraints = NSMutableArray.new;
+    
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;比如下面的代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;make.left.equalTo(self.view.mas_left).with.offset(10);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(1) &lt;code class=&quot;highlighter-rouge&quot;&gt;make.left&lt;/code&gt;等价于：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// MASConstraintMaker
+- (MASConstraint *)left {
+    return [self addConstraintWithLayoutAttribute:NSLayoutAttributeLeft];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (MASConstraint *)addConstraintWithLayoutAttribute:(NSLayoutAttribute)layoutAttribute {
+    return [self constraint:nil addConstraintWithLayoutAttribute:layoutAttribute];
+}
+
+//由于constraint为nil，删除一些无效的代码
+- (MASConstraint *)constraint:(MASConstraint *)constraint addConstraintWithLayoutAttribute:(NSLayoutAttribute)layoutAttribute {
+    MASViewAttribute *viewAttribute = [[MASViewAttribute alloc] initWithView:self.view layoutAttribute:layoutAttribute];
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:viewAttribute];
+    if (!constraint) {
+        newConstraint.delegate = self;
+        [self.constraints addObject:newConstraint];
+    }
+    return newConstraint;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(2) &lt;code class=&quot;highlighter-rouge&quot;&gt;self.view.mas_left&lt;/code&gt;等价于：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// UIView+MASAdditions
+- (MASViewAttribute *)mas_left {
+    return [[MASViewAttribute alloc] initWithView:self layoutAttribute:NSLayoutAttributeLeft];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(3) &lt;code class=&quot;highlighter-rouge&quot;&gt;equalTo&lt;/code&gt;等价于：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (MASConstraint * (^)(id))equalTo {
+    return ^id(id attribute) {
+        return self.equalToWithRelation(attribute, NSLayoutRelationEqual);
+    };
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;equalToWithRelation&lt;/code&gt;方法是在子类中实现的，父类中不提供实现：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#define MASMethodNotImplemented() \
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException \
+                                   reason:[NSString stringWithFormat:@&quot;You must override %@ in a subclass.&quot;, NSStringFromSelector(_cmd)] \
+                                 userInfo:nil]
+
+- (MASConstraint * (^)(id, NSLayoutRelation))equalToWithRelation { 
+    MASMethodNotImplemented(); 
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;可以到&lt;code class=&quot;highlighter-rouge&quot;&gt;MASViewConstraint&lt;/code&gt;中找到具体的实现代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (MASConstraint * (^)(id, NSLayoutRelation))equalToWithRelation {
+    return ^id(id attribute, NSLayoutRelation relation) {
+        if ([attribute isKindOfClass:NSArray.class]) {
+            NSAssert(!self.hasLayoutRelation, @&quot;Redefinition of constraint relation&quot;);
+            NSMutableArray *children = NSMutableArray.new;
+            for (id attr in attribute) {
+                MASViewConstraint *viewConstraint = [self copy];
+                viewConstraint.layoutRelation = relation;
+                viewConstraint.secondViewAttribute = attr;
+                [children addObject:viewConstraint];
+            }
+            MASCompositeConstraint *compositeConstraint = [[MASCompositeConstraint alloc] initWithChildren:children];
+            compositeConstraint.delegate = self.delegate;
+            [self.delegate constraint:self shouldBeReplacedWithConstraint:compositeConstraint];
+            return compositeConstraint;
+        } 
+        else {
+            NSAssert(!self.hasLayoutRelation || self.layoutRelation == relation &amp;amp;&amp;amp; [attribute isKindOfClass:NSValue.class], @&quot;Redefinition of constraint relation&quot;);
+            self.layoutRelation = relation;
+            self.secondViewAttribute = attribute;
+            return self;
+        }
+    };
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;重写了&lt;code class=&quot;highlighter-rouge&quot;&gt;secondViewAttribute的setter&lt;/code&gt;方法，根据不同的类型进行处理&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)setSecondViewAttribute:(id)secondViewAttribute {
+    if ([secondViewAttribute isKindOfClass:NSValue.class]) {
+        [self setLayoutConstantWithValue:secondViewAttribute];
+    } 
+    else if ([secondViewAttribute isKindOfClass:MAS_VIEW.class]) {
+        _secondViewAttribute = [[MASViewAttribute alloc] initWithView:secondViewAttribute layoutAttribute:self.firstViewAttribute.layoutAttribute];
+    } 
+    else if ([secondViewAttribute isKindOfClass:MASViewAttribute.class]) {
+        _secondViewAttribute = secondViewAttribute;
+    } 
+    else {
+        NSAssert(NO, @&quot;attempting to add unsupported attribute: %@&quot;, secondViewAttribute);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;1) 针对&lt;code class=&quot;highlighter-rouge&quot;&gt;NSValue&lt;/code&gt;类型的数据&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)setLayoutConstantWithValue:(NSValue *)value {
+    if ([value isKindOfClass:NSNumber.class]) {
+        self.offset = [(NSNumber *)value doubleValue];
+    } 
+    else if (strcmp(value.objCType, @encode(CGPoint)) == 0) {
+        CGPoint point;
+        [value getValue:&amp;amp;point];
+        self.centerOffset = point;
+    }
+    else if (strcmp(value.objCType, @encode(CGSize)) == 0) {
+        CGSize size;
+        [value getValue:&amp;amp;size];
+        self.sizeOffset = size;
+    } 
+    else if (strcmp(value.objCType, @encode(MASEdgeInsets)) == 0) {
+        MASEdgeInsets insets;
+        [value getValue:&amp;amp;insets];
+        self.insets = insets;
+    }
+    else {
+        NSAssert(NO, @&quot;attempting to set layout constant with unsupported value: %@&quot;, value);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2) 针对&lt;code class=&quot;highlighter-rouge&quot;&gt;UIView/NSView&lt;/code&gt;类型的数据：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;_secondViewAttribute = [[MASViewAttribute alloc] initWithView:secondViewAttribute layoutAttribute:self.firstViewAttribute.layoutAttribute];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3) 针对&lt;code class=&quot;highlighter-rouge&quot;&gt;MASViewAttribute&lt;/code&gt;类型的数据&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;_secondViewAttribute = secondViewAttribute;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(4) &lt;code class=&quot;highlighter-rouge&quot;&gt;with&lt;/code&gt;等价于&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (MASConstraint *)with {
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;其实就是返回一个当前对象，没有实际的意义，方便阅读&lt;/p&gt;
+
+&lt;p&gt;最后创建完约束之后会调用&lt;code class=&quot;highlighter-rouge&quot;&gt;install&lt;/code&gt;方法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// MASConstraintMaker
+- (NSArray *)install {
+    if (self.removeExisting) {
+        NSArray *installedConstraints = [MASViewConstraint installedConstraintsForView:self.view];
+        for (MASConstraint *constraint in installedConstraints) {
+            [constraint uninstall];
+        }
+    }
+    NSArray *constraints = self.constraints.copy;
+    for (MASConstraint *constraint in constraints) {
+        constraint.updateExisting = self.updateExisting;
+        [constraint install];
+    }
+    [self.constraints removeAllObjects];
+    return constraints;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在这个方法会先判断当前的视图的约束是否应该要被&lt;code class=&quot;highlighter-rouge&quot;&gt;uninstall&lt;/code&gt;, 如果我们在最开始调用&lt;code class=&quot;highlighter-rouge&quot;&gt;mas_remakeConstraints:&lt;/code&gt;方法时, 视图中原来的约束就会全部被&lt;code class=&quot;highlighter-rouge&quot;&gt;uninstall&lt;/code&gt;。然后就会遍历&lt;code class=&quot;highlighter-rouge&quot;&gt;constraints&lt;/code&gt;数组, 发送&lt;code class=&quot;highlighter-rouge&quot;&gt;install&lt;/code&gt;消息。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// MASConstraint
+- (void)install {
+    if (self.hasBeenInstalled) {
+        return;
+    }
+    
+    // 是否激活该约束
+    if ([self supportsActiveProperty] &amp;amp;&amp;amp; self.layoutConstraint) {
+        self.layoutConstraint.active = YES;
+        [self.firstViewAttribute.view.mas_installedConstraints addObject:self];
+        return;
+    }
+    
+
+    MAS_VIEW *firstLayoutItem = self.firstViewAttribute.item;
+    NSLayoutAttribute firstLayoutAttribute = self.firstViewAttribute.layoutAttribute;
+    
+    MAS_VIEW *secondLayoutItem = self.secondViewAttribute.item;
+    NSLayoutAttribute secondLayoutAttribute = self.secondViewAttribute.layoutAttribute;
+    
+    // alignment attributes must have a secondViewAttribute therefore we assume that is refering to superview
+    // eg make.left.equalTo(@10)
+    // 对于不是值类型的数据，需要设置第二个视图
+    if (!self.firstViewAttribute.isSizeAttribute &amp;amp;&amp;amp; !self.secondViewAttribute) {
+        secondLayoutItem = self.firstViewAttribute.view.superview;
+        secondLayoutAttribute = firstLayoutAttribute;
+    }
+    
+    // MASLayoutConstraint 继承自 NSLayoutConstraint
+    // 约束公式 firstView.attribute = secondView.attribute * layoutMultiplier + layoutConstant
+    MASLayoutConstraint *layoutConstraint = [MASLayoutConstraint constraintWithItem:firstLayoutItem 
+                                                                          attribute:firstLayoutAttribute
+                                                                          relatedBy:self.layoutRelation
+                                                                             toItem:secondLayoutItem
+                                                                          attribute:secondLayoutAttribute
+                                                                         multiplier:self.layoutMultiplier
+                                                                           constant:self.layoutConstant];
+    // 优先级
+    layoutConstraint.priority = self.layoutPriority;
+    // 标识符, 调试的时候使用
+    layoutConstraint.mas_key = self.mas_key;
+    
+    if (self.secondViewAttribute.view) {
+        // 两个视图进行约束，寻找两个视图的共同父视图，在共同的父视图上面添加约束
+        MAS_VIEW *closestCommonSuperview = [self.firstViewAttribute.view mas_closestCommonSuperview:self.secondViewAttribute.view];
+        NSAssert(closestCommonSuperview, @&quot;couldn't find a common superview for %@ and %@&quot;, self.firstViewAttribute.view, self.secondViewAttribute.view);
+        self.installedView = closestCommonSuperview;
+    } 
+    else if (self.firstViewAttribute.isSizeAttribute) {
+        // 对于数值类型的属性，直接在当前视图上面添加约束
+        self.installedView = self.firstViewAttribute.view;
+    } 
+    else {
+        // 在父视图上面添加约束
+        self.installedView = self.firstViewAttribute.view.superview;
+    }
+    
+    MASLayoutConstraint *existingConstraint = nil;
+    if (self.updateExisting) {
+        // 如果需要更新约束，查找对应的约束
+        existingConstraint = [self layoutConstraintSimilarTo:layoutConstraint];
+    }
+    if (existingConstraint) {
+        // 更新约束的constant
+        existingConstraint.constant = layoutConstraint.constant;
+        self.layoutConstraint = existingConstraint;
+    } 
+    else {
+        // 添加一个新的约束
+        [self.installedView addConstraint:layoutConstraint];
+        self.layoutConstraint = layoutConstraint;
+        [firstLayoutItem.mas_installedConstraints addObject:self];
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;获取两个视图共同的父视图：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// UIView+MASAdditions
+- (instancetype)mas_closestCommonSuperview:(MAS_VIEW *)view {
+    MAS_VIEW *closestCommonSuperview = nil;
+
+    MAS_VIEW *secondViewSuperview = view;
+    while (!closestCommonSuperview &amp;amp;&amp;amp; secondViewSuperview) {
+        MAS_VIEW *firstViewSuperview = self;
+        while (!closestCommonSuperview &amp;amp;&amp;amp; firstViewSuperview) {
+            if (secondViewSuperview == firstViewSuperview) {
+                closestCommonSuperview = secondViewSuperview;
+            }
+            firstViewSuperview = firstViewSuperview.superview;
+        }
+        secondViewSuperview = secondViewSuperview.superview;
+    }
+    return closestCommonSuperview;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;或者同指定约束相似的约束：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (MASLayoutConstraint *)layoutConstraintSimilarTo:(MASLayoutConstraint *)layoutConstraint {
+    // 判断两个约束是否相似，需要从以下几个方面进行考量
+    for (NSLayoutConstraint *existingConstraint in self.installedView.constraints.reverseObjectEnumerator) {
+        if (![existingConstraint isKindOfClass:MASLayoutConstraint.class]) continue;
+        if (existingConstraint.firstItem != layoutConstraint.firstItem) continue;
+        if (existingConstraint.secondItem != layoutConstraint.secondItem) continue;
+        if (existingConstraint.firstAttribute != layoutConstraint.firstAttribute) continue;
+        if (existingConstraint.secondAttribute != layoutConstraint.secondAttribute) continue;
+        if (existingConstraint.relation != layoutConstraint.relation) continue;
+        if (existingConstraint.multiplier != layoutConstraint.multiplier) continue;
+        if (existingConstraint.priority != layoutConstraint.priority) continue;
+        return (id)existingConstraint;
+    }
+    return nil;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;到这里基本上已经差不多了，针对&lt;code class=&quot;highlighter-rouge&quot;&gt;edges&lt;/code&gt;这种类型的源码实现如下，其实就是使用的&lt;code class=&quot;highlighter-rouge&quot;&gt;MASCompositeConstraint&lt;/code&gt;批量创建一系列约束：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (MASConstraint *)edges {
+    return [self addConstraintWithAttributes:MASAttributeTop | MASAttributeLeft | MASAttributeRight | MASAttributeBottom];
+}
+
+- (MASConstraint *)addConstraintWithAttributes:(MASAttribute)attrs {
+    __unused MASAttribute anyAttribute = (MASAttributeLeft | MASAttributeRight | MASAttributeTop | MASAttributeBottom | MASAttributeLeading
+                                          | MASAttributeTrailing | MASAttributeWidth | MASAttributeHeight | MASAttributeCenterX
+                                          | MASAttributeCenterY | MASAttributeBaseline
+#if (__IPHONE_OS_VERSION_MIN_REQUIRED &amp;gt;= 80000) || (__TV_OS_VERSION_MIN_REQUIRED &amp;gt;= 9000) || (__MAC_OS_X_VERSION_MIN_REQUIRED &amp;gt;= 101100)
+                                          | MASAttributeFirstBaseline | MASAttributeLastBaseline
+#endif
+#if (__IPHONE_OS_VERSION_MIN_REQUIRED &amp;gt;= 80000) || (__TV_OS_VERSION_MIN_REQUIRED &amp;gt;= 9000)
+                                          | MASAttributeLeftMargin | MASAttributeRightMargin | MASAttributeTopMargin | MASAttributeBottomMargin
+                                          | MASAttributeLeadingMargin | MASAttributeTrailingMargin | MASAttributeCenterXWithinMargins
+                                          | MASAttributeCenterYWithinMargins
+#endif
+                                          );
+    
+    NSAssert((attrs &amp;amp; anyAttribute) != 0, @&quot;You didn't pass any attribute to make.attributes(...)&quot;);
+    
+    NSMutableArray *attributes = [NSMutableArray array];
+    
+    if (attrs &amp;amp; MASAttributeLeft) [attributes addObject:self.view.mas_left];
+    if (attrs &amp;amp; MASAttributeRight) [attributes addObject:self.view.mas_right];
+    if (attrs &amp;amp; MASAttributeTop) [attributes addObject:self.view.mas_top];
+    if (attrs &amp;amp; MASAttributeBottom) [attributes addObject:self.view.mas_bottom];
+    if (attrs &amp;amp; MASAttributeLeading) [attributes addObject:self.view.mas_leading];
+    if (attrs &amp;amp; MASAttributeTrailing) [attributes addObject:self.view.mas_trailing];
+    if (attrs &amp;amp; MASAttributeWidth) [attributes addObject:self.view.mas_width];
+    if (attrs &amp;amp; MASAttributeHeight) [attributes addObject:self.view.mas_height];
+    if (attrs &amp;amp; MASAttributeCenterX) [attributes addObject:self.view.mas_centerX];
+    if (attrs &amp;amp; MASAttributeCenterY) [attributes addObject:self.view.mas_centerY];
+    if (attrs &amp;amp; MASAttributeBaseline) [attributes addObject:self.view.mas_baseline];
+    
+#if (__IPHONE_OS_VERSION_MIN_REQUIRED &amp;gt;= 80000) || (__TV_OS_VERSION_MIN_REQUIRED &amp;gt;= 9000) || (__MAC_OS_X_VERSION_MIN_REQUIRED &amp;gt;= 101100)
+    if (attrs &amp;amp; MASAttributeFirstBaseline) [attributes addObject:self.view.mas_firstBaseline];
+    if (attrs &amp;amp; MASAttributeLastBaseline) [attributes addObject:self.view.mas_lastBaseline];
+#endif
+    
+#if (__IPHONE_OS_VERSION_MIN_REQUIRED &amp;gt;= 80000) || (__TV_OS_VERSION_MIN_REQUIRED &amp;gt;= 9000)
+    
+    if (attrs &amp;amp; MASAttributeLeftMargin) [attributes addObject:self.view.mas_leftMargin];
+    if (attrs &amp;amp; MASAttributeRightMargin) [attributes addObject:self.view.mas_rightMargin];
+    if (attrs &amp;amp; MASAttributeTopMargin) [attributes addObject:self.view.mas_topMargin];
+    if (attrs &amp;amp; MASAttributeBottomMargin) [attributes addObject:self.view.mas_bottomMargin];
+    if (attrs &amp;amp; MASAttributeLeadingMargin) [attributes addObject:self.view.mas_leadingMargin];
+    if (attrs &amp;amp; MASAttributeTrailingMargin) [attributes addObject:self.view.mas_trailingMargin];
+    if (attrs &amp;amp; MASAttributeCenterXWithinMargins) [attributes addObject:self.view.mas_centerXWithinMargins];
+    if (attrs &amp;amp; MASAttributeCenterYWithinMargins) [attributes addObject:self.view.mas_centerYWithinMargins];
+    
+#endif
+    
+    NSMutableArray *children = [NSMutableArray arrayWithCapacity:attributes.count];
+    
+    for (MASViewAttribute *a in attributes) {
+        [children addObject:[[MASViewConstraint alloc] initWithFirstViewAttribute:a]];
+    }
+    
+    MASCompositeConstraint *constraint = [[MASCompositeConstraint alloc] initWithChildren:children];
+    constraint.delegate = self;
+    [self.constraints addObject:constraint];
+    return constraint;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
+
+&lt;p&gt;1、&lt;a href=&quot;https://github.com/SnapKit/Masonry&quot;&gt;Masonry项目主页&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 01 Sep 2018 13:22:56 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/ios-masonry-source.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/ios-masonry-source.html</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>iOS中WebViewJavaScriptBridge源码分析</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://github.com/marcuswestin/WebViewJavascriptBridge&quot;&gt;WebViewJavascriptBridge&lt;/a&gt;是一个WebView中JavaScript和Native进行交互的框架，使用这个框架能够实现JavaScript和Objective-C之间进行消息的互通。另外这个框架设计的也是非常的简介，只有如下几个文件：&lt;/p&gt;
+
+&lt;p&gt;(1) &lt;code class=&quot;highlighter-rouge&quot;&gt;WebViewJavascriptBridge_JS&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;该文件中只有一个方法&lt;code class=&quot;highlighter-rouge&quot;&gt;NSString * WebViewJavascriptBridge_js(void);&lt;/code&gt;, 该方法主要是提供拼接创建一个JavaScript的脚步代码，在旧版中该文件生成的JS代码是用一个txt文件进行保存的。生成的JS代码主要负责对Native端发送的消息进行处理与将JavaScript端的消息发送到Native端，另外进行一些全局的组件的注册等。&lt;/p&gt;
+
+&lt;p&gt;(2) &lt;code class=&quot;highlighter-rouge&quot;&gt;WebViewJavascriptBridgeBase&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Bridge&lt;/code&gt;的初始化，提供WebView、Native之间的消息通道&lt;/p&gt;
+
+&lt;p&gt;(3) &lt;code class=&quot;highlighter-rouge&quot;&gt;WKWebViewJavascriptBridge/WebViewJavascriptBridge&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;分别负责WKWebView和UIWebView同Native之间的消息处理，实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Handler&lt;/code&gt;的注册和调用逻辑，通过对各自平台下面的一些关键回调方法进行处理实现对JavaScript端发送的消息进行拦截并进行解析处理等流程。&lt;/p&gt;
+
+&lt;h3 id=&quot;如何使用&quot;&gt;如何使用&lt;/h3&gt;
+
+&lt;h4 id=&quot;1javascript端&quot;&gt;1、JavaScript端&lt;/h4&gt;
+
+&lt;p&gt;Bridge的创建，调用本函数会触发Native端执行&lt;code class=&quot;highlighter-rouge&quot;&gt;WebViewJavascriptBridge_JS&lt;/code&gt;文件里面的初始化JS代码&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function setupWebViewJavascriptBridge(callback) {
+	if (window.WebViewJavascriptBridge) { 
+	    return callback(WebViewJavascriptBridge); 
+	}
+	if (window.WVJBCallbacks) { 
+	    return window.WVJBCallbacks.push(callback); 
+	}
+	window.WVJBCallbacks = [callback];
+	var WVJBIframe = document.createElement('iframe');
+	WVJBIframe.style.display = 'none';
+	WVJBIframe.src = 'https://__bridge_loaded__';
+	document.documentElement.appendChild(WVJBIframe);
+	setTimeout(function() {
+	    document.documentElement.removeChild(WVJBIframe)
+	}, 0)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;该&lt;code class=&quot;highlighter-rouge&quot;&gt;setupWebViewJavascriptBridge&lt;/code&gt;函数主要是通过动态在WebView上面创建一个隐藏的&lt;code class=&quot;highlighter-rouge&quot;&gt;iframe&lt;/code&gt;实现在WebView上面打开&lt;code class=&quot;highlighter-rouge&quot;&gt;https://__bridge_loaded__&lt;/code&gt;这样的一个链接地址。具体的流程后面的分析部分会进行介绍。&lt;/p&gt;
+
+&lt;p&gt;初始化完成后就可以进行Handler的注册与调用了&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;setupWebViewJavascriptBridge(function(bridge) {
+	// 注册JS端的Handler供Native进行调用
+	bridge.registerHandler('JS Echo', function(data, responseCallback) {
+		console.log(&quot;JS Echo called with:&quot;, data)
+		responseCallback(data)
+	})
+	// 调用Native端注册的Handler
+	bridge.callHandler('ObjC Echo', {'key':'value'}, function responseCallback(responseData) {
+		console.log(&quot;JS received response:&quot;, responseData)
+	})
+})
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;2native端初始化与使用&quot;&gt;2、Native端初始化与使用&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;self.bridge = [WebViewJavascriptBridge bridgeForWebView:webView];
+// 注册Native端的Handler供JS端使用
+[self.bridge registerHandler:@&quot;ObjC Echo&quot; handler:^(id data, WVJBResponseCallback responseCallback) {
+	NSLog(@&quot;ObjC Echo called with: %@&quot;, data);
+	responseCallback(data);
+}];
+// 调用JS端注册的Handler
+[self.bridge callHandler:@&quot;JS Echo&quot; data:nil responseCallback:^(id responseData) {
+	NSLog(@&quot;ObjC received response: %@&quot;, responseData);
+}];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;源码分析&quot;&gt;源码分析&lt;/h3&gt;
+
+&lt;p&gt;WebViewJavascriptBridge框架主要是Native和JavaScript之间的双向交互，那么接下来从这几个方面来进行分析：&lt;/p&gt;
+
+&lt;h4 id=&quot;1native注册handler&quot;&gt;1、Native注册Handler&lt;/h4&gt;
+
+&lt;p&gt;Native端注册Handler可以供JavaScript进行调用，在Native端注册Handler的时候会调用如下的代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)registerHandler:(NSString *)handlerName handler:(WVJBHandler)handler {
+    _base.messageHandlers[handlerName] = [handler copy];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;从源码来看其实就是在bridge初始化的时候会创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;WebViewJavascriptBridgeBase&lt;/code&gt;的实例&lt;code class=&quot;highlighter-rouge&quot;&gt;_base&lt;/code&gt;，注册Handler其实就是将Handler处理逻辑的block代码记录到&lt;code class=&quot;highlighter-rouge&quot;&gt;_base&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;messageHandlers&lt;/code&gt;里面，该结构是一个&lt;code class=&quot;highlighter-rouge&quot;&gt;NSMutableDictionary&lt;/code&gt;。在使用的时候直接通过Handler的名字就可以找到对应的block。&lt;/p&gt;
+
+&lt;h4 id=&quot;2javascript注册handler&quot;&gt;2、JavaScript注册Handler&lt;/h4&gt;
+
+&lt;p&gt;JavaScript端注册Handler的逻辑和Native这边差不多，也是在全局有一个对象进行的记录，可以理解为就是一个可变的字典，记录了Handler的名称和具体的实现代码回调。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function registerHandler(handlerName, handler) {
+    messageHandlers[handlerName] = handler;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;3native调用javascript的handler&quot;&gt;3、Native调用JavaScript的Handler&lt;/h4&gt;
+
+&lt;p&gt;看完了Native/JavaScript端的注册Handler的逻辑，接下来看下Native端是如何调用JavaScript端的Handler的。&lt;/p&gt;
+
+&lt;p&gt;首先会调用下面的&lt;code class=&quot;highlighter-rouge&quot;&gt;callHandler&lt;/code&gt;方法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)callHandler:(NSString *)handlerName {
+    [self callHandler:handlerName data:nil responseCallback:nil];
+}
+
+- (void)callHandler:(NSString *)handlerName data:(id)data {
+    [self callHandler:handlerName data:data responseCallback:nil];
+}
+
+- (void)callHandler:(NSString *)handlerName data:(id)data responseCallback:(WVJBResponseCallback)responseCallback {
+    [_base sendData:data responseCallback:responseCallback handlerName:handlerName];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;最终会调用&lt;code class=&quot;highlighter-rouge&quot;&gt;WebViewJavascriptBridgeBase&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;sendData...&lt;/code&gt;的方法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)sendData:(id)data responseCallback:(WVJBResponseCallback)responseCallback handlerName:(NSString*)handlerName {
+    //构造消息
+    NSMutableDictionary* message = [NSMutableDictionary dictionary];
+    //消息体
+    if (data) {
+        message[@&quot;data&quot;] = data;
+    }
+    //回调
+    if (responseCallback) {
+        NSString* callbackId = [NSString stringWithFormat:@&quot;objc_cb_%ld&quot;, ++_uniqueId]; //回调的ID唯一标识符
+        self.responseCallbacks[callbackId] = [responseCallback copy];
+        message[@&quot;callbackId&quot;] = callbackId;
+    }
+    //handler的名称
+    if (handlerName) {
+        message[@&quot;handlerName&quot;] = handlerName;
+    }
+    [self _queueMessage:message];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;该方法先将传进来的参数进行处理构造成一条消息(message), 消息可以理解成是一个JSON:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
+	&quot;data&quot;: data /* 必选，发送到JavaScript端的数据 */
+	&quot;callbackId&quot;: &quot;objc_cb_xxxx&quot;, /* 可选，如果有回调responseCallback会全局创建一个唯一的回调ID，并在responseCallbacks记下来对应的关系*/
+	&quot;handlerName&quot;: &quot;handlerName&quot; /* 可选，handler的名称*/
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;消息结构构造完成之后就调用&lt;code class=&quot;highlighter-rouge&quot;&gt;_queueMessage&lt;/code&gt;方法&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//WVJBMessage =&amp;gt; typedef NSDictionary WVJBMessage;
+- (void)_queueMessage:(WVJBMessage *)message {
+    //startupMessageQueue启动bridge的时候的初始化的消息队列，默认bridge启动完成后会自动调用并清空
+    if (self.startupMessageQueue) {
+        [self.startupMessageQueue addObject:message];
+    } 
+    else {
+        [self _dispatchMessage:message];
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;先跳过&lt;code class=&quot;highlighter-rouge&quot;&gt;startupMessageQueue&lt;/code&gt;直接看&lt;code class=&quot;highlighter-rouge&quot;&gt;_dispatchMessage&lt;/code&gt;, 该方法就是处理Native发往JavaScript端的消息的具体实现：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)_dispatchMessage:(WVJBMessage *)message {
+    //将NSDictionary转化为JSON字符串, 并转义一些特殊的字符
+    NSString *messageJSON = [self _serializeMessage:message pretty:NO];
+    [self _log:@&quot;SEND&quot; json:messageJSON];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\\&quot; withString:@&quot;\\\\&quot;];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\&quot;&quot; withString:@&quot;\\\&quot;&quot;];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\'&quot; withString:@&quot;\\\'&quot;];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\n&quot; withString:@&quot;\\n&quot;];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\r&quot; withString:@&quot;\\r&quot;];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\f&quot; withString:@&quot;\\f&quot;];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\u2028&quot; withString:@&quot;\\u2028&quot;]; //行分隔符
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\u2029&quot; withString:@&quot;\\u2029&quot;]; //段落分隔符
+    //拼接要调用的JavaScript代码，参数是JSON字符串
+    NSString* javascriptCommand = [NSString stringWithFormat:@&quot;WebViewJavascriptBridge._handleMessageFromObjC('%@');&quot;, messageJSON];
+    //切换到主线程执行JS代码
+    if ([[NSThread currentThread] isMainThread]) {
+        [self _evaluateJavascript:javascriptCommand];
+
+    } 
+    else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self _evaluateJavascript:javascriptCommand];
+        });
+    }
+}
+
+// 将NSDictionary转化为JSON字符串, 是否是展开的格式
+- (NSString *)_serializeMessage:(id)message pretty:(BOOL)pretty {
+    return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:message options:(NSJSONWritingOptions)(pretty ? NSJSONWritingPrettyPrinted : 0) error:nil] encoding:NSUTF8StringEncoding];
+}
+
+// 执行JS代码， 其实最终还是调用的是`stringByEvaluatingJavaScriptFromString`
+- (void) _evaluateJavascript:(NSString *)javascriptCommand {
+    //self.delegate =&amp;gt; WebViewJavascriptBridge对象的实例
+    [self.delegate _evaluateJavascript:javascriptCommand];
+}
+
+- (NSString*) _evaluateJavascript:(NSString*)javascriptCommand {
+    return [_webView stringByEvaluatingJavaScriptFromString:javascriptCommand];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;到这里Native发送消息到JavaScript了，那么接下来看下JavaScript是如何接收消息会响应的，首先从上面的代码可以看出来发送消息其实就是在WebView上面调用&lt;code class=&quot;highlighter-rouge&quot;&gt;WebViewJavascriptBridge._handleMessageFromObjC&lt;/code&gt;这个JS的方法，参数是一个JSON字符串。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function _handleMessageFromObjC(messageJSON) {
+	_dispatchMessageFromObjC(messageJSON);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;_handleMessageFromObjC&lt;/code&gt;在JS端的实现其实最终调用的是&lt;code class=&quot;highlighter-rouge&quot;&gt;_dispatchMessageFromObjC&lt;/code&gt;这个函数：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function _dispatchMessageFromObjC(messageJSON) {
+    if (dispatchMessagesWithTimeoutSafety) {
+        setTimeout(_doDispatchMessageFromObjC);
+    } 
+    else {
+        _doDispatchMessageFromObjC();
+    }
+		
+	function _doDispatchMessageFromObjC() {
+		 // 解析消息的JSON字符串
+        var message = JSON.parse(messageJSON);
+        var messageHandler;
+        var responseCallback;
+        
+        if (message.responseId) {
+        	  // 对于JavaScript端的消息，判断是否有responseId这个字段，表示需要进行回调处理
+            responseCallback = responseCallbacks[message.responseId];
+            if (!responseCallback) {
+                return;
+            }
+            responseCallback(message.responseData);
+            delete responseCallbacks[message.responseId];
+        } 
+        else {
+        	  // 对于Native端来的消息，判断是否有callbackId这个字段，表示需要进行响应
+            if (message.callbackId) {
+                var callbackResponseId = message.callbackId;
+                responseCallback = function(responseData) {
+                    _doSend({handlerName: message.handlerName, responseId: callbackResponseId, responseData: responseData});
+                };
+            }
+			  
+			  // 执行对应的Handler, 这个就是之前JS端注册的Handler的名称，从全局的配置里面获取到对应的函数实现
+            var handler = messageHandlers[message.handlerName];
+            if (!handler) {
+                console.log(&quot;WebViewJavascriptBridge: WARNING: no handler for message from ObjC:&quot;, message);
+            } 
+            else {
+            	   // 这里的handler其实就是前面注册的handler，执行完成之后会执行responseCallback
+                handler(message.data, responseCallback);
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;responseCallback&lt;/code&gt;里面最终会调用一个&lt;code class=&quot;highlighter-rouge&quot;&gt;_doSend&lt;/code&gt;方法, 该方法会把消息加入到消息发送队列里面，然后通过修改iframe的src属性来达到向Native端发送消息的目的。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function _doSend(message, responseCallback) {
+    if (responseCallback) {
+        var callbackId = 'cb_'+(uniqueId++)+'_'+new Date().getTime();
+        responseCallbacks[callbackId] = responseCallback;
+        message['callbackId'] = callbackId;
+    }
+    sendMessageQueue.push(message);
+    messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + '://' + QUEUE_HAS_MESSAGE;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;4javascript调用native的handler&quot;&gt;4、JavaScript调用Native的Handler&lt;/h4&gt;
+
+&lt;p&gt;JavaScript调用Native的Handler就相比上面的简单一些了，就是直接调用&lt;code class=&quot;highlighter-rouge&quot;&gt;_doSend&lt;/code&gt;方法，根据是否有回调函数然后执行完成之后就从全局的回调里面拿出来执行。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function callHandler(handlerName, data, responseCallback) {
+    if (arguments.length == 2 &amp;amp;&amp;amp; typeof data == 'function') {
+        responseCallback = data;
+        data = null;
+    }
+    _doSend({ handlerName:handlerName, data:data }, responseCallback);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;核心逻辑&quot;&gt;核心逻辑&lt;/h3&gt;
+
+&lt;p&gt;上面只介绍了怎么发送和怎么接收，其实最终主要是如下两个方面的实现：&lt;/p&gt;
+
+&lt;h4 id=&quot;1uiwebview---native&quot;&gt;1、UIWebView -&amp;gt; Native&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    if (webView != _webView) { return YES; }
+    NSURL *url = [request URL];
+    __strong id&amp;lt;UIWebViewDelegate&amp;gt; strongDelegate = _webViewDelegate;
+    if ([_base isWebViewJavascriptBridgeURL:url]) {
+        if ([_base isBridgeLoadedURL:url]) {
+            //__bridge_loaded__:// 注入JS代码
+            [_base injectJavascriptFile];
+        }
+        else if ([_base isQueueMessageURL:url]) {
+            //__wvjb_queue_message__:// 消息处理
+            NSString *messageQueueString = [self _evaluateJavascript:[_base webViewJavascriptFetchQueyCommand]];
+            [_base flushMessageQueue:messageQueueString];
+        }
+        else {
+            //未知的消息类型
+            [_base logUnkownMessage:url];
+        }
+        return NO;
+    }
+    else if (strongDelegate &amp;amp;&amp;amp; [strongDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+        return [strongDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+    }
+    else {
+        return YES;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;初始化的代码如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)injectJavascriptFile {
+    NSString *js = WebViewJavascriptBridge_js();
+    [self _evaluateJavascript:js];
+    if (self.startupMessageQueue) {
+        NSArray* queue = self.startupMessageQueue;
+        self.startupMessageQueue = nil;
+        for (id queuedMessage in queue) {
+            [self _dispatchMessage:queuedMessage];
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;2native---uiwebview&quot;&gt;2、Native -&amp;gt; UIWebView&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (NSString*) _evaluateJavascript:(NSString *)javascriptCommand {
+    return [_webView stringByEvaluatingJavaScriptFromString:javascriptCommand];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
+
+&lt;p&gt;1、&lt;a href=&quot;https://github.com/marcuswestin/WebViewJavascriptBridge&quot;&gt;WebViewJavascriptBridge主页&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;https://www.cnblogs.com/LeeGof/p/8143408.html&quot;&gt;WebViewJavascriptBridge浅析&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 18 Aug 2018 22:46:29 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/ios-webviewjavascriptbridge-source.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/ios-webviewjavascriptbridge-source.html</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>如何将macOS应用程序打包为dmg文件</title>
+        <description>&lt;p&gt;之前改写过网上开源的一个JSON转Model的Mac APP，当时是直接使用的是将&lt;code class=&quot;highlighter-rouge&quot;&gt;.app&lt;/code&gt;格式的文件直接拖到应用里面进行安装的，最近刚好有空就了解了一下dmg文件是怎么打包的，记录下整个的过程方便以后查找。&lt;/p&gt;
+
+&lt;h3 id=&quot;操作步骤&quot;&gt;操作步骤&lt;/h3&gt;
+
+&lt;h4 id=&quot;1准备相关文件&quot;&gt;1.准备相关文件&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(1) 打包生成的&lt;code class=&quot;highlighter-rouge&quot;&gt;.app&lt;/code&gt;文件&lt;/li&gt;
+  &lt;li&gt;(2) 一张背景图&lt;/li&gt;
+  &lt;li&gt;(3) &lt;code class=&quot;highlighter-rouge&quot;&gt;Applications&lt;/code&gt;文件夹的替身文件(可以到其他的dmg里面去拷贝一个)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;2创建空白镜像文件&quot;&gt;2.创建空白镜像文件&lt;/h4&gt;
+
+&lt;p&gt;(1) 打开&lt;code class=&quot;highlighter-rouge&quot;&gt;磁盘工具&lt;/code&gt;，选择&lt;code class=&quot;highlighter-rouge&quot;&gt;文件&lt;/code&gt; -&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;新建映像&lt;/code&gt; -&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;空白映像&lt;/code&gt;：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/macos-build-dmg-file/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(2) 在弹出框中填写相关的信息&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/macos-build-dmg-file/2.png&quot; alt=&quot;2.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(3) 填写完成后点击保存，即可生成一个空白的dmg文件&lt;/p&gt;
+
+&lt;h4 id=&quot;3配置&quot;&gt;3.配置&lt;/h4&gt;
+
+&lt;p&gt;(1) 拷贝文件&lt;/p&gt;
+
+&lt;p&gt;双击前面创建的DMG文件，在Finder中打开，直接将之前准备好的相关文件拖进去就行了&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/macos-build-dmg-file/3.png&quot; alt=&quot;3.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(2) 设置背景图片和图标大小&lt;/p&gt;
+
+&lt;p&gt;在打开的镜像文件中(Finder)的空白地方右键选择&lt;code class=&quot;highlighter-rouge&quot;&gt;查看显示选项&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1) 设置图标大小为&lt;code class=&quot;highlighter-rouge&quot;&gt;100*100&lt;/code&gt;（具体可以根据实际需要进行调整)&lt;/p&gt;
+
+&lt;p&gt;2）设置背景为&lt;code class=&quot;highlighter-rouge&quot;&gt;图片&lt;/code&gt;，将背景图片拖到右边的框里面&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/macos-build-dmg-file/8.png&quot; alt=&quot;8.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(3) 隐藏背景图片&lt;/p&gt;
+
+&lt;p&gt;隐藏背景图片文件夹的方式就是将其重命名为&lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt;开头的&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mv /Volumes/YoudaoNote_3.3.2/background /Volumes/YoudaoNote_3.3.2/.background
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;或者是&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;chflags hidden /Volumes/YoudaoNote_3.3.2/background
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(4) 排列图标&lt;/p&gt;
+
+&lt;p&gt;直接拖动图标到指定位置，拖完的效果如下&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/macos-build-dmg-file/4.png&quot; alt=&quot;4.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(5) 关闭镜像&lt;/p&gt;
+
+&lt;p&gt;打开&lt;code class=&quot;highlighter-rouge&quot;&gt;磁盘工具&lt;/code&gt;将左侧的对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;磁盘映像&lt;/code&gt;关闭即可&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/macos-build-dmg-file/5.png&quot; alt=&quot;5.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;4转换&quot;&gt;4.转换&lt;/h4&gt;
+
+&lt;p&gt;(1) 打开&lt;code class=&quot;highlighter-rouge&quot;&gt;磁盘工具&lt;/code&gt;，选择&lt;code class=&quot;highlighter-rouge&quot;&gt;映像&lt;/code&gt; -&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;转换&lt;/code&gt;：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/macos-build-dmg-file/6.png&quot; alt=&quot;6.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(2) 填写要保存的文件的名称点击转换即可，生成的文件就是最终的dmg文件&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/macos-build-dmg-file/7.png&quot; alt=&quot;7.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
+
+&lt;p&gt;1、&lt;a href=&quot;https://www.jianshu.com/p/c6cd257676bf&quot;&gt;Mac OS 开发 － 聊聊如何打包dmg文件&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;https://bbs.feng.com/read-htm-tid-6724285.html&quot;&gt;制作映像(dmg)文件详细步骤&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 11 Aug 2018 11:46:29 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/pack-macos-app-to-dmg.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/pack-macos-app-to-dmg.html</guid>
+        
+        <category>macOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Python使用pyexecjs执行JS代码</title>
+        <description>&lt;p&gt;近期在采集一个网站的时候遇到一部分的页面是使用JS代码来填充数据的，代码如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;tr&amp;gt;
+    &amp;lt;td width=&quot;150px&quot; class=&quot;success&quot;&amp;gt;案件级别:&amp;lt;/td&amp;gt;
+    &amp;lt;td colspan=&quot;1&quot;&amp;gt;
+        &amp;lt;script&amp;gt;
+            var s = getDictLabel([{&quot;id&quot;:&quot;4191c4842b3842749dd467655f90b1fa&quot;,&quot;isNewRecord&quot;:false,&quot;remarks&quot;:&quot;案件级别&quot;,&quot;createDate&quot;:&quot;2016-11-29 15:19:34&quot;,&quot;updateDate&quot;:&quot;2016-11-29 15:19:34&quot;,&quot;value&quot;:&quot;1&quot;,&quot;label&quot;:&quot;一般事件&quot;,&quot;type&quot;:&quot;case_grade&quot;,&quot;description&quot;:&quot;案件级别&quot;,&quot;sort&quot;:1,&quot;parentId&quot;:&quot;0&quot;},{&quot;id&quot;:&quot;5e24fd12f3384f38ab10898013fe25d7&quot;,&quot;isNewRecord&quot;:false,&quot;createDate&quot;:&quot;2016-11-29 15:19:35&quot;,&quot;updateDate&quot;:&quot;2016-11-29 15:19:35&quot;,&quot;value&quot;:&quot;2&quot;,&quot;label&quot;:&quot;紧急事件&quot;,&quot;type&quot;:&quot;case_grade&quot;,&quot;description&quot;:&quot;案件级别&quot;,&quot;sort&quot;:2,&quot;parentId&quot;:&quot;0&quot;},{&quot;id&quot;:&quot;f793a78eb44c405b9fd007359df09579&quot;,&quot;isNewRecord&quot;:false,&quot;createDate&quot;:&quot;2016-11-29 15:19:36&quot;,&quot;updateDate&quot;:&quot;2016-11-29 15:19:36&quot;,&quot;value&quot;:&quot;3&quot;,&quot;label&quot;:&quot;一般重复&quot;,&quot;type&quot;:&quot;case_grade&quot;,&quot;description&quot;:&quot;案件级别&quot;,&quot;sort&quot;:3,&quot;parentId&quot;:&quot;0&quot;},{&quot;id&quot;:&quot;3f2605e3f6e648f688b79da5f730aedb&quot;,&quot;isNewRecord&quot;:false,&quot;createDate&quot;:&quot;2016-11-29 15:19:34&quot;,&quot;updateDate&quot;:&quot;2016-11-29 15:19:34&quot;,&quot;value&quot;:&quot;4&quot;,&quot;label&quot;:&quot;紧急重复&quot;,&quot;type&quot;:&quot;case_grade&quot;,&quot;description&quot;:&quot;案件级别&quot;,&quot;sort&quot;:4,&quot;parentId&quot;:&quot;0&quot;}], 1, '', true);
+            document.write(s);
+        &amp;lt;/script&amp;gt;
+    &amp;lt;/td&amp;gt;
+    &amp;lt;td width=&quot;150px&quot; class=&quot;success&quot;&amp;gt;受理时间:&amp;lt;/td&amp;gt;
+    &amp;lt;td colspan=&quot;1&quot;&amp;gt;2018-08-05 13:39:22&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;对上下文的源码进行分析，找到&lt;code class=&quot;highlighter-rouge&quot;&gt;getDictLabel&lt;/code&gt;这个JavaScript的函数实现代码如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function getDictLabel(data, value, defaultValue){
+	for (var i=0; i&amp;lt;data.length; i++){
+		var row = data[i];
+		if (row.value == value){
+			return row.label;
+		}
+	}
+	return defaultValue;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;通过一番了解，可以获取到&lt;code class=&quot;highlighter-rouge&quot;&gt;td&lt;/code&gt;标签中间的&lt;code class=&quot;highlighter-rouge&quot;&gt;script&lt;/code&gt;对应的JS代码，通过执行JS代码获取对应的数据。找到了一个Python的库&lt;code class=&quot;highlighter-rouge&quot;&gt;pyexecjs&lt;/code&gt;可以实现，可以通过如下代码进行安装：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install PyExecJS
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;核心代码如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import execjs
+
+def exec_js_function(js):
+    # 编译JS代码
+    ctx = execjs.compile(&quot;&quot;&quot;
+        function getDictLabel(data, value, defaultValue){
+            for (var i = 0; i &amp;lt; data.length; i++){
+                var row = data[i];
+                if (row.value == value){
+                    return row.label;
+                }
+            }
+            return defaultValue;
+        }
+    &quot;&quot;&quot;)
+    # 删除一些无关的字符
+    jscode = js.replace('document.write(s);', '').replace(', true);', ')').replace('var s =', '')
+    # 执行代码
+    return ctx.eval(jscode)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;更多用法可以从参考链接获取&lt;/p&gt;
+
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
+
+&lt;p&gt;1、&lt;a href=&quot;https://github.com/doloopwhile/PyExecJS&quot;&gt;官方主页&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2、&lt;a href=&quot;https://www.jianshu.com/p/729be9639ac7&quot;&gt;Python执行Js语句之ExecJs&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3、&lt;a href=&quot;http://www.wisedream.net/2017/11/27/traps/pyexecjs-and-pyv8/&quot;&gt;pyexecjs速度慢与pyv8的安装&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 20 Jul 2018 11:46:29 +0800</pubDate>
+        <link>http://blog.devzeng.com/blog/execute-js-code-with-execjs.html</link>
+        <guid isPermaLink="true">http://blog.devzeng.com/blog/execute-js-code-with-execjs.html</guid>
+        
+        <category>Python</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>

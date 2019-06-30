@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS8中Today Extension的使用</title>
+  <meta name="description" content="扩展（Extension）是iOS 8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS8中Today Extension的使用">
+  <meta name="twitter:description" content="扩展（Extension）是iOS 8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS8中Today Extension的使用">
+  <meta property="og:description" content="扩展（Extension）是iOS 8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios8-today-extension.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-11-22 23:49:18 +0800" itemprop="datePublished" class="post-meta__date date">2014-11-22</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS8中Today Extension的使用</h1>
+  </header>
+
+  <section class="post">
+    <p>扩展（Extension）是iOS 8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。</p>
+
+<p>iOS 8系统有6个支持扩展的系统区域，分别是Today、Share、Action、Photo Editing、Storage Provider、Custom keyboard。支持扩展的系统区域也被称为扩展点。对于赛事比分，股票、天气、快递这类需要实时获取的信息，可以在通知中心的Today视图中创建一个Today扩展实现。Today扩展又称为Widget。本文主要是介绍Today Extension的用法。</p>
+
+<p><img src="/images/ios8_today_extension/ios8_today_extension.png" alt="ios8_extension.png" /></p>
+
+<p>###创建步骤</p>
+
+<p>1、选择<code class="highlighter-rouge">File</code>-&gt;<code class="highlighter-rouge">New</code>-&gt;<code class="highlighter-rouge">Target</code>创建一个新的Target，如下图所示：</p>
+
+<p><img src="/images/ios8_today_extension/ios8_today_extension_001.png" alt="iOS8_today_extension" /></p>
+
+<p>2、选择<code class="highlighter-rouge">Application Extension</code>-&gt;<code class="highlighter-rouge">Today Extension</code>（下图中最后一个），指定需要创建的Extension的类型，这里选择<code class="highlighter-rouge">Today Extension</code>，如下图所示：</p>
+
+<p><img src="/images/ios8_today_extension/ios8_today_extension_002.png" alt="ios8_today_extension" /></p>
+
+<p>3、按照要求填写<code class="highlighter-rouge">Product Name</code>、<code class="highlighter-rouge">Organization Name</code>和<code class="highlighter-rouge">Language</code>，如下图所示：</p>
+
+<p><img src="/images/ios8_today_extension/ios8_today_extension_003.png" alt="ios8_today_extension" /></p>
+
+<p>4、点击<code class="highlighter-rouge">Finish</code>后Xcode会提示是否需要立即激活当前创建的Scheme，默认选择cancel就行了，Xcode会自动创建一个<code class="highlighter-rouge">Today Extension</code>的Target，默认会创建如下几个文件：</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">TodayViewController.h/TodayViewController.m</code></p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">MainInterface.storyboard</code></p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Supporting Files/Info.plist</code></p>
+  </li>
+</ul>
+
+<p>5、启动应用后在通知中心添加就能看到运行效果，如下图所示：</p>
+
+<p><img src="/images/ios8_today_extension/ios8_today_extension_004.png" alt="ios8_today_extension_004.png" /></p>
+
+<p>###开发实例</p>
+
+<p>1、配置Info.plist文件，使用代码布局</p>
+
+<p>Xcode6中新建的Today Extension默认是使用StoryBoard布局的，如果需要使用代码布局就需要配置Info.plist文件，步骤如下：</p>
+
+<p>（1）删除<code class="highlighter-rouge">NSExtensionMainStoryboard</code>的配置，如下所示：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;NSExtensionMainStoryboard&lt;/key&gt;
+&lt;string&gt;MainInterface&lt;/string&gt;
+</code></pre></div></div>
+
+<p>（2）添加<code class="highlighter-rouge">NSExtensionPrincipalClass</code>的配置，如下所示：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;NSExtensionPrincipalClass&lt;/key&gt;
+&lt;string&gt;TodayViewController&lt;/string&gt;
+</code></pre></div></div>
+<p>（3）修改<code class="highlighter-rouge">CFBundleDisplayName</code>，调整Widget显示的名称</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
+&lt;string&gt;显示的名称&lt;/string&gt;
+</code></pre></div></div>
+
+<p>2、调整Widget的高度</p>
+
+<p><code class="highlighter-rouge">self.preferredContentSize = CGSizeMake(0, 200);</code></p>
+
+<p>取消widget默认的inset，让应用靠左</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets
+{
+    return UIEdgeInsetsZero;
+}
+</code></pre></div></div>
+
+<p>3、示例运行效果如下：</p>
+
+<p><img src="/images/ios8_today_extension/ios8_today_extension_005.png" alt="ios8_today_extension_005.png" /></p>
+
+<p>布局代码如下：【以下代码使用了Masonry来进行AutoLayout处理】</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)makeView
+{
+    __weak __typeof(&amp;*self)ws = self;
+    //内容视图
+    self.contentView = [UIView new];
+    self.contentView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.contentView];
+    self.contentView.userInteractionEnabled = YES;
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(ws.view);
+        make.height.mas_equalTo(@44).priorityHigh();
+    }];
+    //Label1
+    self.priceLabel = [UILabel new];
+    self.priceLabel.textColor = [UIColor colorWithRed:66.0/255 green:145.0/255 blue:211.0/255 alpha:1];
+    self.priceLabel.text = @"$592.12";
+    [self.contentView addSubview:self.priceLabel];
+    [self.priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(ws.contentView.mas_left).with.offset(20);
+        make.top.equalTo(ws.contentView.mas_top).with.offset(10);
+        make.size.mas_equalTo(CGSizeMake(62, 21));
+    }];
+    //切换按钮
+    self.toggleLineChartButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.contentView addSubview:self.toggleLineChartButton];
+    [self.toggleLineChartButton addTarget:self action:@selector(toggleLineChartViewVisible:) forControlEvents:UIControlEventTouchUpInside];
+    [self.toggleLineChartButton setImage:[UIImage imageNamed:@"caret-notification-center"] forState:UIControlStateNormal];
+    [self.toggleLineChartButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(ws.contentView.mas_right).with.offset(0);
+        make.top.equalTo(ws.contentView.mas_top).with.offset(0);
+        make.size.mas_equalTo(CGSizeMake(44, 44));
+    }];
+    //Label2
+    self.priceChangeLabel = [UILabel new];
+    self.priceChangeLabel.textColor = [UIColor colorWithRed:133.0/255 green:191.0/255 blue:37.0/255 alpha:1];
+    self.priceChangeLabel.text = @"+1.23";
+    [self.contentView addSubview:self.priceChangeLabel];
+    [self.priceChangeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(ws.toggleLineChartButton.mas_left).with.offset(-20);
+        make.top.equalTo(ws.contentView).with.offset(10);
+        make.size.mas_equalTo(CGSizeMake(44, 21));
+    }];
+    //Label3
+    self.detailLabel = [[UILabel alloc] init];
+    self.detailLabel.backgroundColor = [UIColor clearColor];
+    self.detailLabel.numberOfLines = 0;
+    [self.contentView addSubview:self.detailLabel];
+    self.detailLabel.text = @"\n\n详细信息";
+    self.detailLabel.textAlignment = NSTextAlignmentCenter;
+    [self.detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(ws.priceLabel.mas_bottom).with.offset(0);
+        make.left.equalTo(ws.contentView);
+        make.width.equalTo(ws.contentView);
+        if(self.lineChartIsVisible)
+        {
+            self.detailLabel.textColor = [UIColor whiteColor];
+            make.height.mas_equalTo(@98);
+        }
+        else
+        {
+            self.detailLabel.textColor = [UIColor clearColor];
+            make.height.mas_equalTo(@0);
+        }
+    }];
+}
+</code></pre></div></div>
+
+<p>按钮点击处理：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)toggleLineChartViewVisible:(id)sender
+{
+    __weak __typeof(&amp;*self)ws = self;
+    //重新布局
+    if(self.lineChartIsVisible)
+    {
+        self.preferredContentSize = CGSizeMake(0, 44);
+        [self.detailLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(@0);
+            ws.detailLabel.textColor = [UIColor clearColor];
+            ws.detailLabel.textAlignment = NSTextAlignmentCenter;
+        }];
+        //改变按钮的方向
+        self.toggleLineChartButton.transform = CGAffineTransformMakeRotation(0);
+        self.lineChartIsVisible = NO;
+        [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(@44).priorityHigh();
+        }];
+    }
+    else
+    {
+        self.preferredContentSize = CGSizeMake(0, 142);
+        [self.detailLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(@98);
+            ws.detailLabel.textColor = [UIColor whiteColor];
+            ws.detailLabel.textAlignment = NSTextAlignmentCenter;
+        }];
+        //改变按钮的方向
+        self.toggleLineChartButton.transform = CGAffineTransformMakeRotation(180.0 * M_PI/180.0);
+        self.lineChartIsVisible = YES;
+        [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(@142).priorityHigh();
+        }];
+    }
+}
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://www.cnblogs.com/xdream86/p/3855932.html">《iOS 8 Extensions》</a></p>
+
+<p>2、<a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214-CH20-SW1">《App Extension Programming Guide》</a></p>
+
+<p>3、<a href="http://adad184.com/2014/10/29/how-to-setup-today-extension-programmatically/">《如何用纯代码构建一个Widget(today extension)》</a></p>
+
+<p>4、<a href="http://wangzz.github.io/blog/2014/06/23/wwdc2014zhi-app-extensionsxue-xi-bi-ji/">《WWDC2014之App Extensions学习笔记》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/wechat-qiyehao-developement-with-url-config-and-verify.html" title="link to 微信企业号开发之开启回调模式">微信企业号开发之开启回调模式</a></h2>
+       <p class="excerpt">企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。本文主要介绍如何使用Java语言进行回调模式的URL验证等内容。###开启回调模式配置1、到应用中心选择需要使用回调模式开发的应用，点击进入后会有如下的模式可供选择：2、选择回调模式点击进入回调模式的配置界面，如下图所示：当你开启应用的回调模式时，企业号会要求你填写应用的URL...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-24 19:53:17 +0800" class="post-list__meta--date date">2014-11-24</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-qiyehao-developement-with-url-config-and-verify.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-settings-bundle.html" title="link to iOS开发中Settings.bundle的使用">iOS开发中Settings.bundle的使用</a></h2>
+       <p class="excerpt">在iOS开发中很多时候开发者需要让用户自行设置一些系统的配置项目，比如让用户设置是否支持在3G模式下加载数据，或者是让用户自己设置支不支持网络数据缓存的功能。另外在企业级应用开发中经常有需要对后台的访问地址进行调整那么需要用户自行的进行配置，下面是爱奇艺和招商银行的设置配置项：###Settings.bundle配置说明在Settings.bundle中支持如下几种配置项：1、GroupGroup类似于UITableView中的Group分组，用来表示一组设置项，配置如下所示：配置项说明：...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-16 16:35:48 +0800" class="post-list__meta--date date">2014-11-16</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-settings-bundle.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

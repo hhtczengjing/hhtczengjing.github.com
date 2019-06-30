@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中Realm数据库的基本用法</title>
+  <meta name="description" content="Realm是由Y Combinator公司孵化的一款支持运行在手机、平板和可穿戴设备上的嵌入式数据库（旨在取代CoreData和Sqlite）。Realm并不是对Core Data的简单封装，相反地，Realm并不是基于Core Data，也不是基于SQLite所构建的。它拥有自己的数据库存储引擎，可以高效且快速...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中Realm数据库的基本用法">
+  <meta name="twitter:description" content="Realm是由Y Combinator公司孵化的一款支持运行在手机、平板和可穿戴设备上的嵌入式数据库（旨在取代CoreData和Sqlite）。Realm并不是对Core Data的简单封装，相反地，Realm并不是基于Core Data，也不是基于SQLite所构建的。它拥有自己的数据库存储引擎，可以高效且快速...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中Realm数据库的基本用法">
+  <meta property="og:description" content="Realm是由Y Combinator公司孵化的一款支持运行在手机、平板和可穿戴设备上的嵌入式数据库（旨在取代CoreData和Sqlite）。Realm并不是对Core Data的简单封装，相反地，Realm并不是基于Core Data，也不是基于SQLite所构建的。它拥有自己的数据库存储引擎，可以高效且快速...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/simple-usage-of-realm-in-ios.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-07-12 19:10:40 +0800" itemprop="datePublished" class="post-meta__date date">2015-07-12</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中Realm数据库的基本用法</h1>
+  </header>
+
+  <section class="post">
+    <p>Realm是由<code class="highlighter-rouge">Y Combinator</code>公司孵化的一款支持运行在手机、平板和可穿戴设备上的嵌入式数据库（旨在取代CoreData和Sqlite）。Realm并不是对Core Data的简单封装，相反地，Realm并不是基于Core Data，也不是基于SQLite所构建的。它拥有自己的数据库存储引擎，可以高效且快速地完成数据库的构建操作。</p>
+
+<p><img src="/images/realm_usage/hello_realm.png" alt="hello_realm.png" /></p>
+
+<p>Realm可以轻松地移植到项目当中，并且绝大部分常用的功能（比如说插入、查询等等）都可以用一行简单的代码轻松完成！目前支持Objective-C、Swift和Java三种语言，也就是说能在iOS、Android和Mac上面跨平台使用。</p>
+
+<p>综上，Realm主要有以下几个优点：</p>
+
+<ul>
+  <li>
+    <p>Easy to Use(简单易用)：Core Data和SQLite冗余、繁杂的知识和代码足以吓退绝大多数刚入门的开发者，而换用Realm，则可以极大地减少学习代价和学习时间，让应用及早用上数据存储功能。</p>
+  </li>
+  <li>
+    <p>Cross-Platform(跨平台)：现在绝大多数的应用开发并不仅仅只在iOS平台上进行开发，还要兼顾到Android平台的开发。为两个平台设计不同的数据库是愚蠢的，而使用Realm数据库，iOS和Android无需考虑内部数据的架构，调用Realm提供的API就可以完成数据的交换，实现“一个数据库，两个平台无缝衔接”。</p>
+  </li>
+  <li>
+    <p>Fast(高效)：Realm相比使用CoreData和原生的SQLite来说速度更快更加高效，而且代码量更少。</p>
+  </li>
+</ul>
+
+<p>###快速集成Realm</p>
+
+<p>1、下载最新的<a href="http://realm.io">Realm</a>更新包，解压zip文件</p>
+
+<p>2、将<code class="highlighter-rouge">ios/static</code>目录下面的<code class="highlighter-rouge">Realm.framework</code>文件拖到项目里面（确保Copy items if needed选中）</p>
+
+<p>3、在<code class="highlighter-rouge">target -&gt; Build Phases -&gt; Link Binary with Libraries</code>中添加<code class="highlighter-rouge">libc++.dylib</code></p>
+
+<p>说明：</p>
+
+<p>（1）对于使用Swift的童鞋，请讲Swift/RLMSupport.swift文件拖到项目中（确保Copy items if needed选中）</p>
+
+<p>（2）推荐使用Cocoapods进行安装，在Podfile中添加<code class="highlighter-rouge">pod 'Realm'</code>即可</p>
+
+<p>（3）也可以自行到Github上面下载代码进行编译，此处不作过多的介绍</p>
+
+<p>运行环境：</p>
+
+<p>（1）支持 &gt;= iOS7.0, &gt;= OS X 10.9, 及WatchKit</p>
+
+<p>（2）推荐使用Xcode 5以上的IDE，支持Swift</p>
+
+<p>###辅助工具和插件的安装</p>
+
+<p>####1、Realm Browser</p>
+
+<p>Realm官方非常贴心的向开发者提供了一个用于查看喝编辑Realm数据的工具<code class="highlighter-rouge">Realm Browser</code>.</p>
+
+<p><img src="/images/realm_usage/browser.png" alt="browser.png" /></p>
+
+<p>在上面下载的更新包的<code class="highlighter-rouge">browser/</code>下面有个Realm Browser拖到Application文件夹或者是直接打开都行。另外可以使用菜单的<code class="highlighter-rouge">tool -&gt; generate demo datebase</code>,生成测试数据用于测试Realm数据库的使用</p>
+
+<p>####2、Xcode Plugin</p>
+
+<p>在Realm中使用到最多的是Realm Model(继承自RLMObject的类，后面有介绍)。官方提供了一个Xcode的插件让我们在创建模型变得非常轻松</p>
+
+<p><img src="/images/realm_usage/plugin.png" alt="plugin.png" /></p>
+
+<p>安装使用：</p>
+
+<p>（1）最简单的安装方式是通过Alcatraz,搜索<code class="highlighter-rouge">RealmPlugin</code>直接安装</p>
+
+<p>（2）或者是打开zip文件夹下面的<code class="highlighter-rouge">plugin/RealmPlguin.xcodeproj</code>,build一下就安装好了</p>
+
+<p>安装完后重启Xcode生效，在创建model的时候选择New File(或⌘N)，选择Realm按照要求输入model的名字就OK啦。</p>
+
+<p>###Realm的使用</p>
+
+<p>####1、构建数据库</p>
+
+<p>Realm提供了三种方式创建数据库，一种是存储在默认路径下的数据库，一种是我们可以自己指定数据库文件的存储路径和只读属性，另外还可以使用内存数据库。</p>
+
+<p>（1）默认Realm数据库</p>
+
+<p><code class="highlighter-rouge">RLMRealm *realm = [RLMRealm defaultRealm];</code></p>
+
+<p>可以通过：<code class="highlighter-rouge">[RLMRealm defaultRealmPath]</code>查看默认存储的路径。</p>
+
+<p>（2）自定义Realm数据库</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+NSString *dbPath = [docPath stringByAppendingPathComponent:@"db/db.realm"];
+RLMRealm *realm = [RLMRealm realmWithPath:dbPath];
+</code></pre></div></div>
+<p>或者是</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+NSString *dbPath = [docPath stringByAppendingPathComponent:@"db/db.realm"];
+RLMRealm *realm = [RLMRealm realmWithPath:dbPath readOnly:YES error:nil];
+</code></pre></div></div>
+<p>其中readOnly表示创建的数据库是只读数据库。</p>
+
+<p>（3）内存数据库</p>
+
+<p>正常的Realm数据库是存储在硬盘上的， 但你也可以通过使用<code class="highlighter-rouge">+ (instancetype)inMemoryRealmWithIdentifier:(NSString *)identifier;</code>来创建一个内存数据库。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RLMRealm *realm = [RLMRealm inMemoryRealmWithIdentifier:@"test"];
+</code></pre></div></div>
+
+<p>注意：内存数据库在每次程序退出时不会保存数据。如果某个内存Realm实例没有被引用，所有的数据在实例对象释放的适合也会被释放。建议你在app中用强引用来钳制所有新建的内存Realm数据库实例。</p>
+
+<p>####2、数据模型</p>
+
+<p>Realm的数据模型是用传统的Objective-C接口（interface）和属性（@property）定义的。 只要定义 <code class="highlighter-rouge">RLMObject</code>的一个子类或者一个现成的模型类，你就能轻松创建一个Realm的数据模型对象。Realm模型对象和其他的Objective-c的功能很相似–你可以给它们添加你自己的方法和protocol然后和其他的对象一样使用。 唯一的限制就是从它们被创建开始，只能在一个进程中被使用。</p>
+
+<p>如果已经安装了Realm Xcode插件，在<code class="highlighter-rouge">New File</code>对话框中会有一个很漂亮的样板，你可以用它来创建interface和implementation文件。</p>
+
+<p>用一个对象来表示一篇文章（Articl）,创建的数据模型如下：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Article.h</code></li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@interface Article : RLMObject
+
+@property NSString *num;//序号
+@property NSString *title;//标题
+@property NSString *link;//链接地址
+@property NSString *author;//作者
+@property NSString *tag;//标签分类
+@property NSInteger weight;//权重
+
+@end
+
+RLM_ARRAY_TYPE(Article)
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">Article.m</code></li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@implementation Article
+
+//主键
++ (NSString *)primaryKey {
+    return @"num";
+}
+
+//需要添加索引的属性
++ (NSArray *)indexedProperties {
+    return @[@"title"];
+}
+
+//默认属性值
++ (NSDictionary *)defaultPropertyValues {
+    return @{@"author":@"zengjing"};
+}
+
+//忽略的字段
++ (NSArray *)ignoredProperties {
+    return @[@"weight"];
+}
+
+@end
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>（1）Realm支持以下的属性（property）种类：BOOL, bool, int, NSInteger, long, float, double, CGFloat, NSString, NSDate 和 NSData。</p>
+
+<p>（2）你可以使用<code class="highlighter-rouge">RLMArray&lt;Object&gt;</code>和<code class="highlighter-rouge">RLMObject</code>来模拟对一或对多的关系(Realm也支持RLMObject继承)</p>
+
+<p>（3）Realm忽略了Objective-C的property attributes(如nonatomic, atomic, strong, copy, weak 等等）。 所以，推荐在创建模型的时候不要使用任何的property attributes。但是，假如你设置了，这些attributes会一直生效直到RLMObject被写入realm数据库。</p>
+
+<p>（4）定义了<code class="highlighter-rouge">RLM_ARRAY_TYPE(Article)</code>这个宏表示支持<code class="highlighter-rouge">RLMArray&lt;Article&gt;</code>该属性</p>
+
+<p>（5）另外Realm提供了以下几个方法供对属性进行自定义：</p>
+
+<p>1）<code class="highlighter-rouge">+ (NSArray *)indexedProperties;</code>: 可以被重写来来提供特定属性（property）的属性值（attrbutes）例如某个属性值要添加索引。</p>
+
+<p>2）<code class="highlighter-rouge">+ (NSDictionary *)defaultPropertyValues;</code>: 为新建的对象属性提供默认值。</p>
+
+<p>3）<code class="highlighter-rouge">+ (NSString *)primaryKey;</code>: 可以被重写来设置模型的主键。定义主键可以提高效率并且确保唯一性。</p>
+
+<p>4）<code class="highlighter-rouge">+ (NSArray *)ignoredProperties;</code>：可以被重写来防止Realm存储模型属性。</p>
+
+<p>####3、数据增删改查</p>
+
+<p>（1）存储数据</p>
+
+<p>创建数据模型对象：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Article *article = [[Article alloc] init];
+article.num      = @"1";
+article.title    = @"iOS开发中集成Reveal";
+article.link     = @"http://blog.devzeng.com/blog/ios-reveal-integrating.html";
+article.tag      = @"iOS";
+</code></pre></div></div>
+
+<p>存储数据：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RLMRealm *realm = [RLMRealm defaultRealm];
+[realm beginWriteTransaction];
+[realm addObject:article];
+[realm commitWriteTransaction];
+</code></pre></div></div>
+
+<p>（2）删除数据</p>
+
+<p>1）删除指定的数据：</p>
+
+<p><code class="highlighter-rouge">- (void)deleteObject:(RLMObject *)object;</code></p>
+
+<p>2）删除一组数据：</p>
+
+<p><code class="highlighter-rouge">- (void)deleteObjects:(id)array;</code></p>
+
+<p>3）删除全部的数据：</p>
+
+<p><code class="highlighter-rouge">- (void)deleteAllObjects;</code></p>
+
+<p>（3）修改数据</p>
+
+<p>修改数据如果该条数据不存在则会新建一条数据。</p>
+
+<p>1）针对单个数据进行的修改或新增：</p>
+
+<p><code class="highlighter-rouge">- (void)addOrUpdateObject:(RLMObject *)object;</code></p>
+
+<p>2）针对一组数据的修改或新增：</p>
+
+<p><code class="highlighter-rouge">- (void)addOrUpdateObjectsFromArray:(id)array;</code></p>
+
+<p>说明：对于增加、删除、修改必须要在事务中进行操作。</p>
+
+<p>（5）查询数据</p>
+
+<p>1）查询全部数据</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RLMResults *results = [Article allObjects];
+</code></pre></div></div>
+
+<p>或指定Realm数据库：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+NSString *realmPath = [path stringByAppendingPathComponent:@"devzeng.realm"];
+RLMRealm *realm = [RLMRealm realmWithPath:realmPath];
+RLMResults *results = [Article allObjectsInRealm:realm];
+</code></pre></div></div>
+
+<p>2）条件查询</p>
+
+<p>假设要查询所有分组是iOS和作者是zengjing的文章：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RLMResults *results = [Article objectsWhere:@"tag = 'iOS' AND author = 'zengjing'"];
+</code></pre></div></div>
+
+<p>也可以使用谓词查询：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSPredicate *pred = [NSPredicate predicateWithFormat:@"tag = '%@' AND author = '%@'", @"iOS", @"zengjing"];
+RLMResults *results = [Article objectsWithPredicate:pred];
+</code></pre></div></div>
+
+<p>3）条件排序</p>
+
+<p>假设要查询所有分组是iOS和作者是zengjing的文章，然后筛选出来的结果按照num字段进行递增排序：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RLMResults *results = [[Article objectsWhere:@"tag = 'iOS' AND author = 'zengjing'"] sortedResultsUsingProperty:@"num" ascending:YES];
+</code></pre></div></div>
+<p>4）链式查询(结果过滤)</p>
+
+<p>假设要查询所有所属分组是iOS的文章，然后从中筛选出作者是zengjing的数据：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RLMResults *results1 = [Article objectsWhere:@"tag = 'iOS'"];
+RLMResults *results2 = [results1 objectsWhere:@"author = 'zengjing'"];
+</code></pre></div></div>
+
+<p>####4、通知</p>
+
+<p>每当一次写事务完成Realm实例都会向其他线程上的实例发出通知，可以通过注册一个block来响应通知：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.token = [realm addNotificationBlock:^(NSString *note, RLMRealm * realm) {
+    [_listTableView reloadData];
+}];
+</code></pre></div></div>
+
+<p>只要有任何的引用指向这个返回的notification token，它就会保持激活状态。在这个注册更新的类里，你需要有一个强引用来钳制这个token， 因为一旦notification token被释放，通知也会自动解除注册。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@property (nonatomic, strong) RLMNotificationToken *token;
+</code></pre></div></div>
+
+<p>另外可以使用下面的方式解除通知：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[realm removeNotification:self.token];
+</code></pre></div></div>
+
+<p>####5、数据库版本迁移</p>
+
+<p>当你和数据库打交道的时候，时不时的你需要改变数据模型（model），但因为Realm中得数据模型被定义为标准的Objective-C interfaces，要改变模型，就像改变其他Objective-C interface一样轻而易举。举个例子，假设有个数据模型<code class="highlighter-rouge">Person</code>:</p>
+
+<p>在v1.0中数据模型如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// v1.0
+@interface Person : RLMObject
+@property NSString *firstName;
+@property NSString *lastName;
+@property int age;
+@end
+</code></pre></div></div>
+
+<p>升级到v2.0之后将firstName和lastName字段合并为一个字段fullName</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// v2.0
+@interface Person : RLMObject
+@property NSString *fullName; // new property
+@property int age;
+@end
+</code></pre></div></div>
+<p>迁移的逻辑可以为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[RLMRealm setSchemaVersion:2.0 forRealmAtPath:[RLMRealm defaultRealmPath] 
+                         withMigrationBlock:^(RLMMigration *migration, 
+                                              NSUInteger oldSchemaVersion) {
+  [migration enumerateObjects:Person.className 
+                        block:^(RLMObject *oldObject, RLMObject *newObject) {
+    if (oldSchemaVersion &lt; 2.0) {
+      newObject[@"fullName"] = [NSString stringWithFormat:@"%@ %@", oldObject[@"firstName"], oldObject[@"lastName"]];
+    }
+  }];
+}];
+</code></pre></div></div>
+
+<p>当版本升级到3.0时，添加新的属性email</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// v3.0
+@interface Person : RLMObject
+@property NSString *fullName;
+@property NSString *email;   // new property
+@property int age;
+@end
+</code></pre></div></div>
+<p>迁移的逻辑可以为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[RLMRealm setSchemaVersion:2.0 forRealmAtPath:[RLMRealm defaultRealmPath] 
+                         withMigrationBlock:^(RLMMigration *migration, 
+                                              NSUInteger oldSchemaVersion) {
+  [migration enumerateObjects:Person.className 
+                        block:^(RLMObject *oldObject, RLMObject *newObject) {
+    //处理v2.0的更新
+    if (oldSchemaVersion &lt; 2.0) {
+      newObject[@"fullName"] = [NSString stringWithFormat:@"%@ %@", oldObject[@"firstName"], oldObject[@"lastName"]];
+    }
+    //处理v3.0的更新
+    if(oldSchemaVersion &lt; 3.0) {
+    	newObject[@"email"] = @"";
+    }
+  }];
+}];
+</code></pre></div></div>
+
+<p>###说明（摘自官方的FAQ）</p>
+
+<p>1、realm的支持库有多大？</p>
+
+<p>一旦你的app编译完成，realm的支持库应该只有1MB左右。我们发布的那个可能有点大（iOS ~37MB, OSX ~2.4MB）， 那是因为它们还包含了对其他构架的支持（ARM，ARM64，模拟器的是X86）和一些编译符号。 这些都会在你编译app的时候被Xcode自动清理掉。</p>
+
+<p>2、我应该在正式产品中使用realm吗？</p>
+
+<p>自2012年起，realm就已经开始被用于正式的商业产品中了。正如你预期，我们的objective-c &amp; Swift API 会随着社区的反馈不断的完善和进化。 所以，你也应该期待realm带给你更多的新特性和版本修复。</p>
+
+<p>3、我要付realm的使用费用吗？</p>
+
+<p>不要， Realm的彻底免费的， 哪怕你用于商业软件。</p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://realm.io/docs/objc/latest">《Realm Document》</a></p>
+
+<p>2、<a href="http://www.jianshu.com/p/052c763d5693">《Realm数据库基础教程》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/encrypt-sqlite-with-sqlcipher.html" title="link to 使用SQLCipher加密SQLite数据库">使用SQLCipher加密SQLite数据库</a></h2>
+       <p class="excerpt">在iOS应用程序开发中经常需要使用SQLite来存储数据，很多时候需要加密保存一部分的数据。常见的做法是将要存储的内容先加密然后存到数据库中，使用的时候将数据进行解密，这样就会有大量的性能消耗在数据的加解密上（性能主要取决于加解密的算法和CPU的能力）。  SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.SQL...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-07-19 20:02:54 +0800" class="post-list__meta--date date">2015-07-19</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/encrypt-sqlite-with-sqlcipher.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/simple-usage-of-gitlab.html" title="link to GitLab的简单使用">GitLab的简单使用</a></h2>
+       <p class="excerpt">GitLab是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。它拥有与Github类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。团队成员可以利用内置的简单聊天程序(Wall)进行交流。它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找。开源中国代码托管平台git.oschina.net就是基于GitLab项目搭...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-07-12 04:05:48 +0800" class="post-list__meta--date date">2015-07-12</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/simple-usage-of-gitlab.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

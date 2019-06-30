@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>微信企业号开发之消息与事件的接收</title>
+  <meta name="description" content="企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="微信企业号开发之消息与事件的接收">
+  <meta name="twitter:description" content="企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="微信企业号开发之消息与事件的接收">
+  <meta property="og:description" content="企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/wechat-qiehao-development-of-message-receive.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-11-25 20:52:05 +0800" itemprop="datePublished" class="post-meta__date date">2014-11-25</time> &#8226; <span class="post-meta__tags tags">WeChat</span>
+    </div>
+    <h1 class="post-title">微信企业号开发之消息与事件的接收</h1>
+  </header>
+
+  <section class="post">
+    <p>企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。</p>
+
+<p><img src="http://blog.devzeng.com/images/wechat_qyh_url_config/wechat_qyh.jpg" alt="wechat_qyh.jpg" /></p>
+
+<p>将应用设置在回调模式时，企业可以通过回调URL接收员工回复的消息，以及员工关注、点击菜单、上报地理位置等事件。在接收到事件后，企业可以发送被动响应消息，实现员工与企业的互动。企业在接收消息，以及发送被动响应消息时，数据包以xml格式组成，以AES方式加密传输。本文主要介绍如何处理接收到的消息和事件。</p>
+
+<p>###消息与事件的类型</p>
+
+<p>1、事件</p>
+
+<p>（1）关注与取消关注事件</p>
+
+<p>消息体格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+   &lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+   &lt;FromUserName&gt;&lt;![CDATA[UserID]]&gt;&lt;/FromUserName&gt;
+   &lt;CreateTime&gt;1348831860&lt;/CreateTime&gt;
+   &lt;MsgType&gt;&lt;![CDATA[event]]&gt;&lt;/MsgType&gt;
+   &lt;Event&gt;&lt;![CDATA[subscribe]]&gt;&lt;/Event&gt;
+   &lt;AgentID&gt;1&lt;/AgentID&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+<p>消息字段说明：</p>
+
+<p><img src="/images/wechat_qyh_inmessage/inmessage_type_event_subscribe.png" alt="inmessage_type_event_subscribe.png" /></p>
+
+<p>Event对应的事件类型有：subscribe(订阅)和unsubscribe(取消订阅)两种。</p>
+
+<p>（2）上报地理位置事件</p>
+
+<p>消息体格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+   &lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+   &lt;FromUserName&gt;&lt;![CDATA[FromUser]]&gt;&lt;/FromUserName&gt;
+   &lt;CreateTime&gt;123456789&lt;/CreateTime&gt;
+   &lt;MsgType&gt;&lt;![CDATA[event]]&gt;&lt;/MsgType&gt;
+   &lt;Event&gt;&lt;![CDATA[LOCATION]]&gt;&lt;/Event&gt;
+   &lt;Latitude&gt;23.104105&lt;/Latitude&gt;
+   &lt;Longitude&gt;113.320107&lt;/Longitude&gt;
+   &lt;Precision&gt;65.000000&lt;/Precision&gt;
+   &lt;AgentID&gt;1&lt;/AgentID&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+
+<p>消息字段说明：</p>
+
+<p><img src="/images/wechat_qyh_inmessage/inmessage_type_event_location.png" alt="inmessage_type_event_subscribe.png" /></p>
+
+<p>（3）上报菜单事件</p>
+
+<p>消息体格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+&lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+&lt;FromUserName&gt;&lt;![CDATA[FromUser]]&gt;&lt;/FromUserName&gt;
+&lt;CreateTime&gt;123456789&lt;/CreateTime&gt;
+&lt;MsgType&gt;&lt;![CDATA[event]]&gt;&lt;/MsgType&gt;
+&lt;Event&gt;&lt;![CDATA[CLICK]]&gt;&lt;/Event&gt;
+&lt;EventKey&gt;&lt;![CDATA[EVENTKEY]]&gt;&lt;/EventKey&gt;
+&lt;AgentID&gt;1&lt;/AgentID&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+
+<p>消息字段说明：</p>
+
+<p><img src="/images/wechat_qyh_inmessage/inmessage_type_event_menu.png" alt="inmessage_type_event_subscribe.png" /></p>
+
+<p>Event对应的事件类型有：</p>
+
+<ul>
+  <li>CLICK：点击菜单拉取消息的事件推送</li>
+  <li>VIEW：点击菜单跳转链接的事件推送</li>
+  <li>scancode_push：扫码推事件的事件推送</li>
+  <li>scancode_waitmsg：扫码推事件且弹出“消息接收中”提示框的事件推送</li>
+  <li>pic_sysphoto：弹出系统拍照发图的事件推送</li>
+  <li>pic_photo_or_album：弹出拍照或者相册发图的事件推送</li>
+  <li>pic_weixin：弹出微信相册发图器的事件推送</li>
+  <li>location_select：弹出地理位置选择器的事件推送</li>
+</ul>
+
+<p>不同的事件类型对应的消息体的格式略有不同，请参考<a href="http://qydev.weixin.qq.com/wiki/index.php?title=接收事件#.E4.B8.8A.E6.8A.A5.E5.9C.B0.E7.90.86.E4.BD.8D.E7.BD.AE.E4.BA.8B.E4.BB.B6">官方的文档</a>描述。</p>
+
+<p>2、消息</p>
+
+<p>（1）text消息，即文本消息</p>
+
+<p>消息体格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+	&lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+	&lt;FromUserName&gt;&lt;![CDATA[fromUser]]&gt;&lt;/FromUserName&gt;
+	&lt;CreateTime&gt;1348831860&lt;/CreateTime&gt;
+	&lt;MsgType&gt;&lt;![CDATA[text]]&gt;&lt;/MsgType&gt;
+	&lt;Content&gt;&lt;![CDATA[this is a test]]&gt;&lt;/Content&gt;
+	&lt;MsgId&gt;1234567890123456&lt;/MsgId&gt;
+	&lt;AgentID&gt;1&lt;/AgentID&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+<p>消息字段说明：</p>
+
+<p><img src="/images/wechat_qyh_inmessage/inmessage_type_msg_text.png" alt="inmessage_text_type.png" /></p>
+
+<p>（2）image消息，即图片消息</p>
+
+<p>消息体格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+   &lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+   &lt;FromUserName&gt;&lt;![CDATA[fromUser]]&gt;&lt;/FromUserName&gt;
+   &lt;CreateTime&gt;1348831860&lt;/CreateTime&gt;
+   &lt;MsgType&gt;&lt;![CDATA[image]]&gt;&lt;/MsgType&gt;
+   &lt;PicUrl&gt;&lt;![CDATA[this is a url]]&gt;&lt;/PicUrl&gt;
+   &lt;MediaId&gt;&lt;![CDATA[media_id]]&gt;&lt;/MediaId&gt;
+   &lt;MsgId&gt;1234567890123456&lt;/MsgId&gt;
+   &lt;AgentID&gt;1&lt;/AgentID&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+
+<p>消息字段说明：</p>
+
+<p><img src="/images/wechat_qyh_inmessage/inmessage_type_msg_image.png" alt="inmessage_text_type.png" /></p>
+
+<p>（3）voice消息，即语言消息</p>
+
+<p>消息体格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+   &lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+   &lt;FromUserName&gt;&lt;![CDATA[fromUser]]&gt;&lt;/FromUserName&gt;
+   &lt;CreateTime&gt;1357290913&lt;/CreateTime&gt;
+   &lt;MsgType&gt;&lt;![CDATA[voice]]&gt;&lt;/MsgType&gt;
+   &lt;MediaId&gt;&lt;![CDATA[media_id]]&gt;&lt;/MediaId&gt;
+   &lt;Format&gt;&lt;![CDATA[Format]]&gt;&lt;/Format&gt;
+   &lt;MsgId&gt;1234567890123456&lt;/MsgId&gt;
+   &lt;AgentID&gt;1&lt;/AgentID&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+
+<p>消息字段说明：</p>
+
+<p><img src="/images/wechat_qyh_inmessage/inmessage_type_msg_voice.png" alt="inmessage_text_type.png" /></p>
+
+<p>（4）video消息，即视频消息</p>
+
+<p>消息体格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+   &lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+   &lt;FromUserName&gt;&lt;![CDATA[fromUser]]&gt;&lt;/FromUserName&gt;
+   &lt;CreateTime&gt;1357290913&lt;/CreateTime&gt;
+   &lt;MsgType&gt;&lt;![CDATA[video]]&gt;&lt;/MsgType&gt;
+   &lt;MediaId&gt;&lt;![CDATA[media_id]]&gt;&lt;/MediaId&gt;
+   &lt;ThumbMediaId&gt;&lt;![CDATA[thumb_media_id]]&gt;&lt;/ThumbMediaId&gt;
+   &lt;MsgId&gt;1234567890123456&lt;/MsgId&gt;
+   &lt;AgentID&gt;1&lt;/AgentID&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+
+<p>消息字段说明：</p>
+
+<p><img src="/images/wechat_qyh_inmessage/inmessage_type_msg_video.png" alt="inmessage_text_type.png" /></p>
+
+<p>（5）location消息，即位置消息</p>
+
+<p>消息体格式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;xml&gt;
+   &lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;
+   &lt;FromUserName&gt;&lt;![CDATA[fromUser]]&gt;&lt;/FromUserName&gt;
+   &lt;CreateTime&gt;1351776360&lt;/CreateTime&gt;
+   &lt;MsgType&gt;&lt;![CDATA[location]]&gt;&lt;/MsgType&gt;
+   &lt;Location_X&gt;23.134521&lt;/Location_X&gt;
+   &lt;Location_Y&gt;113.358803&lt;/Location_Y&gt;
+   &lt;Scale&gt;20&lt;/Scale&gt;
+   &lt;Label&gt;&lt;![CDATA[位置信息]]&gt;&lt;/Label&gt;
+   &lt;MsgId&gt;1234567890123456&lt;/MsgId&gt;
+   &lt;AgentID&gt;1&lt;/AgentID&gt;
+&lt;/xml&gt;
+</code></pre></div></div>
+
+<p>消息字段说明：</p>
+
+<p><img src="/images/wechat_qyh_inmessage/inmessage_type_msg_location.png" alt="inmessage_text_type.png" /></p>
+
+<p>###消息与事件的接收和解析</p>
+
+<p>1、通过网站上配置的信息初始化加解密的工具</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String sToken = "Token";//网站配置的Token
+String sCorpID = "CorpID";
+String sEncodingAESKey = "EncodingAESKey";
+WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(sToken, sEncodingAESKey, sCorpID);
+</code></pre></div></div>
+
+<p>2、解析出url上的参数，包括消息体签名(msg_signature)，时间戳(timestamp)以及随机数字串(nonce)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String sReqMsgSig = URLDecoder.decode(request.getParameter("msg_signature"), "UTF-8");
+String sReqTimeStamp = URLDecoder.decode(request.getParameter("timestamp"), "UTF-8");
+String sReqNonce = URLDecoder.decode(request.getParameter("nonce"), "UTF-8");
+</code></pre></div></div>
+
+<p>3、获取POST过来的消息体的内容</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String sReqData = inputStream2String(request.getInputStream());
+</code></pre></div></div>
+
+<p>将HTTP Request中的InputStream转换为字符串的方法：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private String inputStream2String(InputStream in) throws Exception {
+	if(in == null) {
+		return "";
+	}
+	StringBuffer out = new StringBuffer();
+	byte[] b = new byte[4096];
+	for (int n; (n = in.read(b)) != -1;) {
+		out.append(new String(b, 0, n, "UTF-8"));
+	}
+	return out.toString();
+}
+</code></pre></div></div>
+
+<p>4、验证消息体签名的正确性</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String sMsg = wxcpt.DecryptMsg(sReqMsgSig, sReqTimeStamp, sReqNonce, sReqData);
+</code></pre></div></div>
+<p>验证完成后返回解密后的消息体，XML格式</p>
+
+<p>5、将post请求的数据进行xml解析，并将<Encrypt>标签的内容进行解密，解密出来的明文即是用户回复消息的明文，明文格式请参考官方文档</Encrypt></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WeChatInMessage inMessage = WeChatMessageUtil.parsingInMessage(sMsg);
+System.out.println("解析消息类型为：" + inMessage.getMsgType());
+</code></pre></div></div>
+
+<p>解析XML的代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static WeChatInMessage parsingInMessage(String responseInputString) {
+	XStream xs = WeChatXStreamFactory.init(false);
+	xs.ignoreUnknownElements();
+	xs.alias("xml", WeChatInMessage.class);
+	WeChatInMessage msg = (WeChatInMessage) xs.fromXML(responseInputString);
+	return msg;
+}
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://qydev.weixin.qq.com/wiki/index.php?title=接收消息与事件">《接收消息与事件》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/wechat-qiyehao-message-response.html" title="link to 微信企业号开发之消息与事件的被动响应">微信企业号开发之消息与事件的被动响应</a></h2>
+       <p class="excerpt">企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。本文重点介绍接收到用户的消息请求后如何给用户响应消息。###消息与事件的类型1、text消息消息的明文XML结构：&lt;xml&gt;   &lt;ToUserName&gt;&lt;![CDATA[toUser]]&gt;&lt;/ToUserName&gt;   &lt;...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-26 20:43:26 +0800" class="post-list__meta--date date">2014-11-26</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-qiyehao-message-response.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/wechat-qiyehao-developement-with-url-config-and-verify.html" title="link to 微信企业号开发之开启回调模式">微信企业号开发之开启回调模式</a></h2>
+       <p class="excerpt">企业号是微信为企业客户提供的移动应用入口。它帮助企业建立员工、上下游供应链与企业IT系统间的连接。利用企业号，企业或第三方合作伙伴可以帮助企业快速、低成本的实现高质量的移动轻应用，实现生产、管理、协作、运营的移动化。本文主要介绍如何使用Java语言进行回调模式的URL验证等内容。###开启回调模式配置1、到应用中心选择需要使用回调模式开发的应用，点击进入后会有如下的模式可供选择：2、选择回调模式点击进入回调模式的配置界面，如下图所示：当你开启应用的回调模式时，企业号会要求你填写应用的URL...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-11-24 19:53:17 +0800" class="post-list__meta--date date">2014-11-24</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/wechat-qiyehao-developement-with-url-config-and-verify.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

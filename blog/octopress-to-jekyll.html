@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>将博客从Octopress迁移到Jekyll</title>
+  <meta name="description" content="一直想把Octopress的主题给换了，没有找到满意的主题。最近发现喵神的博客(OneV’s Den)由ghost迁移到了Jekyll了。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="将博客从Octopress迁移到Jekyll">
+  <meta name="twitter:description" content="一直想把Octopress的主题给换了，没有找到满意的主题。最近发现喵神的博客(OneV’s Den)由ghost迁移到了Jekyll了。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="将博客从Octopress迁移到Jekyll">
+  <meta property="og:description" content="一直想把Octopress的主题给换了，没有找到满意的主题。最近发现喵神的博客(OneV’s Den)由ghost迁移到了Jekyll了。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/octopress-to-jekyll.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-01-23 18:49:35 +0800" itemprop="datePublished" class="post-meta__date date">2016-01-23</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">将博客从Octopress迁移到Jekyll</h1>
+  </header>
+
+  <section class="post">
+    <p>一直想把Octopress的主题给换了，没有找到满意的主题。最近发现<a href="https://onevcat.com">喵神的博客(OneV’s Den)</a>由ghost迁移到了<a href="https://jekyllrb.com">Jekyll</a>了。</p>
+
+<p><img src="/images/octopress_jekyll/jekyll.png" alt="" /></p>
+
+<p>这些都不是重点，重点是他把之前使用的主题也一起弄到Jekyll上面来了，而且代码开源在GitHub上面了(项目地址：<code class="highlighter-rouge">https://github.com/onevcat/vno-jekyll</code>),效果如下：</p>
+
+<p><img src="/images/octopress_jekyll/onevcat.png" alt="onevcat.png" /></p>
+
+<p>###安装Vno Jekyll</p>
+
+<p>####（1）从GitHub把项目的源码clone下来</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/onevcat/vno-jekyll.git blog_site
+</code></pre></div></div>
+
+<p>####（2）安装相关依赖工具</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo gem install bundler
+bundle install
+</code></pre></div></div>
+
+<p>如果之前安装过bundler，可以先使用<code class="highlighter-rouge">sudo gem uninstall bundler</code>卸载然后再执行上面的命令安装。</p>
+
+<p>####（3）启动服务</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundler exec jekyll serve
+</code></pre></div></div>
+
+<p>启动成功后如下所示：</p>
+
+<p><img src="/images/octopress_jekyll/jekyll_server.png" alt="jekyll_server.png" /></p>
+
+<p>###部署到GitHub和Coding</p>
+
+<p>部署的过程可以参考我之前写的文章：</p>
+
+<p>（1）<a href="http://blog.devzeng.com/blog/hello-octopress.html">《Hello Octopress》</a></p>
+
+<p>（2）<a href="http://blog.devzeng.com/blog/change-blog-host-to-gitcafe.html">《将博客从GitHub迁移到GitCafe》</a></p>
+
+<p>为了便于将文件和源码同步推送到github和coding上，我写了一个脚本：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#! /bin/bash</span>
+
+<span class="c">#提交源码到Github</span>
+<span class="nb">rm</span> <span class="nt">-rf</span> _site
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"update at </span><span class="sb">`</span><span class="nb">date</span><span class="sb">`</span><span class="s2"> "</span>
+
+git remote add origin git@github.com:hhtczengjing/MyBlogSourceCode.git <span class="o">&gt;&gt;</span> /dev/null 2&gt;&amp;1
+<span class="nb">echo</span> <span class="s2">"### Pushing Source to Github..."</span>
+git push origin master <span class="nt">-f</span>
+<span class="nb">echo</span> <span class="s2">"### Done"</span>
+
+<span class="c">#提交编译后的代码到Github</span>
+bundler <span class="nb">exec </span>jekyll clean
+bundler <span class="nb">exec </span>jekyll build
+<span class="nb">cd </span>_site
+
+git init
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"update at </span><span class="sb">`</span><span class="nb">date</span><span class="sb">`</span><span class="s2"> "</span>
+
+git remote add origin git@github.com:hhtczengjing/hhtczengjing.github.com.git <span class="o">&gt;&gt;</span> /dev/null 2&gt;&amp;1
+<span class="nb">echo</span> <span class="s2">"### Pushing Source to Github..."</span>
+git push origin master <span class="nt">-f</span>
+<span class="nb">echo</span> <span class="s2">"### Done"</span>
+
+git remote add coding git@git.coding.net:zengjing2016/zengjing2016.git <span class="o">&gt;&gt;</span> /dev/null 2&gt;&amp;1
+<span class="nb">echo</span> <span class="s2">"### Pushing to coding..."</span>
+git push coding master:coding-pages <span class="nt">-f</span>
+<span class="nb">echo</span> <span class="s2">"### Done"</span>
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://github.com/onevcat/vno-jekyll">《Vno Jekyll源码》</a></p>
+
+<p>2、<a href="http://vno.onevcat.com/2016/02/hello-world-vno/">《Hello World - Vno》</a></p>
+
+<p>3、<a href="http://jekyllrb.com">《Jekyll Documentation》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/hello-cordova-ios.html" title="link to iOS中Cordova开发初探">iOS中Cordova开发初探</a></h2>
+       <p class="excerpt">跨平台开发是我们长久以来都在关注的话题，前段时间写了一篇关于React Native的文章《React Native开发初探》。也在公司的项目中部分使用React Native，虽然React Native的出现带来了很多变革，但是光一个环境搭建就把很多人挡在了门外，另外React Native更新的频率过快差不多两周一个版本，所以目前还是处于观望阶段。Cordova是一个开源的移动应用开发框架，是Adobe贡献给Apache的开源项目，是从PhoneGap中抽出的核心代码，是驱动Phon...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-04-01 22:08:53 +0800" class="post-list__meta--date date">2016-04-01</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/hello-cordova-ios.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/hello-react-native.html" title="link to React Native开发初探">React Native开发初探</a></h2>
+       <p class="excerpt">Facebook在React.js Conf 2015大会(2015.3.26)上开源了React Native。最开始只支持iOS，2015年9月15日发布了React Native for Android，至此React Native支持主流的两大平台（iOS和Android）。新事物的出现，都会引发行业的热烈讨论，自React Native发布起，一直都是热门的讨论话题。React Native的出现在一定程度上解决了我们目前在移动开发上面临的问题。我们身处在移动互联网的黄金时代，越...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-01-23 18:49:35 +0800" class="post-list__meta--date date">2016-01-23</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/hello-react-native.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>如何创建一个私有的Gem库</title>
+  <meta name="description" content="近期看了下Cocoapods的一部分代码，结合之前做的iOS项目脚手架工具，突发奇想能不能做一个内部的工具库呢（类似于Cocoapods）。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="如何创建一个私有的Gem库">
+  <meta name="twitter:description" content="近期看了下Cocoapods的一部分代码，结合之前做的iOS项目脚手架工具，突发奇想能不能做一个内部的工具库呢（类似于Cocoapods）。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="如何创建一个私有的Gem库">
+  <meta property="og:description" content="近期看了下Cocoapods的一部分代码，结合之前做的iOS项目脚手架工具，突发奇想能不能做一个内部的工具库呢（类似于Cocoapods）。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/create-a-private-gem.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-03-12 19:29:36 +0800" itemprop="datePublished" class="post-meta__date date">2018-03-12</time> &#8226; <span class="post-meta__tags tags">Ruby</span>
+    </div>
+    <h1 class="post-title">如何创建一个私有的Gem库</h1>
+  </header>
+
+  <section class="post">
+    <p>近期看了下<a href="https://github.com/CocoaPods/CocoaPods">Cocoapods</a>的一部分代码，结合之前做的iOS项目脚手架工具，突发奇想能不能做一个内部的工具库呢（类似于Cocoapods）。</p>
+
+<p>首先要解决的问题就是怎么样发布自己写的工具库，有没有类似于<a href="https://rubygems.org/">RubyGems</a>这样的托管平台呢？查了一番资料找到了一个开源的项目- <a href="https://github.com/geminabox/geminabox">geminabox</a>， 可以搭建一个托管的平台。</p>
+
+<h3 id="搭建gem私服">搭建Gem私服</h3>
+
+<p>前提条件是需要有Docker的环境，如果没有的话可以参考：<a href="http://blog.devzeng.com/blog/install-docker-in-centos.html">CentOS安装Docker</a>。</p>
+
+<h4 id="1-创建并运行容器">(1) 创建并运行容器</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -v /home/docker/geminabox:/webapps/geminabox/data --name geminabox -p 9292:9292 -P -h geminabox spoonest/geminabox:latest
+</code></pre></div></div>
+
+<h4 id="2-安装geminabox客户端">(2) 安装geminabox客户端</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install geminabox
+</code></pre></div></div>
+
+<blockquote>
+  <p>PS : 如果是MacOS自带ruby环境。Ruby的版本管理可以使用RVM工具</p>
+</blockquote>
+
+<p>安装完成之后访问: <code class="highlighter-rouge">http://ip:9292</code>即可打开：</p>
+
+<p><img src="/images/create-a-private-gem/geminabox.png" alt="geminabox.png" /></p>
+
+<h3 id="gem模块开发与发布">Gem模块开发与发布</h3>
+
+<h4 id="1-创建模板工程">(1) 创建模板工程</h4>
+
+<p>使用<code class="highlighter-rouge">bundler gem [name]</code>命令可以一键创建项目的结构，相当的方便：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>⇒  bundler gem demo
+
+Creating gem 'demo'...
+MIT License enabled in config
+      create  demo/Gemfile
+      create  demo/lib/demo.rb
+      create  demo/lib/demo/version.rb
+      create  demo/demo.gemspec
+      create  demo/Rakefile
+      create  demo/README.md
+      create  demo/bin/console
+      create  demo/bin/setup
+      create  demo/.gitignore
+      create  demo/LICENSE.txt
+Initializing git repo in /Users/zengjing/demo/demo
+</code></pre></div></div>
+
+<p>如果是第一次使用可能会有些提示问题需要填写。</p>
+
+<h4 id="2-编译打包">(2) 编译打包</h4>
+
+<p>发布gem库需要先进行打包，使用<code class="highlighter-rouge">gem build [gemspecname]</code>命令可以打包：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>⇒  gem build demo.gemspec
+
+  Successfully built RubyGem
+  Name: demo
+  Version: 0.1.0
+  File: demo-0.1.0.gem
+</code></pre></div></div>
+
+<p>出现<code class="highlighter-rouge">Successfully built RubyGem</code>表示编译打包完成。</p>
+
+<p>(3) 上传</p>
+
+<p>接下就是之前安装的<code class="highlighter-rouge">geminabox</code>派上用场的时候了，使用<code class="highlighter-rouge">gem inabox [gemfile]</code>可以一键上传。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem inabox [gemfile]
+</code></pre></div></div>
+
+<h3 id="使用">使用</h3>
+
+<p>在Gemfile中加入如下代码:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source "http://192.168.3.18:9292" do
+	gem 'demo', '~&gt; 0.1.0'
+end
+</code></pre></div></div>
+
+<p>然后安装</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle install
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="http://code.oneapm.com/ruby/2015/07/02/how-to-create-a-gem/">如何开发一个自己的 RubyGem？</a></p>
+
+<p>2、<a href="http://tomlea.co.uk/posts/gem-in-a-box/">geminabox</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/python-convert-word-to-pdf.html" title="link to 使用Python批量将Word文档转换为PDF">使用Python批量将Word文档转换为PDF</a></h2>
+       <p class="excerpt">最近一直在整理数据，刚好有一批Word文档需要批量另存为PDF格式的文档，使用win32com操作Word，写了个Python的脚本用于批量进行转换。1、环境准备(1) 安装pip install pywin32(2) 初始化由于我的机器上面安装的是Office 2010, 安装完成pywin32之后，进入到Python安装路径\Lib\site-packages\win32com\client的目录下面执行如下代码：python makepy.py -d "Microsoft Word ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-25 11:46:29 +0800" class="post-list__meta--date date">2018-04-25</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/python-convert-word-to-pdf.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/hello-nwjs.html" title="link to 使用NW.js开发桌面应用程序">使用NW.js开发桌面应用程序</a></h2>
+       <p class="excerpt">前段时间要写一个桌面的应用，做一个简单的输入框供用户输入验证码的小功能，程序最开始是用Python写的，那么GUI一开始就考虑使用wxPython，虽然实现了功能但是总觉得太过于麻烦。之前了解过关于Node.js开发桌面应用的技术，目前使用的比较多的都是nw.js 和 electron，由于下载electron的时候出现了一些问题所以就选择了nw.js来学习。NW.js（之前叫做node-webkit)能够通过DOM直接调用Node.js模块，实现通过Web技术来编写应用程序。环境搭建  ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-02-06 21:28:24 +0800" class="post-list__meta--date date">2018-02-06</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/hello-nwjs.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

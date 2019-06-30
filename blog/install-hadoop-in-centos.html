@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>CentOS安装Hadoop</title>
+  <meta name="description" content="系统环境">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CentOS安装Hadoop">
+  <meta name="twitter:description" content="系统环境">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="CentOS安装Hadoop">
+  <meta property="og:description" content="系统环境">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/install-hadoop-in-centos.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-09-10 10:08:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-09-10</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">CentOS安装Hadoop</h1>
+  </header>
+
+  <section class="post">
+    <p>系统环境</p>
+
+<p><img src="/images/install-hadoop-in-centos/server-config.png" alt="server-config.png" /></p>
+
+<p>下载软件：</p>
+
+<ul>
+  <li>（1）JDK</li>
+  <li>（2）Hadoop</li>
+  <li>（3）MySQL</li>
+  <li>（4）Hive</li>
+  <li>（5）HBase</li>
+  <li>（6）Zookeeper</li>
+</ul>
+
+<p><img src="/images/install-hadoop-in-centos/hadoop-arch.png" alt="hadoop-arch.png" /></p>
+
+<h3 id="1服务器配置">1、服务器配置</h3>
+
+<h4 id="1修改主机名">（1）修改主机名</h4>
+
+<p>将<code class="highlighter-rouge">192.168.13.1</code>、<code class="highlighter-rouge">192.168.13.2</code> 和 <code class="highlighter-rouge">192.168.13.3</code> 这三台机器分别命名为
+<code class="highlighter-rouge">hadoop-master</code>、<code class="highlighter-rouge">hadoop-slave1</code> 和 <code class="highlighter-rouge">hadoop-slave2</code>。</p>
+
+<p>1） 修改<code class="highlighter-rouge">/etc/sysconfig/network</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>修改
+HOSTNAME=localhost.localdomain
+为
+HOSTNAME=hadoop-master #这里根据情况进行调整(hadoop-master/slave1/slave2)
+</code></pre></div></div>
+
+<p>2）修改<code class="highlighter-rouge">/etc/hosts</code></p>
+
+<p>修改成如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>127.0.0.1 hadoop-master
+::1 hadoop-master
+</code></pre></div></div>
+
+<p>修改完成之后重启才会生效，如果想要立即生效，可以使用<code class="highlighter-rouge">hostname hadoop-master</code>的方式临时生效，下次服务器重启后就好了。</p>
+
+<p>3）在每台服务器上面修改hosts文件增加如下配置：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>192.168.13.1 hadoop-master
+192.168.13.2 hadoop-slave1
+192.168.13.3 hadoop-slave2
+</code></pre></div></div>
+
+<h4 id="2关闭防火墙">（2）关闭防火墙</h4>
+
+<p>1) 关闭selinux</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+</code></pre></div></div>
+
+<p>查看selinux状态：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/sbin/sestatus -v
+</code></pre></div></div>
+
+<p>2) 关闭防火墙</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service iptables stop
+chkconfig iptables off
+</code></pre></div></div>
+
+<p>查看防火墙状态：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service iptables status
+</code></pre></div></div>
+
+<h4 id="3配置ssh免密码登录">（3）配置SSH免密码登录</h4>
+
+<p>因为Hadoop需要通过SSH登录到各个节点进行操作，每台服务器都生成公钥，再合并到<code class="highlighter-rouge">authorized_keys</code></p>
+
+<p>1）开启SSH免密码登录模式</p>
+
+<p>CentOS默认没有启动SSH无密码登录，需要修改<code class="highlighter-rouge">/etc/ssh/sshd_config</code>将下面的两行配置前面的注释去掉（每台服务器都要设置）：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#RSAAuthentication yes
+#PubkeyAuthentication yes
+</code></pre></div></div>
+
+<p>2）生成密钥</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen -t rsa
+</code></pre></div></div>
+
+<p>执行上面的命令，一路回车即可（每台服务器都要设置）。</p>
+
+<p>3）合并公钥到authorized_keys文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat id_rsa.pub &gt;&gt; authorized_keys
+ssh root@192.168.13.2 cat ~/.ssh/id_rsa.pub &gt;&gt; authorized_keys
+ssh root@192.168.13.3 cat ~/.ssh/id_rsa.pub &gt;&gt; authorized_keys
+</code></pre></div></div>
+
+<p>4）把Master服务器的<code class="highlighter-rouge">authorized_keys</code>、<code class="highlighter-rouge">known_hosts</code>复制到Slave服务器的<code class="highlighter-rouge">/root/.ssh</code>目录</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp /root/.ssh/authorized_keys root@192.168.13.2:/root/.ssh
+scp /root/.ssh/known_hosts root@192.168.13.2:/root/.ssh
+
+scp /root/.ssh/authorized_keys root@192.168.13.3:/root/.ssh
+scp /root/.ssh/known_hosts root@192.168.13.3:/root/.ssh
+</code></pre></div></div>
+
+<p>执行完成后，使用<code class="highlighter-rouge">ssh root@192.168.13.2</code>、<code class="highlighter-rouge">ssh root@192.168.13.3</code>就不需要输入密码了</p>
+
+<h3 id="2组件安装">2、组件安装</h3>
+
+<h4 id="1安装配置jdk">（1）安装配置JDK</h4>
+
+<p>每台机器都需要安装JDK，所以先在<code class="highlighter-rouge">hadoop-master</code>上面安装好之后，通过scp命令拷贝到<code class="highlighter-rouge">hadoop-slave1</code>和<code class="highlighter-rouge">hadoop-slave2</code>上面。</p>
+
+<p>1) 解压</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p /home/bigdata/java
+tar xvf jdk-8u144-linux-x64.tar -C /home/bigdata/java
+</code></pre></div></div>
+
+<p>2) 配置环境变量</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/profile
+
+#在文件末尾增加如下配置：
+export JAVA_HOME=/home/bigdata/java/jdk1.8.0_144
+export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+</code></pre></div></div>
+
+<p>保存后，执行<code class="highlighter-rouge">source /etc/profile</code>使配置生效，然后可以通过<code class="highlighter-rouge">java -version</code>查看是否安装成功：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java version "1.8.0_144"
+Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
+Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
+</code></pre></div></div>
+
+<p>3）分发到各台机器上面</p>
+
+<p>① 首先到各台近期上面都要创建<code class="highlighter-rouge">/home/bigdata</code>的文件目录，然后执行下面的命令：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp -r /home/bigdata/java root@hadoop-slave1:/home/bigdata/
+scp -r /home/bigdata/java root@hadoop-slave2:/home/bigdata/
+</code></pre></div></div>
+
+<p>② 到各台机器上面配置环境变量，和上面的配置一致</p>
+
+<p>说明：</p>
+
+<p>如果执行<code class="highlighter-rouge">java -version</code>不是安装的指定版本的JDK，而是系统默认的JDK的话需要先把系统的JDK卸载，可以先通过<code class="highlighter-rouge">rpm -qa | grep java</code>这个命名查出来当前安装的Java包：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java_cup-0.10k-5.el6.x86_64
+pki-java-tools-9.0.3-20.el6.noarch
+tzdata-java-2011l-4.el6.noarch
+java-1.5.0-gcj-1.5.0.0-29.1.el6.x86_64
+java-1.6.0-openjdk-1.6.0.0-1.41.1.10.4.el6.x86_64
+</code></pre></div></div>
+
+<p>比如当前通过<code class="highlighter-rouge">java -version</code>查询出来的版本是<code class="highlighter-rouge">1.6</code>那么对应使用的包是<code class="highlighter-rouge">java-1.6.0-openjdk-1.6.0.0-1.41.1.10.4.el6.x86_64</code>，然后使用<code class="highlighter-rouge">rpm -e --nodeps java-1.6.0-openjdk-1.6.0.0-1.41.1.10.4.el6.x86_64</code>直接卸载就行了，反复几次直到查询Java的版本不再是系统的默认就可以了，然后使用<code class="highlighter-rouge">source /etc/profile</code>让配置生效。</p>
+
+<h4 id="2安装配置zookeeper">（2）安装配置Zookeeper</h4>
+
+<p>Zookeeper安装在<code class="highlighter-rouge">hadoop-slave1</code>和<code class="highlighter-rouge">hadoop-slave2</code>上面，下面的操作都是在这两台机器上面。</p>
+
+<p>1) 解压</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p /home/bigdata/zookeeper
+cd /home/bigdata/zookeeper
+mkdir zookeeper-data
+tar zxvf zookeeper-3.4.6.tar.gz -C /home/bigdata/zookeeper
+</code></pre></div></div>
+
+<p>2) 配置环境变量</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/profile
+
+#在文件末尾增加如下配置
+export ZOOKEEPER_HOME=/home/bigdata/zookeeper/zookeeper-3.4.6
+export PATH=$PATH:${ZOOKEEPER_HOME}/bin
+</code></pre></div></div>
+
+<p>保存后<code class="highlighter-rouge">source /etc/profile</code>。</p>
+
+<p>3) 新建<code class="highlighter-rouge">zoo.cfg</code>配置文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $ZOOKEEPER_HOME/conf
+vi zoo.cfg
+</code></pre></div></div>
+
+<p>文件的配置内容为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/home/bigdata/zookeeper/zookeeper-data
+clientPort=2222
+server.1=hadoop-slave1:2888:3888
+server.2=hadoop-slave2:2888:3888
+</code></pre></div></div>
+
+<p>4) 新建<code class="highlighter-rouge">myid</code>配置文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/zookeeper/zookeeper-data
+vi myid
+</code></pre></div></div>
+
+<p>这里<code class="highlighter-rouge">myid</code>里面的内容对应上面的<code class="highlighter-rouge">zoo.cfg</code>文件中<code class="highlighter-rouge">server.x</code>这个<code class="highlighter-rouge">x</code>(服务号)：
+如果是<code class="highlighter-rouge">hadoop-slave1</code>机器<code class="highlighter-rouge">myid</code>的内容<code class="highlighter-rouge">1</code>，<code class="highlighter-rouge">hadoop-slave2</code>机器<code class="highlighter-rouge">myid</code>的内容<code class="highlighter-rouge">2</code>。</p>
+
+<p>5) 将zookeeper分发到其他机器(hadoop-slave2)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp -r /home/bigdata/zookeeper root@hadoop-slave2:/home/bigdata
+</code></pre></div></div>
+
+<p>修改环境变量配置和<code class="highlighter-rouge">myid</code>的内容即可。</p>
+
+<p>6）启动服务</p>
+
+<p>在各台安装zookeeper的机器上面执行下面的命令启动：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $ZOOKEEPER_HOME/bin
+zkServer.sh start #启动服务
+zkServer.sh status #查看服务状态
+</code></pre></div></div>
+
+<p>如果需要关闭<code class="highlighter-rouge">zkServer.sh stop</code>,日志文件在当前目录下面的<code class="highlighter-rouge">zookeeper.out</code>。</p>
+
+<h4 id="3安装配置hadoop">（3）安装配置Hadoop</h4>
+
+<p>1) 解压</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p /home/bigdata/hadoop
+tar xvf hadoop-2.7.4.tar -C /home/bigdata/hadoop
+</code></pre></div></div>
+
+<p>2) 配置Hadoop</p>
+
+<p>① 创建临时文件夹</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hadoop/hadoop-2.7.4
+mkdir tmp
+</code></pre></div></div>
+
+<p>② 修改环境变量配置文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/profile
+
+#在文件末尾追加如下配置：
+export HADOOP_HOME=/home/bigdata/hadoop/hadoop-2.7.4
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+export HADOOP_MAPRED_HOME=${HADOOP_HOME}
+export HADOOP_HDFS_HOME=${HADOOP_HOME}
+export YARN_HOME=${HADOOP_HOME}
+export HADOOP_COMMON_LIB_NATIVE_DIR=${HADOOP_HOME}/lib/native
+export HADOOP_OPTS="-Djava.library.path=${HADOOP_HOME}/lib:${HADOOP_HOME}/lib/native"
+</code></pre></div></div>
+
+<p>保存后<code class="highlighter-rouge">source /etc/profile</code>。</p>
+
+<p>③ Hadoop基础配置</p>
+
+<p>1️⃣ 设置<code class="highlighter-rouge">hadoop-env.sh</code>和<code class="highlighter-rouge">yarn-env.sh</code>中的Java环境变量</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hadoop/hadoop-2.7.4/etc/hadoop/
+
+vi hadoop-env.sh
+#修改JAVA_HOME
+export JAVA_HOME=/home/bigdata/java/jdk1.8.0_144
+
+vi yarn-env.sh
+#修改JAVA_HOME
+export JAVA_HOME=/home/bigdata/java/jdk1.8.0_144
+</code></pre></div></div>
+
+<p>2️⃣ 配置<code class="highlighter-rouge">core-site.xml</code>配置文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hadoop/hadoop-2.7.4/etc/hadoop/
+vi core-site.xml
+</code></pre></div></div>
+
+<p>文件的配置如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;configuration&gt;
+  &lt;!-- 存储其他临时目录的根目录 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;
+    &lt;value&gt;/home/bigdata/hadoop/hadoop-2.7.4/tmp&lt;/value&gt;
+    &lt;description&gt;A base for other temporary directories.&lt;/description&gt;
+  &lt;/property&gt;
+  &lt;!-- 与namenode的交互端口 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;fs.default.name&lt;/name&gt;
+    &lt;value&gt;hdfs://hadoop-master:9000&lt;/value&gt;
+ &lt;/property&gt;
+ &lt;property&gt;
+    &lt;name&gt;hadoop.proxyuser.root.hosts&lt;/name&gt;
+    &lt;value&gt;*&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;hadoop.proxyuser.root.groups&lt;/name&gt;
+    &lt;value&gt;*&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;      
+    &lt;name&gt;io.file.buffer.size&lt;/name&gt;      
+    &lt;value&gt;4096&lt;/value&gt;      
+  &lt;/property&gt;  
+  &lt;!-- 指定zookeeper地址 --&gt;  
+  &lt;property&gt;  
+    &lt;name&gt;ha.zookeeper.quorum&lt;/name&gt;  
+    &lt;value&gt;hadoop-master:2222,hadoop-slave1:2222,hadoop-slave2:2222&lt;/value&gt;  
+  &lt;/property&gt; 
+&lt;/configuration&gt;
+</code></pre></div></div>
+
+<p>3️⃣ 配置<code class="highlighter-rouge">hdfs-site.xml</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hadoop/hadoop-2.7.4/etc/hadoop/
+vi hdfs-site.xml
+</code></pre></div></div>
+
+<p>文件的配置如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;configuration&gt;
+	&lt;!-- 存储在本地的namenode数据镜像目录，作为namenode的冗余备份 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;
+        &lt;value&gt;file:///home/bigdata/hadoop/hadoop-2.7.4/dfs/name&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;!-- datanode存储数据的根目录 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;
+        &lt;value&gt;file:///home/bigdata/hadoop/hadoop-2.7.4/dfs/data&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;!-- 冗余数量，备份的数据量 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.replication&lt;/name&gt;
+        &lt;value&gt;1&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.nameservices&lt;/name&gt;
+        &lt;value&gt;hadoop-master&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;!-- namenode的http协议访问地址与端口 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:50090&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;
+        &lt;value&gt;true&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre></div></div>
+
+<p>4️⃣ 配置<code class="highlighter-rouge">mapred-site.xml</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hadoop/hadoop-2.7.4/etc/hadoop/
+cp mapred-site.xml.template mapred-site.xml
+vi mapred-site.xml
+</code></pre></div></div>
+<p>文件的配置如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+        &lt;value&gt;yarn&lt;/value&gt;
+        &lt;final&gt;true&lt;/final&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.jobtracker.http.address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:50030&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:10020&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:19888&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapred.job.tracker&lt;/name&gt;
+        &lt;value&gt;http://hadoop-master:9001&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre></div></div>
+
+<p>5️⃣ 配置<code class="highlighter-rouge">yarn-site.xml</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hadoop/hadoop-2.7.4/etc/hadoop/
+vi yarn-site.xml
+</code></pre></div></div>
+
+<p>文件的配置如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;
+        &lt;value&gt;hadoop-master&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:8032&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:8030&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:8031&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:8033&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;
+        &lt;value&gt;hadoop-master:8088&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre></div></div>
+
+<p>3) 配置集群</p>
+
+<p>每台机器都需要安装Hadoop，所以先在<code class="highlighter-rouge">hadoop-master</code>上面安装好之后，通过scp命令拷贝到<code class="highlighter-rouge">hadoop-slave1</code>和<code class="highlighter-rouge">hadoop-slave2</code>上面。</p>
+
+<p>1️⃣ 将hadoop安装目录分发到其他机器上面</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp -r /home/bigdata/hadoop root@hadoop-slave1:/home/bigdata/
+scp -r /home/bigdata/hadoop root@hadoop-slave2:/home/bigdata/
+</code></pre></div></div>
+
+<p>2️⃣ 修改各自机器的<code class="highlighter-rouge">/etc/profile</code>配置文件，和上面的<code class="highlighter-rouge">hadoop-master</code>机器一样</p>
+
+<p>3️⃣ 修改<code class="highlighter-rouge">hadoop-master</code>上面的<code class="highlighter-rouge">slaves</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hadoop/hadoop-2.7.4/etc/hadoop/
+vi slaves
+</code></pre></div></div>
+
+<p>文件的内容如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hadoop-slave1
+hadoop-slave2
+</code></pre></div></div>
+
+<p>4) 格式化文件系统</p>
+
+<p>在<code class="highlighter-rouge">hadoop-master</code>机器上面执行如下命令：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hadoop namenode -format
+</code></pre></div></div>
+
+<p>5) 启动</p>
+
+<p>在<code class="highlighter-rouge">hadoop-master</code>机器上面执行如下命令：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hadoop/hadoop-2.7.4/sbin
+./start-dfs.sh
+./start-yarn.sh
+</code></pre></div></div>
+
+<h4 id="4安装配置hbase">（4）安装配置Hbase</h4>
+
+<p>1) 解压</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p /home/bigdata/hbase
+tar zxvf hbase-1.2.6-bin.tar.gz -C /home/bigdata/hbase/
+</code></pre></div></div>
+
+<p>2) 配置环境变量</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/profile
+
+#在文件末尾追加如下配置
+export HBASE_HOME=/home/bigdata/hbase/hbase-1.2.6
+export PATH=$PATH:${HBASE_HOME}/bin
+</code></pre></div></div>
+
+<p>3) 配置Hbase配置文件</p>
+
+<p>1️⃣ 修改<code class="highlighter-rouge">hbase-env.sh</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hbase/hbase-1.2.6/conf
+vi hbase-env.sh
+</code></pre></div></div>
+
+<p>修改如下两个配置项：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export JAVA_HOME=/home/bigdata/java/jdk1.8.0_144
+export HBASE_MANAGES_ZK=false
+</code></pre></div></div>
+
+<p>2️⃣ 修改<code class="highlighter-rouge">hbase-site.xml</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hbase/hbase-1.2.6/conf
+vi hbase-site.xml
+</code></pre></div></div>
+
+<p>配置文件的内容如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;configuration&gt;
+	&lt;property&gt;
+		&lt;name&gt;hbase.rootdir&lt;/name&gt;
+		&lt;value&gt;hdfs://hadoop-master:9000/hbase&lt;/value&gt;
+	&lt;/property&gt;
+	&lt;property&gt;
+		&lt;name&gt;hbase.cluster.distributed&lt;/name&gt;
+		&lt;value&gt;true&lt;/value&gt;
+	&lt;/property&gt;
+	&lt;property&gt;
+		&lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;
+		&lt;value&gt;hadoop-slave1,hadoop-slave2&lt;/value&gt;
+	&lt;/property&gt;
+	&lt;property&gt;
+		&lt;name&gt;hbase.zookeeper.property.clientPort&lt;/name&gt;
+		&lt;value&gt;2222&lt;/value&gt;
+	&lt;/property&gt;
+	&lt;property&gt;
+		&lt;name&gt;hbase.zookeeper.property.dataDir&lt;/name&gt;
+		&lt;value&gt;/home/bigdata/zookeeper/zookeeper-data&lt;/value&gt;
+	&lt;/property&gt;
+	&lt;property&gt;
+		&lt;name&gt;hbase.master&lt;/name&gt;
+		&lt;value&gt;master&lt;/value&gt;
+	&lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre></div></div>
+
+<p>3️⃣ 修改<code class="highlighter-rouge">regionservers</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hbase/hbase-1.2.6/conf
+vi regionservers
+</code></pre></div></div>
+
+<p>文件内容如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hadoop-slave1
+hadoop-slave2
+</code></pre></div></div>
+
+<p>4) 同步到各台机器上面，同样修改环境变量</p>
+
+<h4 id="5安装配置hive">（5）安装配置Hive</h4>
+
+<p>1) 解压安装</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p /home/bigdata/hive2
+tar zxvf apache-hive-2.1.1-bin.tar.gz -C /home/bigdata/hive2
+</code></pre></div></div>
+
+<p>2) 配置环境变量</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export HIVE_HOME=/home/bigdata/hive2/apache-hive-2.1.1-bin
+export PATH=$PATH:${HIVE_HOME}/bin
+</code></pre></div></div>
+
+<p>3) 安装配置MySQL</p>
+
+<p>1️⃣ 安装MySQL</p>
+
+<p>MySQL需要安装三个rpm包:<code class="highlighter-rouge">MySQL-server-5.5.57-1.el6.x86_64.rpm</code>、<code class="highlighter-rouge">MySQL-client-5.5.57-1.el6.x86_64.rpm</code> 和 <code class="highlighter-rouge">MySQL-devel-5.5.57-1.el6.x86_64.rpm</code>。</p>
+
+<p>安装的命令如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm -ivh MySQL-server-5.5.57-1.el6.x86_64.rpm --force --nodeps
+rpm -ivh MySQL-client-5.5.57-1.el6.x86_64.rpm --force --nodeps
+rpm -ivh MySQL-devel-5.5.57-1.el6.x86_64.rpm --force --nodeps
+</code></pre></div></div>
+
+<p>2️⃣ 设置开机启动</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chkconfig mysql on
+chkconfig --list mysql
+</code></pre></div></div>
+
+<p>3️⃣ 设置root账号密码并配置远程连接</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql -uroot
+
+use mysql;
+#修改密码
+update user set Password = password('123456') where User='root';
+#授权远程连接
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root';
+#刷新权限
+FLUSH PRIVILEGES; 
+exit;
+</code></pre></div></div>
+
+<p>4️⃣ 创建Hive用户</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql -uroot -p
+
+CREATE USER 'hive' IDENTIFIED BY 'hive';
+GRANT ALL PRIVILEGES ON *.* TO 'hive'@'hadoop-master' WITH GRANT OPTION;
+FLUSH PRIVILEGES; 
+</code></pre></div></div>
+
+<p>5️⃣ 创建Hive表</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql -h hadoop-master -uhive -p
+
+CREATE DATABASE hive;
+</code></pre></div></div>
+
+<p>4) Hive配置</p>
+
+<p>先将提前准备好的mysql jdbc的jar(<code class="highlighter-rouge">mysql-connector-java-5.1.34.jar</code>)拷贝到<code class="highlighter-rouge">/home/bigdata/hive2/apache-hive-2.1.1-bin/lib</code>这个目录下面，然后将<code class="highlighter-rouge">/home/bigdata/hive2/apache-hive-2.1.1-bin/jdbc</code>下面的<code class="highlighter-rouge">hive-jdbc-2.1.1-standalone.jar</code>文件拷贝到<code class="highlighter-rouge">/home/bigdata/hive2/apache-hive-2.1.1-bin/lib</code>下面。接下来进入到配置文件夹所在的目录进行配置：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/bigdata/hive2/apache-hive-2.1.1-bin/conf
+</code></pre></div></div>
+
+<p>1️⃣ 创建<code class="highlighter-rouge">hive-default.xml</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp hive-default.xml.template hive-default.xml
+</code></pre></div></div>
+
+<p>2️⃣ 创建<code class="highlighter-rouge">hive-site.xml</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi hive-site.xml
+</code></pre></div></div>
+
+<p>配置文件的内容为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;configuration&gt;
+  &lt;property&gt;
+    &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;
+    &lt;value&gt;jdbc:mysql://hadoop-master:3306/hive?createDatabaseIfNotExist=true&lt;/value&gt;
+    &lt;description&gt;JDBC connect string for a JDBC metastore&lt;/description&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;
+    &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;
+    &lt;description&gt;Driver class name for a JDBC metastore&lt;/description&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;
+    &lt;value&gt;hive&lt;/value&gt;
+    &lt;description&gt;username to use against metastore database&lt;/description&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;
+    &lt;value&gt;hive&lt;/value&gt;
+    &lt;description&gt;password to use against metastore database&lt;/description&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;datanucleus.autoCreateSchema&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;datanucleus.autoCreateTables&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;datanucleus.autoCreateColumns&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre></div></div>
+
+<p>3️⃣ 客户端配置</p>
+
+<p>将hive2目录拷贝到<code class="highlighter-rouge">hadoop-slave1</code>和<code class="highlighter-rouge">hadoop-slave2</code>上面：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp -r /home/bigdata/hive2 root@hadoop-slave1:/home/bigdata/
+scp -r /home/bigdata/hive2 root@hadoop-slave2:/home/bigdata/
+</code></pre></div></div>
+
+<p>然后分别修改<code class="highlighter-rouge">/home/bigdata/hive2/apache-hive-2.1.1-bin/conf/hive-site.xml</code>文件的内容如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;configuration&gt;
+	&lt;property&gt;  
+		&lt;name&gt;hive.metastore.uris&lt;/name&gt;  
+    	&lt;value&gt;thrift://hadoop-master:9083&lt;/value&gt;  
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre></div></div>
+
+<p>5) 启动</p>
+
+<p>启动metastore</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hive --service metastore &amp;
+</code></pre></div></div>
+
+<h3 id="3组件启动顺序">3、组件启动顺序</h3>
+
+<p>(1) Hadoop</p>
+
+<p>在<code class="highlighter-rouge">hadoop-master</code>上面启动</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $HADOOP_HOME/sbin
+./start-all.sh
+</code></pre></div></div>
+
+<p>(2) zookeeper</p>
+
+<p>分别到<code class="highlighter-rouge">hadoop-slave1</code>和<code class="highlighter-rouge">hadoop-slave2</code>上面执行如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $ZOOKEEPER_HOME/bin
+./zkServer.sh start
+</code></pre></div></div>
+
+<p>(3) hbase</p>
+
+<p>在<code class="highlighter-rouge">hadoop-master</code>上面启动</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $HBASE_HOME/bin
+./start-hbase.sh
+</code></pre></div></div>
+
+<p>(4) hive</p>
+
+<p>在<code class="highlighter-rouge">hadoop-master</code>上面启动</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hive --service metastore &amp;
+nohup $HIVE_HOME/bin/hiveserver2 &amp;
+</code></pre></div></div>
+
+<h3 id="4组件关闭顺序">4、组件关闭顺序</h3>
+
+<p>(1) Hbase</p>
+
+<p>在<code class="highlighter-rouge">hadoop-master</code>上面启动</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $HBASE_HOME/bin
+./stop-hbase.sh
+</code></pre></div></div>
+
+<p>(2) Hive</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps -ef | grep hive
+kill -9 pid
+</code></pre></div></div>
+
+<p>(3) Zookeeper</p>
+
+<p>分别到<code class="highlighter-rouge">hadoop-slave1</code>和<code class="highlighter-rouge">hadoop-slave2</code>上面执行如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $ZOOKEEPER_HOME/bin
+./zkServer.sh stop
+</code></pre></div></div>
+
+<p>(4) Hadoop</p>
+
+<p>在<code class="highlighter-rouge">hadoop-master</code>上面执行：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $HADOOP_HOME/sbin
+./stop-all.sh
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="http://blog.csdn.net/u012441621/article/details/50879225">Centos环境下卸载自带的JDK</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/scrapy-run-on-docker.html" title="link to 在Docker上运行Scrapy">在Docker上运行Scrapy</a></h2>
+       <p class="excerpt">之前使用Scrapy写过一个空气质量的采集程序，最近要切换到另外一台服务器上面去，折腾了几个小时的安装环境还是没跑起来。几次之后就放弃了，刚好那台服务器上面安装了Docker的环境，运行了一个Nexus的服务几个月来一直都很稳定，那为啥不可以把Scrapy也放在上面运行呢？操作过程下面记录下我的处理的过程：（1）创建dockfile在scrapy.cfg文件所在的目录下面创建dockfile，里面的内容如下：FROM ubuntuMAINTAINER hhtczengjing@gmail....&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-10-10 10:08:00 +0800" class="post-list__meta--date date">2017-10-10</time> &#8226; <span class="post-list__meta--tags tags">Docker</span><a class="btn-border-small" href=/blog/scrapy-run-on-docker.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/load-excel-data-with-kettle.html" title="link to 使用Kettle导入Excel数据">使用Kettle导入Excel数据</a></h2>
+       <p class="excerpt">ETL（Extraction, Transformation, and Loading），在日常的工作中我们经常会遇到各种数据的处理，转换，迁移。比如将Excel的数据导入到数据库，将SQLServer里面的数据转换后存到Oracle，将数据库的数据提取到文本等。最开始都是使用写代码然后进行处理，多了几次之后就觉得麻烦了。后来了解到Kettle这个工具，首先无需安装直接就能使用，支持图形化的GUI设计界面，然后可以以工作流的形式流转，在做一些简单或复杂的数据抽取、质量检测、数据清洗、数据转...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-08-20 10:08:00 +0800" class="post-list__meta--date date">2017-08-20</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/load-excel-data-with-kettle.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

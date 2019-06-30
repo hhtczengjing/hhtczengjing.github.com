@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中使用Protocol Buffers</title>
+  <meta name="description" content="Google Protocol Buffer(简称Protobuf)是由Google推出的一种轻便高效的结构化数据存储格式，可以用于结构化数据串行化，或者说序列化。它很适合做数据存储或RPC数据交换格式。可用于通讯协议、数据存储等领域的语言无关、平台无关、可扩展的序列化结构数据格式。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中使用Protocol Buffers">
+  <meta name="twitter:description" content="Google Protocol Buffer(简称Protobuf)是由Google推出的一种轻便高效的结构化数据存储格式，可以用于结构化数据串行化，或者说序列化。它很适合做数据存储或RPC数据交换格式。可用于通讯协议、数据存储等领域的语言无关、平台无关、可扩展的序列化结构数据格式。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中使用Protocol Buffers">
+  <meta property="og:description" content="Google Protocol Buffer(简称Protobuf)是由Google推出的一种轻便高效的结构化数据存储格式，可以用于结构化数据串行化，或者说序列化。它很适合做数据存储或RPC数据交换格式。可用于通讯协议、数据存储等领域的语言无关、平台无关、可扩展的序列化结构数据格式。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-protobuf.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-07-09 09:40:53 +0800" itemprop="datePublished" class="post-meta__date date">2016-07-09</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中使用Protocol Buffers</h1>
+  </header>
+
+  <section class="post">
+    <p><a href="https://developers.google.com/protocol-buffers/"><code class="highlighter-rouge">Google Protocol Buffer</code></a>(简称<code class="highlighter-rouge">Protobuf</code>)是由Google推出的一种轻便高效的结构化数据存储格式，可以用于结构化数据串行化，或者说序列化。它很适合做数据存储或RPC数据交换格式。可用于通讯协议、数据存储等领域的语言无关、平台无关、可扩展的序列化结构数据格式。</p>
+
+<blockquote>
+  <p>Protocol buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data.</p>
+</blockquote>
+
+<p>Protobuf和XML相比同是数据交换协议，不过Protobuf更小、更快、也更简单。可以通过定义自己的数据结构，然后使用Protobuf的代码生成器生成代码，用生成的代码来读写这个数据结构。Protobuf具有如下几个优点：</p>
+
+<p>(1)“向后”兼容性好。不必担心因为消息结构的改变而造成的大规模的代码重构或者迁移的问题，因为添加新的消息中的字段并不会引起已经发布的程序的任何改变。</p>
+
+<p>(2)语义更清晰。Protobuf使用<code class="highlighter-rouge">.proto</code>文件描述数据交换的格式，然后Protobuf编译器会将<code class="highlighter-rouge">.proto</code>文件编译生成对应的数据访问类以对<code class="highlighter-rouge">Protobuf</code>数据进行序列化、反序列化操作），无需解释器之类的东西。</p>
+
+<p>(3)简单易学。使用Protobuf无需学习复杂的文档对象模型，它拥有良好的文档和示例，对于喜欢简单事物的人们而言，Protobuf比其他的技术更加有吸引力。</p>
+
+<p>Protobuf开源并托管在Github，项目地址是：<a href="https://github.com/google/protobuf/">https://github.com/google/protobuf/</a>。目前Google提供了三种语言的实现：java、c++ 和python，每一种实现都包含了相应语言的编译器以及库文件。</p>
+
+<p>###Protocol协议格式说明</p>
+
+<p>要通信，必须有协议，否则双方无法理解对方的码流。在Protobuf中，协议是由一系列的消息组成的。因此最重要的就是定义通信时使用到的消息格式。消息由至少一个字段组合而成，类似于C语言中的结构。每个字段都有一定的格式。字段格式：</p>
+
+<p><code class="highlighter-rouge">限定修饰符① | 数据类型② | 字段名称③ | = | 字段编码值④ | [字段默认值⑤]</code></p>
+
+<p>#####①．限定修饰符包含<code class="highlighter-rouge">required\optional\repeated</code></p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">Required</code>: 表示是一个必须字段，必须相对于发送方，在发送消息之前必须设置该字段的值，对于接收方，必须能够识别该字段的意思。发送之前没有设置required字段或者无法识别required字段都会引发编解码异常，导致消息被丢弃。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Optional</code>：表示是一个可选字段，可选对于发送方，在发送消息时，可以有选择性的设置或者不设置该字段的值。对于接收方，如果能够识别可选字段就进行相应的处理，如果无法识别，则忽略该字段，消息中的其它字段正常处理。因为optional字段的特性，很多接口在升级版本中都把后来添加的字段都统一的设置为optional字段，这样老的版本无需升级程序也可以正常的与新的软件进行通信，只不过新的字段无法识别而已，因为并不是每个节点都需要新的功能，因此可以做到按需升级和平滑过渡。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Repeated</code>：表示该字段可以包含0~N个元素。其特性和optional一样，但是每一次可以包含多个值。可以看作是在传递一个数组的值。</p>
+  </li>
+</ul>
+
+<p>#####②．数据类型。</p>
+
+<p>Protobuf定义了一套基本数据类型。几乎都可以映射到C++\Java\Objective-C等语言的基础数据类型。数据类型如下图所示：</p>
+
+<p><img src="/images/ios-protobuf/protobuf_field_type.png" alt="protobuf_field_type.png" /></p>
+
+<p>#####③．字段名称</p>
+
+<p>字段名称的命名与C、C++、Java和Objective-C等语言的变量命名方式几乎是相同的。Protobuf建议字段的命名采用以下划线分割的驼峰式。例如<code class="highlighter-rouge">first_name</code>而不是<code class="highlighter-rouge">firstName</code>。</p>
+
+<p>#####④．字段编码值</p>
+
+<p>有了该值，通信双方才能互相识别对方的字段。当然相同的编码值，其限定修饰符和数据类型必须相同。编码值的取值范围为 1~2^32（4294967296）。</p>
+
+<p>其中 1~15的编码时间和空间效率都是最高的，编码值越大，其编码的时间和空间效率就越低（相对于1-15），当然一般情况下相邻的2个值编码效率的是相同的，除非2个值恰好实在4字节，12字节，20字节等的临界区。比如15和16。1900~2000编码值为Protobuf系统内部保留值，建议不要在自己的项目中使用。Protobuf还建议把经常要传递的值把其字段编码设置为1-15之间的值。消息中的字段的编码值无需连续，只要是合法的，并且不能在同一个消息中有字段包含相同的编码值。</p>
+
+<p>建议：项目投入运营以后涉及到版本升级时的新增消息字段全部使用optional或者repeated，尽量不使用required。如果使用了required，需要全网统一升级，如果使用optional或者repeated可以平滑升级。</p>
+
+<p>#####⑤．默认值。</p>
+
+<p>当在传递数据时，对于required数据类型，如果用户没有设置值，则使用默认值传递到对端。当接受数据是，对于optional字段，如果没有接收到optional字段，则设置为默认值。</p>
+
+<p>#####⑥．关于import</p>
+
+<p>Protobuf接口文件可以像C语言的h文件一个，分离为多个，在需要的时候通过import导入需要对文件。其行为和C语言的<code class="highlighter-rouge">#include</code>或者iOS中的的<code class="highlighter-rouge">#import</code>的行为大致相同。</p>
+
+<p>#####⑦．关于package</p>
+
+<p>避免名称冲突，可以给每个文件指定一个package名称，对于java解析为java中的包。对于C++则解析为名称空间。</p>
+
+<p>#####⑧．关于message</p>
+
+<p>支持嵌套消息，消息可以包含另一个消息作为其字段。也可以在消息内定义一个新的消息。</p>
+
+<p>#####⑨．关于enum</p>
+
+<p>枚举的定义和C++相同，但是有一些限制。枚举值必须大于等于0的整数。使用分号(;)分隔枚举变量而不是C++语言中的逗号(,)</p>
+
+<p>###安装Protobuf Compiler</p>
+
+<p>目前Protobuf稳定的版本是<a href="https://github.com/google/protobuf/releases/download/v2.6.1/protobuf-2.6.1.tar.gz"><code class="highlighter-rouge">v2.6.1</code></a>,最新的版本是<code class="highlighter-rouge">v3.0.0-beta-3.1</code>估计很快就会推出3.0的正式版本了。本文所有的操作都是基于2.6.1的版本。</p>
+
+<p>####1.检查是否安装Homebrew:</p>
+
+<p><code class="highlighter-rouge">brew -v</code></p>
+
+<p>如果没有安装可以通过下面的方式进行安装：</p>
+
+<p><code class="highlighter-rouge">ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</code></p>
+
+<p>####2.安装Protobuf Compiler</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install automake 
+brew install libtool 
+brew install protobuf
+</code></pre></div></div>
+<p>####3.创建Protobuf Compiler的符号链接(可选步骤)</p>
+
+<p><code class="highlighter-rouge">ln -s /usr/local/Cellar/protobuf/2.6.1/bin/protoc /usr/local/bin</code></p>
+
+<p>####4.安装Objective-C的扩展</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/alexeyxo/protobuf-objc.git
+cd protobuf-objc
+./scripts/build.sh
+</code></pre></div></div>
+
+<p>###集成Protobuf Runtime</p>
+
+<p>推荐使用CocoaPods的方式进行集成，在Podfile中加入下面的代码：</p>
+
+<p><code class="highlighter-rouge">pod 'ProtocolBuffers', '~&gt; 1.9.10'</code></p>
+
+<p>###示例</p>
+
+<p>####1.创建<code class="highlighter-rouge">.proto</code>文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">option</span> <span class="n">java_package</span> <span class="p">=</span> <span class="s2">"com.devzeng.statistics.proto"</span><span class="p">;</span>
+<span class="k">package</span> <span class="n">Statistics</span><span class="p">;</span>
+
+<span class="n">message</span> <span class="n">AppContextMessage</span> <span class="p">{</span>
+	<span class="n">required</span> <span class="k">string</span> <span class="n">net_connetion_type</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>    <span class="p">//</span><span class="err">网络连接类型</span><span class="p">,</span><span class="err">可选值是</span><span class="n">wifi</span><span class="p">/</span><span class="n">wwan</span><span class="p">/</span><span class="n">unknown</span>
+	<span class="n">required</span> <span class="k">string</span> <span class="n">screen_resolution</span>  <span class="p">=</span> <span class="m">2</span><span class="p">;</span>    <span class="p">//</span><span class="err">屏幕分辨率</span>
+	<span class="n">optional</span> <span class="k">string</span> <span class="n">device_token</span>		<span class="p">=</span> <span class="m">3</span><span class="p">;</span>	<span class="p">//</span><span class="err">推送设备号</span>
+	<span class="n">optional</span> <span class="k">string</span> <span class="n">mac_address</span>			<span class="p">=</span> <span class="m">4</span><span class="p">;</span>	<span class="p">//</span><span class="n">mac</span><span class="err">地址</span>
+	<span class="n">optional</span> <span class="k">string</span> <span class="n">carrier_name</span> 		<span class="p">=</span> <span class="m">5</span><span class="p">;</span>	<span class="p">//</span><span class="err">运营商名称</span>
+	<span class="n">optional</span> <span class="k">string</span> <span class="n">device_model</span> 		<span class="p">=</span> <span class="m">6</span><span class="p">;</span>	<span class="p">//</span><span class="err">设备型号</span>
+	<span class="n">optional</span> <span class="k">string</span> <span class="n">wifi_name</span> 			<span class="p">=</span> <span class="m">7</span><span class="p">;</span>	<span class="p">//</span><span class="n">wifi</span><span class="err">名称</span>
+	<span class="n">optional</span> <span class="k">string</span> <span class="n">device_name</span> 		<span class="p">=</span> <span class="m">8</span><span class="p">;</span>	<span class="p">//</span><span class="err">设备名称</span>
+	<span class="n">required</span> <span class="k">string</span> <span class="n">device_type</span> 		<span class="p">=</span> <span class="m">9</span><span class="p">;</span>	<span class="p">//</span><span class="err">设备类型，可选值是</span><span class="n">iPhone</span><span class="p">/</span><span class="n">iPad</span><span class="p">/</span><span class="n">Android</span>
+	<span class="n">required</span> <span class="k">string</span> <span class="n">system_version</span> 		<span class="p">=</span> <span class="m">10</span><span class="p">;</span>	<span class="p">//</span><span class="err">系统版本</span>
+	<span class="n">required</span> <span class="k">string</span> <span class="n">device_uuid</span> 		<span class="p">=</span> <span class="m">11</span><span class="p">;</span>	<span class="p">//</span><span class="err">设备号</span>
+	<span class="n">optional</span> <span class="k">string</span> <span class="n">gps</span> 				<span class="p">=</span> <span class="m">12</span><span class="p">;</span>	<span class="p">//</span><span class="err">经纬度</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span><span class="n">longitude</span><span class="p">)</span>
+	<span class="n">required</span> <span class="k">string</span> <span class="n">app_version</span> 		<span class="p">=</span> <span class="m">13</span><span class="p">;</span>	<span class="p">//</span><span class="err">当前安装的</span><span class="n">APP</span><span class="err">版本号</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>一个比较好的习惯是认真对待proto文件的文件名。比如将命名规则定于如下：
+<code class="highlighter-rouge">packageName.MessageName.proto</code></p>
+
+<p>在上例中，package 名字叫做<code class="highlighter-rouge">Statistics</code>，定义了一个消息<code class="highlighter-rouge">AppContextMessage</code>。那么可以可以命名为<code class="highlighter-rouge">Statistics.AppContextMessage.proto</code></p>
+
+<p>####2.使用Protobuf编译器生成平台相关的代码</p>
+
+<p><code class="highlighter-rouge">protoc --plugin=/usr/local/bin/protoc-gen-objc *.proto --objc_out="./"</code></p>
+
+<p>####3.数据的序列化</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AppContextMessageBuilder *builder = [AppContextMessage builder];
+[builder setNetConnetionType:@"wifi"];
+[builder setScreenResolution:@""];
+[builder setMacAddress:@""];
+[builder setCarrierName:@"中国联通"];
+[builder setDeviceModel:@""];
+[builder setWifiName:@"my_wifi(8c:21:a:44:f0:c)"];
+[builder setDeviceType:@"iPhone"];
+[builder setSystemVersion:@""];
+[builder setDeviceUuid:@""];
+[builder setDeviceName:@""];
+[builder setGps:@""];
+[builder setAppVersion:@"1.0.1_20"];
+NSData *data = [builder build].data;
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1.<a href="https://developers.google.com/protocol-buffers/">《Protobuf’s Documentation》</a></p>
+
+<p>2.<a href="http://www.ibm.com/developerworks/cn/linux/l-cn-gpb/">《Google Protocol Buffer 的使用和原理》</a></p>
+
+<p>3.<a href="http://www.tanhao.me/code/150911.html/">《Protocol Buffer搭建及示例》</a></p>
+
+<p>4.<a href="https://github.com/alexeyxo/protobuf-objc">《Protocol Buffers for Objective-C》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-leveldb.html" title="link to iOS中KV数据库LevelDB的编译和使用">iOS中KV数据库LevelDB的编译和使用</a></h2>
+       <p class="excerpt">LevelDB是Google公司重量级工程师Jeff Dean和Sanjay Ghemawat发起的开源项目。LevelDB是一个持久化存储的KV系统，和Redis这种内存型的KV系统不同，LevelDB不会像Redis一样狂吃内存，而是将大部分数据存储到磁盘上。目前能够支持billion级别的数据量，在这个数量级别下还有着非常高的性能，主要归功于它的良好的设计。LevelDB开源并托管在GitHub上，项目的地址是：https://github.com/google/leveldb。有个...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-07-10 12:15:53 +0800" class="post-list__meta--date date">2016-07-10</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-leveldb.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-webp-usage.html" title="link to 在iOS项目中使用WebP格式图片">在iOS项目中使用WebP格式图片</a></h2>
+       <p class="excerpt">WebP是Google开发的一种旨在加快图片加载速度的图片格式。图片压缩体积大约只有JPEG的2/3，并能节省大量的服务器带宽资源和数据空间。Facebook Ebay等知名网站已经开始测试并使用WebP格式。下图是Google已经和正在部署的WebP的产品。与JPEG相同，WebP是一种有损压缩。Google表示这种格式的主要优势在于高效率。他们发现，“在质量相同的情况下，WebP格式图像的体积要比JPEG格式图像小40%，美中不足的是，WebP格式图像的编码时间“比JPEG格式图像长8...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-06-19 11:40:53 +0800" class="post-list__meta--date date">2016-06-19</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-webp-usage.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

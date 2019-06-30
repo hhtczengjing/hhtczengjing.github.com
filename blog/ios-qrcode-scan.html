@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中的二维码扫描</title>
+  <meta name="description" content="二维码（Two-dimensional code），又称二维条码，它是用特定的几何图形按一定规律在平面（二维方向）上分布的黑白相间的图形，是所有信息数据的一把钥匙。在现代商业活动中，可实现的应用十分广泛，如：产品防伪/溯源、广告推送、网站链接、数据下载、商品交易、定位/导航、电子凭证、车辆管理、信息传递、名片交流...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中的二维码扫描">
+  <meta name="twitter:description" content="二维码（Two-dimensional code），又称二维条码，它是用特定的几何图形按一定规律在平面（二维方向）上分布的黑白相间的图形，是所有信息数据的一把钥匙。在现代商业活动中，可实现的应用十分广泛，如：产品防伪/溯源、广告推送、网站链接、数据下载、商品交易、定位/导航、电子凭证、车辆管理、信息传递、名片交流...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中的二维码扫描">
+  <meta property="og:description" content="二维码（Two-dimensional code），又称二维条码，它是用特定的几何图形按一定规律在平面（二维方向）上分布的黑白相间的图形，是所有信息数据的一把钥匙。在现代商业活动中，可实现的应用十分广泛，如：产品防伪/溯源、广告推送、网站链接、数据下载、商品交易、定位/导航、电子凭证、车辆管理、信息传递、名片交流...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-qrcode-scan.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-09 17:44:36 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-09</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中的二维码扫描</h1>
+  </header>
+
+  <section class="post">
+    <p>二维码（Two-dimensional code），又称二维条码，它是用特定的几何图形按一定规律在平面（二维方向）上分布的黑白相间的图形，是所有信息数据的一把钥匙。在现代商业活动中，可实现的应用十分广泛，如：产品防伪/溯源、广告推送、网站链接、数据下载、商品交易、定位/导航、电子凭证、车辆管理、信息传递、名片交流、wifi共享等。如今智能手机扫一扫功能的应用使得二维码更加普遍。</p>
+
+<p>##ZXing
+   <a href="https://github.com/zxing/zxing">ZXing</a>是一个开源的条码生成和扫描库，支持众多的条码格式，而且有各种语言的实现版本，支持的语言包括Java、C++、C#、Objective-C等，但是目前已经不再维护。</p>
+
+<p>1、下载ZXing源码，对源码工程进行处理
+   首先去Google Code或Github将ZXing的代码下载下来，整个工程比较大，我们只需要其中涉及iOS的部分，所以最好做一些裁剪。简单来说，我们只需要保留<code class="highlighter-rouge">cpp</code>和<code class="highlighter-rouge">iphone</code>这两个文件夹，其余的文件和文件夹全部删掉。接着继续裁剪，对于cpp这个目录，只保留<code class="highlighter-rouge">cpp/core/src/zxing</code>和<code class="highlighter-rouge">cpp/core/src/bigint</code>下面的内容，其余内容也可以删掉了。但是整个目录结构必须保持原样。 完成之后如下图所示：</p>
+
+<p><img src="/images/ios_qrcode/ios_zxing_dir.png" alt="ios_zxing_dir.png" /></p>
+
+<p>2、配置Xcode</p>
+
+<p>(1)把裁剪后的<code class="highlighter-rouge">zxing</code>目录整个移动到iOS项目的目录下,把<code class="highlighter-rouge">ZXingWidget.xcodeproj</code>文件拖动到iOS工程中，如下图所示。</p>
+
+<p><img src="http://blog.devzeng.com/images/ios_qrcode/zxing_xcode_profile.png" alt="zxing_xcode_profile.png" /></p>
+
+<p>(2)在Xcode的<code class="highlighter-rouge">Target</code>-&gt;<code class="highlighter-rouge">Build Phases</code>中添加如下配置：</p>
+
+<p>1)在<code class="highlighter-rouge">Target Dependencies</code>中添加<code class="highlighter-rouge">ZXingWidget(ZXingWidget)</code></p>
+
+<p>2)在<code class="highlighter-rouge">Link Binary With Libraries</code>中添加<code class="highlighter-rouge">AVFoundation</code>、<code class="highlighter-rouge">AudioToolbox</code>、<code class="highlighter-rouge">CoreVideo</code>、<code class="highlighter-rouge">CoreMedia</code>、<code class="highlighter-rouge">libiconv</code>、<code class="highlighter-rouge">AddressBook</code>、<code class="highlighter-rouge">AddressBookUI</code>和<code class="highlighter-rouge">libZXingWidget.a</code></p>
+
+<p>(3)在在Xcode的<code class="highlighter-rouge">Target</code>-&gt;<code class="highlighter-rouge">Build Settings</code>中添加如下配置：</p>
+
+<p>1)在Target<code class="highlighter-rouge">ZXingWidget</code>的<code class="highlighter-rouge">Build Settings</code>中调整<code class="highlighter-rouge">Build Active Architecture Only</code>为<code class="highlighter-rouge">NO</code></p>
+
+<p>2)在主工程的Target的<code class="highlighter-rouge">Build Settings</code>的<code class="highlighter-rouge">Header Search Paths</code>添加下面两行：</p>
+
+<p><code class="highlighter-rouge">./zxing/iphone/ZXingWidget/Classes</code>【recursive】</p>
+
+<p><code class="highlighter-rouge">./zxing/cpp/core/src</code> 【non-recursive】</p>
+
+<p>3、实现二维码的扫描</p>
+
+<p>将引用到ZXing的类的后缀名改成<code class="highlighter-rouge">.mm</code></p>
+
+<p>(1)直接使用ZXingWidgetController扫描二维码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)onZxingClicked:(id)sender
+{
+    ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:self showCancel:YES OneDMode:NO];
+    NSMutableSet *readers = [[NSMutableSet alloc] init];
+    QRCodeReader *qrcodeReader = [[QRCodeReader alloc] init];
+    [readers addObject:qrcodeReader];
+    widController.readers = readers;
+    [self presentViewController:widController animated:YES completion:nil];
+}
+</code></pre></div></div>
+
+<p>实现ZXingDelegate协议的代理方法</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//扫描出结果调用的函数
+- (void)zxingController:(ZXingWidgetController*)c didScanResult:(NSString *)result
+{
+    [c dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"%@", result);
+}
+
+//取消处理回调的函数
+- (void)zxingControllerDidCancel:(ZXingWidgetController*)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+</code></pre></div></div>
+
+<p>(2)使用AVFoundation获取Camera的实时图像然后对图像进行解析</p>
+
+<p>1)获取Camera的实时图像</p>
+
+<p>获取Camera的实时图像的方法过长，会在接下来的博文中进行介绍。</p>
+
+<p>2)解析图像的内容</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//解析图像的内容
+- (void)decoderQRCode:(UIImage *)image
+{
+    NSMutableSet *qrReaderConfig = [[NSMutableSet alloc ] init];
+    QRCodeReader* qrcodeReader = [[QRCodeReader alloc] init];
+    [qrReaderConfig addObject:qrcodeReader];
+    Decoder *d = [[Decoder alloc] init];
+    d.readers = qrReaderConfig;
+    d.delegate = self;
+    [d decodeImage:image];
+}
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//开始解析图片
+- (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset
+{
+    
+}
+
+//已经完成解析
+- (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset withResult:(TwoDDecoderResult *)result
+{
+    NSLog(@"【Decoder Result】-&gt;%@", result.text);
+}
+
+//解析失败
+- (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason
+{
+    NSLog(@"【Decoder Error】-&gt;%@", reason);
+}
+
+- (void)decoder:(Decoder *)decoder foundPossibleResultPoint:(CGPoint)point
+{
+    
+}
+</code></pre></div></div>
+
+<p>##iOS7中自带的AVFoundation</p>
+
+<p>1、创建AVCaptureSession对象</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (AVCaptureSession *)setupCaptureSession
+{
+    NSError *error;
+    AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:captureDevice error:&amp;error];
+    
+    if (!input) {
+        NSLog(@"%@", [error localizedDescription]);
+        return NO;
+    }
+    
+    AVCaptureSession *session = [[AVCaptureSession alloc] init];
+    // Set the input device on the capture session.
+    [session addInput:input];
+    
+    AVCaptureMetadataOutput *captureMetadataOutput = [[AVCaptureMetadataOutput alloc] init];
+    [session addOutput:captureMetadataOutput];
+    
+    // Create a new serial dispatch queue.
+    dispatch_queue_t dispatchQueue;
+    dispatchQueue = dispatch_queue_create("com.devzeng.qrcode.queue", NULL);
+    [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
+    
+    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypeQRCode]];
+    //[captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObjects:AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypeQRCode, nil]];
+    
+    [session startRunning];
+    
+    return session;
+}
+</code></pre></div></div>
+
+<p>2、实现<code class="highlighter-rouge">AVCaptureMetadataOutputObjectsDelegate</code>代理方法</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
+{
+    if(!self.isReading)
+    {
+        return;
+    }
+    
+    if (metadataObjects != nil &amp;&amp; [metadataObjects count] &gt; 0)
+    {
+        AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
+        NSLog(@"%@", metadataObj.stringValue);
+    }
+}
+</code></pre></div></div>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://www.devtang.com/blog/2012/12/23/use-zxing-library/">《在iOS中使用ZXing库》</a></p>
+
+<p>2、<a href="http://chenweihuacwh.iteye.com/blog/1918325">《iOS项目开发中使用了ZXing》</a></p>
+
+<p>3、<a href="http://thierry-xing.iteye.com/blog/1815295">《在iOS和Android中使用二维码ZXing库及常见问题解决和整合后的代码》</a></p>
+
+<p>4、<a href="http://stackoverflow.com/questions/12968369/undefined-symbols-for-architecture-armv7-when-using-zxing-library-in-xcode-4-5">《Undefined symbols for architecture armv7 when using ZXing library in XCode 4.5》</a></p>
+
+<p>5、<a href="http://blog.csdn.net/sing_sing/article/details/21512941">《解决Xcode5.1编译ZXing出错的问题》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-url-scheme.html" title="link to iOS中的URL Scheme">iOS中的URL Scheme</a></h2>
+       <p class="excerpt">在iOS的SDK中提供了一个非常有意思的功能，它能将iOS的Application同自定义的URL Schema绑定，同时可以通过URL Scheme在浏览器或者是其他应用中启动这个Application。本文主要介绍如何通过URL Scheme的方式启动应用和参数的传递。##创建URL Scheme1、首先在*-Info.plist中添加一行,选择URL types，效果如下图所示：2、在展开的Item 0中填写URL identifier,这个用来唯一标识用户自定义的URL Schem...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-11 19:07:27 +0800" class="post-list__meta--date date">2014-08-11</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-url-scheme.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/java-jndi-datasource.html" title="link to Java使用JNDI配置WEB项目数据源">Java使用JNDI配置WEB项目数据源</a></h2>
+       <p class="excerpt">JNDI(Java Naming and Directory Interface,Java命名与目录接口)是Java提供的一种标准的命名系统接口，JNDI提供统一的客户端API，通过不同的访问提供者接口JNDI SPI(Service Provider Interface,服务提供者接口)的实现，由管理者将JNDI API映射为特定的命名服务和目录系统，使得Java应用程序可以和这些命名服务和目录服务之间进行交互。##使用传统的方式一般对于普通的项目，习惯上使用.properties的文件...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-06 21:28:49 +0800" class="post-list__meta--date date">2014-08-06</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/blog/java-jndi-datasource.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

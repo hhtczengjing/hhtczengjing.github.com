@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>微信公众平台开发之access_token</title>
+  <meta name="description" content="">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="微信公众平台开发之access_token">
+  <meta name="twitter:description" content="">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="微信公众平台开发之access_token">
+  <meta property="og:description" content="">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/wechat-development-of-access-token.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-09-29 22:15:03 +0800" itemprop="datePublished" class="post-meta__date date">2014-09-29</time> &#8226; <span class="post-meta__tags tags">WeChat</span>
+    </div>
+    <h1 class="post-title">微信公众平台开发之access_token</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="/images/wechat_development_02/wechat_development_logo.png" alt="wechat_development_logo.png" /></p>
+
+<p>为了使第三方开发者能够为用户提供更多更有价值的个性化服务，微信公众平台开放了许多接口，包括自定义菜单接口、客服接口、获取用户信息接口、用户分组接口、群发接口等，开发者在调用这些接口时，都需要传入一个相同的参数access_token，它是公众账号的全局唯一票据，它是接口访问凭证。本文重点是介绍在实际的开发中如何获取access_token和如何保持获取到的access_token长期有效。</p>
+
+<p>##获取access_token的接口说明</p>
+
+<p>以HTTP GET请求的方式向微信服务器发送请求，请求的URL格式如下：</p>
+
+<p><code class="highlighter-rouge">https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid=APPID&amp;secret=APPSECRET</code></p>
+
+<p>####1、参数说明：</p>
+
+<table>
+<tbody>
+<tr>
+	<th style="width:120px">参数</th>
+	<th style="width:120px">是否必须</th>
+	<th>说明</th>
+</tr>
+<tr>
+	<td>grant_type</td>
+	<td>是</td>
+	<td>获取access_token填写client_credential</td>
+</tr>
+<tr>
+	<td>appid</td>
+	<td>是</td>
+	<td>第三方用户唯一凭证</td>
+</tr>
+<tr>
+	<td>secret</td>
+	<td>是</td>
+	<td>第三方用户唯一凭证密钥，即appsecret</td>
+</tr>
+</tbody>
+</table>
+
+<p>说明：</p>
+
+<p>(1)AppID和AppSecret可在开发模式中获得;</p>
+
+<p>(2)注意调用所有微信接口时均需使用https协议。</p>
+
+<p>####2、返回数据说明：</p>
+
+<p>正常情况下，微信会返回下述JSON数据包给公众号：</p>
+
+<p><code class="highlighter-rouge">{"access_token":"ACCESS_TOKEN","expires_in":7200}</code></p>
+
+<p>说明如下：</p>
+
+<table>
+<tbody>
+<tr>
+	<th style="width:120px">参数</th>
+	<th>说明</th>
+</tr>
+<tr>
+	<td>access_token</td>
+	<td>获取到的凭证(至少有512个字符)</td>
+</tr>
+<tr>
+	<td>expires_in</td>
+	<td>凭证有效时间，单位：秒</td>
+</tr>
+</tbody>
+</table>
+
+<p>错误时微信会返回错误码等信息，JSON数据包示例如下（该示例为AppID无效错误）:</p>
+
+<p><code class="highlighter-rouge">{"errcode":40013,"errmsg":"invalid appid"}</code></p>
+
+<p>有关<code class="highlighter-rouge">errcode</code>的说明请参考<a href="http://mp.weixin.qq.com/wiki/index.php?title=全局返回码说明">全局返回码说明</a>中的对应描述</p>
+
+<p>##最佳实践</p>
+
+<p><code class="highlighter-rouge">access_token</code>是公众号的全局唯一票据，公众号调用各接口时都需使用access_token。正常情况下access_token有效期为<code class="highlighter-rouge">7200</code>秒，重复获取将导致上次获取的access_token失效。由于获取access_token的api调用次数非常有限，微信官方建议开发者全局存储与更新access_token，频繁刷新access_token会导致api调用受限，影响自身业务。</p>
+
+<p>为了减少获取access_token的API的调用次数，在实际的开发中设计采用单例全局存储access_token的值和过期时间。具体的步骤如下：</p>
+
+<p>1、获取access_token</p>
+
+<p>思路是首先会判断本地有没有存储过access_token，如果有存储就判断是否过期。如果本地没有存储或存储的access_token已经过期便向微信服务器申请获取新的access_token。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static String getAccessToken() throws Exception {
+
+	//首先判断本地有无记录，记录是否过期 7200s
+
+    boolean isExpired = WeChatSystemContext.getInstance().isExpired();
+
+    if(isExpired) {
+    
+    	//拼接url,APPID和APPSECRET从开发者中心获取
+
+    	String APPID = "";//APPID
+
+    	String APPSECRET = "";//APPSECRET
+
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid="+ APPID + "&amp;secret=" + APPSECRET";
+
+        //发起HTTPS的GET请求
+
+        String jsonStr = WeChatHTTPClient.get(url);
+
+        Map&lt;String, Object&gt; map = JSONObject.parseObject(jsonStr);
+
+        String accessToken = map.get("access_token").toString();
+
+        //记录到配置 access_token 当前时间
+
+        WeChatSystemContext.getInstance().saveLocalAccessonToke(accessToken);
+
+        return accessToken;
+
+    } else {
+
+    	//从配置中直接获取access_token 
+
+    	return WeChatConfigSingleton.getInstance().getAccessToken();
+
+    }
+
+}
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>(1)<code class="highlighter-rouge">WeChatHTTPClient</code>这个类是封装的一个HTTP请求的工具类，用户发起http请求返回相应的数据，后续会进行介绍；</p>
+
+<p>(2)<code class="highlighter-rouge">JSONObject</code>这个是一个解析JSON的第三方库<code class="highlighter-rouge">fastjson</code></p>
+
+<p>2、存储access_token的单例类</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class WeChatSystemContext {
+
+	private String accessToken;//接口访问凭据
+
+	private long createTime;//接口访问凭据创建时间，理论上是2小时后过期
+
+	
+	static class WeChatSystemContextHolder {
+
+		static WeChatSystemContext instance = new WeChatSystemContext();
+
+	}
+	
+
+	public static WeChatSystemContext getInstance() {
+
+		return WeChatSystemContextHolder.instance;
+
+	}
+	
+
+	//是否过期
+
+	public boolean isExpired() {
+
+		long time = new Date().getTime();
+
+		//如果当前记录时间为0
+
+		if(this.createTime &lt;= 0) {
+
+			return true;
+
+		}
+
+		//判断记录时间是否超过7200s
+
+		if(this.createTime/1000 + 7200 &lt; time/1000) {
+
+			return true;
+
+		}
+
+		return false;
+
+	}
+
+	
+	//记录接口访问凭证
+
+	public void saveLocalAccessonToke(String accessToken) {
+
+		this.accessToken = accessToken;
+
+		this.createTime = new Date().getTime();
+
+	}
+
+	
+	public void setAccessToken(String accessToken) {
+
+		this.accessToken = accessToken;
+
+	}
+
+	public String getAccessToken() {
+
+		return accessToken;
+
+	}
+
+	public void setCreateTime(long createTime) {
+
+		this.createTime = createTime;
+
+	}
+
+	public long getCreateTime() {
+
+		return createTime;
+
+	}
+
+}
+</code></pre></div></div>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://blog.csdn.net/lyq8479/article/details/25076223">《[051] 微信公众平台开发教程第22篇-如何保证access_token长期有效》</a></p>
+
+<p>2、<a href="http://mp.weixin.qq.com/wiki/index.php?title=获取access_token">《获取access token》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/aliyun-ubuntu-svn-server.html" title="link to 阿里云Ubuntu系统搭建SVN服务器">阿里云Ubuntu系统搭建SVN服务器</a></h2>
+       <p class="excerpt">近期入手了一台阿里云（阿里云是国内优秀的云计算服务提供商，属于阿里巴巴旗下）的云服务器（Ubuntu系统）打算用来做WEB API的服务器，另外为了便于对数据和相关文档的管理需要在服务器上搭建SVN服务器，本文主要是用于记录如何搭建SVN服务器以及在搭建过程中遇到的一些问题。##SVN服务器相关软件安装1、使用SSH远程服务器（1）对于MAC OS/Liunx的用户直接打开终端输入ssh 用户名@实例名，例如 ssh root@192.168.1.100执行上面的命令后终端会提示输入密码，...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-10-14 23:39:09 +0800" class="post-list__meta--date date">2014-10-14</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/aliyun-ubuntu-svn-server.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios8-notification-reply.html" title="link to iOS8中的通知中心快速回复">iOS8中的通知中心快速回复</a></h2>
+       <p class="excerpt">iOS8拥有了全新的通知中心，有全新的通知机制。当屏幕顶部收到推送时只需要往下拉，就能看到快速操作界面，并不需要进入该应用才能操作。在锁屏界面，对于推送项目也可以快速处理。基本上就是让用户尽量在不离开当前页面的前提下处理推送信息，再次提高处理效率。能够进行直接互动的短信、邮件、日历、提醒，第三方应用，可以让你不用进入程序就能进行快捷操作，并专注于手中正在做的事情，用户可以做如下操作：  在通知横幅快速回复信息，不用进入短信程序；  可直接拒绝或接受邮件邀请；  可对提醒进行标记为完成或推迟...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-09-21 17:15:45 +0800" class="post-list__meta--date date">2014-09-21</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios8-notification-reply.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Eclipse无法正常启动Tomcat项目解决办法</title>
+  <meta name="description" content="">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Eclipse无法正常启动Tomcat项目解决办法">
+  <meta name="twitter:description" content="">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Eclipse无法正常启动Tomcat项目解决办法">
+  <meta property="og:description" content="">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/eclipse-tomcat-launch-error.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-06-07 21:51:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-06-07</time> &#8226; <span class="post-meta__tags tags">Java</span>
+    </div>
+    <h1 class="post-title">Eclipse无法正常启动Tomcat项目解决办法</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="/images/eclipse-tomcat-lanuch-error/eclipse-logo.png" alt="eclipse-logo.png" /></p>
+
+<p>以前一直使用 <code class="highlighter-rouge">MyEclipse</code> 开发 JavaEE 项目，实在是太卡了，近期将之前的项目全部迁移到了 Eclipse 上面。一段时间内都好好的，这两天突然发现启动 Tomcat 不正常了，具体表现如下：</p>
+
+<p>（1）Tomcat 在 Eclipse 里面能正常启动，但在浏览器中访问<code class="highlighter-rouge">http://localhost:8080/</code>报404错误。也就是说 Tomcat 启动了但是里面部署的 web 项目没有启动。</p>
+
+<p>（2）关闭 Eclipse 里面的 Tomcat，在 Tomcat 安装目录下双击<code class="highlighter-rouge">startup.bat</code>手动启动 Tomcat 服务器。访问<code class="highlighter-rouge">http://localhost:8080/</code>能正常打开 Tomcat 里面部署的项目。</p>
+
+<p>通过网上一篇文章<a href="http://blog.csdn.net/wqjsir/article/details/7169838/">《eclipse启动tomcat无法访问》</a>终于解决了问题，貌似之前在MyEclipse里面也遇到过这个问题，下面记录一下解决的办法：</p>
+
+<p>（1）在 Eclipse 中的 Server 页面，双击 Tomcat 服务</p>
+
+<p><img src="/images/eclipse-tomcat-lanuch-error/open-server.png" alt="open-server.png" /></p>
+
+<p>会看到如下所示的配置页面：</p>
+
+<p><img src="/images/eclipse-tomcat-lanuch-error/config-error.png" alt="open-server.png" /></p>
+
+<p>可以看到当前<code class="highlighter-rouge">Server Locations</code>选择的是 <code class="highlighter-rouge">Use workspace metadata(does not modify Tomcat installion)</code></p>
+
+<p>（2）如果该tomcat中部署了项目的话，这红圈中的选项会灰掉不能修改，要修改必须得先把tomcat中的部署的服务都移除。如下图所示:</p>
+
+<p><img src="/images/eclipse-tomcat-lanuch-error/add-remove.png" alt="open-server.png" /></p>
+
+<p>选择 <code class="highlighter-rouge">Add and Remove</code>，在弹出的对话框中移除已部署的项目。移除完确定后，将看到上面的选项面板部分可编辑了</p>
+
+<p>（3）选择tomcat的安装目录来作为项目的发布目录</p>
+
+<p>选择<code class="highlighter-rouge">Use tomcat installation(Task control of Tomcat installation)</code> 即选择tomcat的安装目录来作为项目的发布目录。</p>
+
+<p>（4） 修改部署文件夹的名称</p>
+
+<p>然后,下来四行,看到<code class="highlighter-rouge">"Deploy Path"</code>了没?它后面的值默认是”<code class="highlighter-rouge">wtpwebapps</code>“,把它改成”webapps”,也就是tomcat中发布项目所在的文件夹名字。</p>
+
+<p>修改后关掉该页面，保存配置。这样就将项目部署到了 <code class="highlighter-rouge">Tomcat</code> 安装目录下的 <code class="highlighter-rouge">webapp</code>
+重启 <code class="highlighter-rouge">Tomcat</code> 服务器，访问<code class="highlighter-rouge">http://localhost:8080</code>则能正常访问了，自己部署的项目也能正常访问了。</p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="http://blog.csdn.net/wqjsir/article/details/7169838/">eclipse启动tomcat无法访问</a></p>
+
+<p>2、<a href="https://www.eclipse.org/">Eclipse官网</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-ocr-with-tesseract.html" title="link to iOS中使用Tesseract提取身份证号码">iOS中使用Tesseract提取身份证号码</a></h2>
+       <p class="excerpt">OCR （Optical Character Recognition，光学字符识别）是指电子设备（例如扫描仪或数码相机）检查纸上打印的字符，通过检测暗、亮的模式确定其形状，然后用字符识别方法将形状翻译成计算机文字的过程。通俗来说就是通过对图像进行处理提取裁剪出来有字符的区域然后对字符进行识别翻译成文字。上面的图片是来自于Baidu的在线OCR识别。本文是基于tesseract-ocr（Tesseract是一个开源的OCR引擎，可以识别多种格式的图像文件并将其转换成文本，目前已支持包括中文在...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-07-15 11:08:00 +0800" class="post-list__meta--date date">2017-07-15</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-ocr-with-tesseract.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/jersey-swagger-api.html" title="link to Jersey整合Swagger自动生成API文档">Jersey整合Swagger自动生成API文档</a></h2>
+       <p class="excerpt">之前写过一篇文章《使用Jersey开发REST服务》，里面简单介绍了使用Jersey来快速创建REST的API服务。REST API都是要对外提供服务的，那么文档是必须的。经常要给其他人员提供文档，每次都是要不断的维护word/excel的文件，挺麻烦的。能不能做到自动生成呢？答案是可以的，swagger就是这样的一个组件帮助我们快速生成，让开发人员只需要关注功能的开发即可，后续的工作就交给Swagger就好了。下面简单介绍下如何在Jersey的项目中集成Swagger。1、pom.xml...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-05-04 21:51:00 +0800" class="post-list__meta--date date">2017-05-04</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/blog/jersey-swagger-api.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

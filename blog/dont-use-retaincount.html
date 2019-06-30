@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>不要使用retainCount</title>
+  <meta name="description" content="Objective-C通过引用计数来管理内存，每个对象都有一个计数器，其值表明还有多少个对象同此对象之间存在引用关系。每个对象在创建之际其retainCount设置为1，retain/copy会使引用计数递增，而release则会使其引用计数递减。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="不要使用retainCount">
+  <meta name="twitter:description" content="Objective-C通过引用计数来管理内存，每个对象都有一个计数器，其值表明还有多少个对象同此对象之间存在引用关系。每个对象在创建之际其retainCount设置为1，retain/copy会使引用计数递增，而release则会使其引用计数递减。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="不要使用retainCount">
+  <meta property="og:description" content="Objective-C通过引用计数来管理内存，每个对象都有一个计数器，其值表明还有多少个对象同此对象之间存在引用关系。每个对象在创建之际其retainCount设置为1，retain/copy会使引用计数递增，而release则会使其引用计数递减。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/dont-use-retaincount.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-07-24 22:22:02 +0800" itemprop="datePublished" class="post-meta__date date">2014-07-24</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">不要使用retainCount</h1>
+  </header>
+
+  <section class="post">
+    <p>Objective-C通过引用计数来管理内存，每个对象都有一个计数器，其值表明还有多少个对象同此对象之间存在引用关系。每个对象在创建之际其retainCount设置为1，retain/copy会使引用计数递增，而release则会使其引用计数递减。</p>
+
+<p>在NSObject协议中定义了retainCount的方法，用于查询对象当前的引用计数，方法的定义如下：</p>
+
+<p><code class="highlighter-rouge">-(NSUInteger)retainCount</code></p>
+
+<p>虽然说在ARC的情况下该方法已经被废弃，这和在ARC中使用retain、release、autorelease方法一样编译器会报错，若在不启用ARC的开发环境下仍然可以调用此方法而编译器不会报错。虽然此方法已经被正式废弃了但是还是经常有人会误解它，其实这个方法根本就不应该被调用。这个方法看上去似乎挺有用的，毕竟返回了保留的引用计数，似乎可以通过retainCount的值来决定对象能否被释放等。但问题在于，保留计数的绝对值一般都与开发者所留意的事情完全无关。</p>
+
+<p>此方法之所以没有用处其首要原因在于：</p>
+
+<blockquote>
+  <p>它所返回的保留计数只是在某个给定时间点上的值，并未考虑到系统会稍后吧自动释放池清空，因而不会将后续的释放操作从返回值中减去，这样的话就未必能真实地反映实际的保留计数了。</p>
+</blockquote>
+
+<h4 id="实例分析">实例分析</h4>
+
+<p>对于下面的这种想要释放对于的写法非常糟糕：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>while([obj retainCount]) {
+	[obj release];
+}
+</code></pre></div></div>
+<p>错误分析：</p>
+
+<p>1、这种写法的第一个错误是，没有考虑到后续的自动释放操作，只是不停的通过释放操作来减少保留计数，直到对象资源被系统回收，假如此对象也在自动释放池里，那么稍后系统清空自动释放池时还要将它再释放一次，这将导致程序异常；</p>
+
+<p>2、第二个错误在于，retainCount可能永远不返回0，因为有时系统会优化对象的释放行为在保留计数还是1的时候就把对象给回收了，只有系统不打算这么优化时，计数值才会递减至0，因此保留计数可能永远不为0。</p>
+
+<h4 id="要点小结">要点小结</h4>
+
+<p>1、对象的保留计数看似有用，实则不然，因为任何给定时间点上的“绝对保留计数”（absolute retain count）都无法反映对象生命周期的全貌；</p>
+
+<p>2、引入ARC后，retainCount正式被废弃使用，在ARC环境下调用该方法会导致编译器报错；</p>
+
+<p>3、不应该总是依赖保留计数的具体值来编码，即便只是为了调试。</p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-singleton-design-pattern.html" title="link to iOS中的单例设计模式">iOS中的单例设计模式</a></h2>
+       <p class="excerpt">在一个iOS应用的生命周期中，有时候我们只需要某个类的一个实例。例如，iOS设备都有一个重力加速计硬件设备，要访问设备在X轴、Y轴和Z轴上的重力加速度，就必然有一个类能够与硬件设备沟通来实时获取这些数据，这个类就是UIAccelerometer。除了实时地获取数据该类还能保持X轴、Y轴和Z轴的状态，但这个类只要一个实例就够了，如果有多个实例就会占用过多的内存。单例模式简单实现在objective-c中要实现一个单例类，至少需要做以下四个步骤：(推荐使用宏的方式来创建)(1)为单例对象实现一...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-24 23:16:28 +0800" class="post-list__meta--date date">2014-07-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-singleton-design-pattern.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-enteprise-deployment.html" title="link to iOS企业级应用部署">iOS企业级应用部署</a></h2>
+       <p class="excerpt">在iOS开发计划中有一种是iOS Developer Enterprise Program(iOS开发者企业级计划)，对于这种开发者证书发布的应用程序是无法上传到Apple App Store上的，目前对于这种企业级开发的应用程序最好的分发方式是部署到内网服务器上通过网络进行下载。IN-HOUSE应用程序分发下面介绍下使用网络方式进行部署的方式,用户直接在iPhone/iPad的Safari浏览器里面输入URL地址即可安装，如在浏览器输入http://www.itools.cn能出现如下的...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-20 18:07:16 +0800" class="post-list__meta--date date">2014-07-20</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-enteprise-deployment.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

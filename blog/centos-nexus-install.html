@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Maven私有库Nexus的安装和使用</title>
+  <meta name="description" content="在进行Java开发的时候，通常会使用Maven进行第三方库的管理，类似于iOS中的Cocoapods。我们在使用Cocoapods的时候都感受过更新索引库Specs的痛苦，使用Maven的时候依赖库也是从中央库(Central Repository)下载，速度可想而知会很慢。另外如果我们内部开发了一些基础的工具库...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Maven私有库Nexus的安装和使用">
+  <meta name="twitter:description" content="在进行Java开发的时候，通常会使用Maven进行第三方库的管理，类似于iOS中的Cocoapods。我们在使用Cocoapods的时候都感受过更新索引库Specs的痛苦，使用Maven的时候依赖库也是从中央库(Central Repository)下载，速度可想而知会很慢。另外如果我们内部开发了一些基础的工具库...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Maven私有库Nexus的安装和使用">
+  <meta property="og:description" content="在进行Java开发的时候，通常会使用Maven进行第三方库的管理，类似于iOS中的Cocoapods。我们在使用Cocoapods的时候都感受过更新索引库Specs的痛苦，使用Maven的时候依赖库也是从中央库(Central Repository)下载，速度可想而知会很慢。另外如果我们内部开发了一些基础的工具库...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/centos-nexus-install.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-07-22 00:08:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-07-22</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">Maven私有库Nexus的安装和使用</h1>
+  </header>
+
+  <section class="post">
+    <p>在进行Java开发的时候，通常会使用<a href="http://maven.apache.org/">Maven</a>进行第三方库的管理，类似于iOS中的Cocoapods。我们在使用Cocoapods的时候都感受过更新索引库Specs的痛苦，使用Maven的时候依赖库也是从中央库(Central Repository)下载，速度可想而知会很慢。另外如果我们内部开发了一些基础的工具库，又不太方便托管到Central Repository的时候怎么办呢？</p>
+
+<p><img src="http://www.sonatype.org/nexus/content/uploads/2014/09/thenexus-header-final2.jpg" alt="thenexus-header-final2.jpg" /></p>
+
+<p>参考Cocoapods我们可以搭建内部的私有库来解决这些问题。<a href="http://www.sonatype.org/nexus/">Nexus</a> 是Maven仓库管理器，如果你使用Maven，你可以从Maven中央仓库 下载所需要的构件（artifact），但这通常不是一个好的做法，通常会在本地架设一个Maven仓库服务器，在代理远程仓库的同时维护本地仓库，以节省带宽和时间，Nexus就可以满足这样的需要。这里记录下使用Nexus来搭建Maven的私有库的过程，本文基于<code class="highlighter-rouge">CentOS 6.5</code>。</p>
+
+<h3 id="手动安装nexus-20">手动安装Nexus 2.0</h3>
+
+<h4 id="1下载nexus">1、下载nexus</h4>
+
+<p>到官网下载最新版本的nexus，下载地址<code class="highlighter-rouge">http://www.sonatype.org/nexus/archived/</code>，本文使用的版本是<code class="highlighter-rouge">Nexus 2.12.0-01</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget http://download.sonatype.com/nexus/oss/nexus-2.12.0-01-bundle.tar.gz
+</code></pre></div></div>
+
+<h4 id="2创建一个nexus文件夹将所有的东西放在下面">2、创建一个nexus文件夹将所有的东西放在下面</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p /home/nexus
+</code></pre></div></div>
+
+<h4 id="3解压">3、解压</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tar zxvf nexus-2.12.0-01-bundle.tar.gz
+</code></pre></div></div>
+
+<p>将解压后的文件拷贝到刚才创建的nexus目录下面</p>
+
+<h4 id="4配置防火墙">4、配置防火墙</h4>
+
+<p>nexus的默认端口是<code class="highlighter-rouge">8081</code>, 如果启动后无法正常访问需要配置下防火墙策略：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables -I INPUT -p tcp --dport 8081 -j ACCEPT
+/etc/init.d/iptables save
+service iptables restart
+</code></pre></div></div>
+
+<h4 id="5启动">5、启动</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /home/nexus/nexus-2.12.0-01/bin
+./nexus start
+</code></pre></div></div>
+
+<p>启动成功后访问地址：<code class="highlighter-rouge">http://localhost:10081/nexux/</code>。</p>
+
+<h3 id="nexus配置说明">nexus配置说明</h3>
+
+<h4 id="1repository类型">1.Repository类型</h4>
+
+<p>关于Repository的类型有如下几种：</p>
+
+<ul>
+  <li>group: 仓库组，用来合并多个hosted/proxy仓库，通常我们配置maven依赖仓库组</li>
+  <li>hosted：本地仓库，通常我们会部署自己的构件到这一类型的仓库。</li>
+  <li>proxy：代理仓库，它们被用来代理远程的公共仓库，如maven中央仓库。</li>
+  <li>virtual: 虚拟组，暂未使用</li>
+</ul>
+
+<h4 id="2默认repository">2.默认Repository</h4>
+
+<p>nexus会默认创建如下几种Repository：</p>
+
+<ul>
+  <li>1、<code class="highlighter-rouge">Public Repositories</code>, 这是一个Repository Group，该Repository  Group包含了多个Repository，其中包含了Releases、Snapshots、ThirdParty和Central。</li>
+  <li>2、<code class="highlighter-rouge">3rd party</code>，该Repository即是存放你公司所购买的第三方软件库的地方，它是一个由Nexus自己维护的一个Repository。</li>
+  <li>3、<code class="highlighter-rouge">Apache Snapshots</code>，这是一个代理Repository，即最终的依赖还是得在Apache官网上去下载，然后缓存在Nexus中。</li>
+  <li>4、<code class="highlighter-rouge">Central</code>，这就是代理Maven Central Repository的Repository。</li>
+  <li>5、<code class="highlighter-rouge">Releases</code>，你自己的项目要发布时，就应该发布在这个Repository，他也是Nexus自己维护的Repository，而不是代理。</li>
+  <li>6、<code class="highlighter-rouge">Snapshots</code>，你自己项目Snapshot的Repository。</li>
+</ul>
+
+<h3 id="使用docker安装nexus-30">使用Docker安装Nexus 3.0</h3>
+
+<h4 id="1安装docker">1、安装Docker</h4>
+
+<p>参考<a href="http://blog.devzeng.com/blog/install-docker-in-centos.html">《CentOS安装Docker》</a></p>
+
+<h4 id="2安装nexus">2、安装Nexus</h4>
+
+<h5 id="1下载镜像">（1）下载镜像</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull sonatype/nexus3
+</code></pre></div></div>
+
+<h5 id="2创建nexus的数据存储目录">（2）创建nexus的数据存储目录</h5>
+
+<p>创建存储文件目录，并修改目录拥有者，容器里面运行的uid是<code class="highlighter-rouge">200</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir -p /opt/nexus-data
+chown -R 200 /opt/nexus-data
+</code></pre></div></div>
+
+<h5 id="3创建并启动服务">（3）创建并启动服务</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 8081:8081 --name nexus3 -v /opt/nexus-data:/nexus-data sonatype/nexus3
+</code></pre></div></div>
+
+<p>参数说明：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">-d</code>：指的是后台运行</li>
+  <li><code class="highlighter-rouge">-p 8081:8081</code>：指把容器<code class="highlighter-rouge">8081</code>端口映射到主机<code class="highlighter-rouge">8081</code>端口，格式为<code class="highlighter-rouge">“主机端口:容器端口”</code></li>
+  <li><code class="highlighter-rouge">-v /opt/nexus-data:/nexus-data</code>：把容器里的<code class="highlighter-rouge">/nexus-data</code>目录，映射到主机的<code class="highlighter-rouge">/opt/nexus-data</code>目录</li>
+  <li><code class="highlighter-rouge">–-name nexus3</code>：容器的名称</li>
+  <li><code class="highlighter-rouge">sonatype/nexus3</code>：需要下载的镜像</li>
+</ul>
+
+<h3 id="配置maven">配置Maven</h3>
+
+<h4 id="1mac安装maven">1、Mac安装Maven</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install maven
+</code></pre></div></div>
+
+<h4 id="2修改配置文件">2、修改配置文件</h4>
+
+<p>安装完成后Maven的配置文件在：<code class="highlighter-rouge">/usr/local/Cellar/maven/{版本号}/libexec/conf</code>这个目录下面。找到<code class="highlighter-rouge">settings.xml</code>文件在<code class="highlighter-rouge">mirrors</code>节点下面新增如下配置:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;mirror&gt;
+	&lt;id&gt;nexus&lt;/id&gt;
+	&lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+	&lt;name&gt;central repository&lt;/name&gt;
+	&lt;url&gt;http://192.168.3.18:8081/repository/maven-public/&lt;/url&gt;
+&lt;/mirror&gt;
+</code></pre></div></div>
+<p>表示新增了一个镜像配置，第三方库从这个镜像地址下载。</p>
+
+<h4 id="3编写maven示例程序">3、编写Maven示例程序</h4>
+
+<p>使用Maven的模板快速创建一个webapp的项目：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvn archetype:generate -DgroupId=com.devzeng.demo -DartifactId=demo-app -DpackageName=com.devzeng.demo -Dversion=1.0
+</code></pre></div></div>
+
+<p>如果在控制台看到有jar包从<code class="highlighter-rouge">http://192.168.3.18:8081</code>这个地址下载表示配置成功。</p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="http://blog.csdn.net/liujiahan629629/article/details/39272321">《Nexus私服使Maven更加强大》</a></p>
+
+<p>2、<a href="http://www.chengyong.net/linux-study/centos-install-sonaType-nexus.html">《CentOS上搭建私有maven仓库，提供jcenter镜像》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/typa01_kk/article/details/49228873">《CentOS安装nexus(Maven仓库管理器)》</a></p>
+
+<p>4、<a href="http://www.cnblogs.com/dingyingsi/p/3776557.html">《Centos 基础开发环境搭建之Maven私服nexus》</a></p>
+
+<p>5、<a href="http://beyondvincent.com/2016/09/23/2016-09-23-use-nexus-with-docker/">《在 Docker 搭建 Maven 私有库》</a></p>
+
+<p>6、<a href="https://zhuanlan.zhihu.com/p/27660819">《使用sonatype nexus搭建jcenter mirror》</a></p>
+
+<p>7、<a href="https://wendyeq.me/2016/11/20/nexus-oss-3-in-docker/">《Docker 搭建Nexus OSS3私服》</a></p>
+
+<p>8、<a href="http://juvenshun.iteye.com/blog/349534">《Nexus入门指南（图文）》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/build-docker-image-with-dockerfile.html" title="link to 使用Dockerfile构建Docker镜像">使用Dockerfile构建Docker镜像</a></h2>
+       <p class="excerpt">Docker中有个非常重要的概念叫做——镜像（Image）。Docker 镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-08-01 08:08:00 +0800" class="post-list__meta--date date">2017-08-01</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/build-docker-image-with-dockerfile.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/install-docker-in-centos.html" title="link to CentOS安装Docker">CentOS安装Docker</a></h2>
+       <p class="excerpt">之前写过一篇关于在Mac上面使用并安装Docker的文章《Mac上Docker的安装和使用初探》，介绍了在Macos上面安装Docker的步骤。近期由于需要在一台CentOS 6.5的服务器上面部署一些服务，考虑到使用Docker来做这些事情，记录一下处理的步骤。检查内核版本uname -r如果输出的信息为2.6.32-431.el6.centos.plus.x86_64，表示当前的内核版本是2.6.32。docker需要的内核版本是3.10，所以需要升级Linux的内核，升级的步骤如下：...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-07-21 11:08:00 +0800" class="post-list__meta--date date">2017-07-21</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/install-docker-in-centos.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

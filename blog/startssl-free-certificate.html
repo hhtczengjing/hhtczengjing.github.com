@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>在StartSSL上申请免费SSL证书</title>
+  <meta name="description" content="跟VeriSign一样，StartSSL（http://www.startssl.com，公司名：StartCom）也是一家CA机构，它的根证书很久之前就被一些具有开源背景的浏览器支持（Firefox浏览器、谷歌Chrome浏览器、苹果Safari浏览器等）。在去年9月份，StartSSL竟然搞定了微软：微软在升...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在StartSSL上申请免费SSL证书">
+  <meta name="twitter:description" content="跟VeriSign一样，StartSSL（http://www.startssl.com，公司名：StartCom）也是一家CA机构，它的根证书很久之前就被一些具有开源背景的浏览器支持（Firefox浏览器、谷歌Chrome浏览器、苹果Safari浏览器等）。在去年9月份，StartSSL竟然搞定了微软：微软在升...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="在StartSSL上申请免费SSL证书">
+  <meta property="og:description" content="跟VeriSign一样，StartSSL（http://www.startssl.com，公司名：StartCom）也是一家CA机构，它的根证书很久之前就被一些具有开源背景的浏览器支持（Firefox浏览器、谷歌Chrome浏览器、苹果Safari浏览器等）。在去年9月份，StartSSL竟然搞定了微软：微软在升...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/startssl-free-certificate.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-10-20 22:18:54 +0800" itemprop="datePublished" class="post-meta__date date">2014-10-20</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">在StartSSL上申请免费SSL证书</h1>
+  </header>
+
+  <section class="post">
+    <p>跟VeriSign一样，StartSSL（<code class="highlighter-rouge">http://www.startssl.com</code>，公司名：StartCom）也是一家CA机构，它的根证书很久之前就被一些具有开源背景的浏览器支持（Firefox浏览器、谷歌Chrome浏览器、苹果Safari浏览器等）。在去年9月份，StartSSL竟然搞定了微软：微软在升级补丁中，更新了通过Windows根证书认证程序（Windows Root Certificate Program）的厂商清单，并首次将StartCom公司列入了该认证清单，这是微软首次将提供免费数字验证技术的厂商加入根证书认证列表中。现在，在Windows 7或安装了升级补丁的Windows Vista或Windows XP操作系统中，系统会完全信任由StartCom这类免费数字认证机构认证的数字证书，从而使StartSSL也得到了IE浏览器的支持。</p>
+
+<p><img src="http://www.startssl.com/img/top-logo1.jpg" alt="startssl_logo.jpg" /></p>
+
+<p>##StartSSL个人证书登录申请</p>
+
+<p>1、在浏览器中输入：<code class="highlighter-rouge">https://www.startssl.com/?app=12</code>，如果是第一次使用需要进行注册，选择Sign-up,如下图所示：</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_001.png" alt="startssl_free_certificate_001" /></p>
+
+<p>2、在注册表单中填写指定的内容，需要填写姓名（First/Last Name）、家庭住址（Home Address）、邮编（Zip）等，具体如下图所示：</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_002.png" alt="startssl_free_ certificate_002" /></p>
+
+<p>注意：</p>
+
+<p>（1）所示字段都需要完整填写；</p>
+
+<p>（2）Complete Home Address：需要填写的是完整的家庭住址，最好是和IP所在地一致。比如是在深圳注册的，那么家庭住址需要填写一个深圳的地址；</p>
+
+<p>（3）填写的家庭住址不要明显的表面是一个商业的住址，如<code class="highlighter-rouge">14/F, BAK Tech Buld</code>。这种类型的地址会被打回来提示需要用邮件补一份家庭住址；</p>
+
+<p>（4）邮箱不要使用QQ邮箱，这里QQ不支持。</p>
+
+<p>3、填写完成后点击Continue按钮，接下来StartSSL官方会发送一封邮件到上面填写的邮箱地址上，里面有一个验证码，把验证码输入到下面的框中点击Continue即可。</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_003.png" alt="startssl_free_ certificate_003.png" /></p>
+
+<p>4、验证成功后，要么是等待人工审核开通，要么是直接提示下载个人操作证书。我申请的时候是因为前面填写的地址和注册的IP所在地不一致直接被拒绝，第二次是因为家庭住址不规范被要求重新填了一次。通过审核后就会出现下面的页面下载个人操作的证书，这里是选择证书加密的位数默认选择<code class="highlighter-rouge">2048(高级)</code>，如图所示：</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_004.png" alt="startssl_free_ certificate_004.png" /></p>
+
+<p>5、点击Continue后就会进入到下载安装的界面，如下图所示：</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_005.png" alt="startssl_free_ certificate_005.png" /></p>
+
+<p>6、点击Install安装,然后在出现的界面中选择Finish就能开始下载证书，稍等几分钟就会自动在浏览器上安装StartSSL操作证书了</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_006.png" alt="startssl_free_certificate_006.png" /></p>
+
+<p>##StartSSL免费证书创建</p>
+
+<p>1、点击Validations Wizard，选择Domain name validation，点击Continue。</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_007.png" alt="startssl_free_certificate_007" /></p>
+
+<p>2、输入你想要使用SSL的域名，点击继续</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_008.png" alt="startssl_free_ certificate_008" /></p>
+
+<p>3、接下来选择你的域名所有者的邮箱，如果你的域名设置了Whois保护，可能还要先进入域名注册商那里取消保护，否则无法使用域名管理员邮箱通过域名所有权验证</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_009.png" alt="startssl_free_ certificate_009" /></p>
+
+<p>4、提交了域名后，到邮箱中收取激活邮件，填入验证码，通过验证。</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_010.png" alt="startssl_free_certificate_010" /></p>
+
+<p>验证通过后会有如下提示：</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_011.png" alt="startssl_free_certificate_011" /></p>
+
+<p>5、上面已经提交了域名并通过了所有权验证，点击Certificates Wizard，选择WEB Server SSL/TSL Certifites。</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_012.png" alt="startssl_free_certificate_012" /></p>
+
+<p>6、上面点击Continue后接下来会提示输入生成私钥需要的密码和指定位数。其中密码，最少10位，最大32位。</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_013.png" alt="startssl_free_ certificate_013" /></p>
+
+<p>7、将显示内容保存为ssl.key（这个私钥是加密的），继续点击下一步。</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_014.png" alt="startssl_free_ certificate_014" /></p>
+
+<p>8、接下来会提示需要选择要生成的域名下面的二级域名，如下这里我选择的是devzeng.com下面的ssl.devzeng.com这个二级域名，如下图示：</p>
+
+<p>（1）选择前面绑定的域名：</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_015.png" alt="startssl_free_ certificate_015" /></p>
+
+<p>（2）输入二级域名：</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_016.png" alt="startssl_free_ certificate_016" /></p>
+
+<p>提交后还得再等待StartSSL审核，一般是几分钟后就可以收到邮件通知。当然也有审核不通过的，</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_017.png" alt="startssl_free_ certificate_017" /></p>
+
+<p>9、这时进入Tool Box点击Retrieve Certificate，选择申请证书的域名，将框中的内容保存为.crt文件，这个就是域名证书了。</p>
+
+<p><img src="/images/startssl_free_certificate/startssl_free_certificate_018.png" alt="startssl_free_certificate_018" /></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://www.chinaz.com/free/2010/0114/103945.shtml">《全球唯一免费HTTPS证书颁发机构：StartSSL》</a></p>
+
+<p>2、<a href="http://www.freehao123.com/startssl-ssl/">《StartSSL免费SSL证书成功申请-HTTPS让访问网站更安全》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/handle-url-in-wechat-development.html" title="link to 微信公众平台开发之URL处理">微信公众平台开发之URL处理</a></h2>
+       <p class="excerpt">在微信公众平台开发中会遇到很多地方需要向客户端返回一个URL地址，比如用户点击了界面上的菜单，触发了菜单的事件，后台检测到这个事件之后需要想用户返回一些信息，如果信息是以一段文本来展示的而且里面包含一个阅读更多的超链接，这个该怎么处理呢？熟悉HTML的朋友对超链接一定不会陌生，只要用&lt;a href="URL地址"&gt;这是超链接&lt;/a&gt;这样的形式写一段代码就可以实现一个简单的超链接，用户点击之后会跳转到href属性里配置的URL地址。今天主要介绍的是在微信中如何使用超链...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-10-27 22:28:12 +0800" class="post-list__meta--date date">2014-10-27</time> &#8226; <span class="post-list__meta--tags tags">WeChat</span><a class="btn-border-small" href=/blog/handle-url-in-wechat-development.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-development-by-using-svn.html" title="link to iOS开发中SVN管理工具的使用">iOS开发中SVN管理工具的使用</a></h2>
+       <p class="excerpt">SVN是Subversion的简称，是一个开放源代码的版本控制系统，相较于RCS、CVS，它采用了分支管理系统，它的设计目标就是取代CVS。互联网上很多版本控制服务已从CVS转移到Subversion。##SVN命令行工具1、从本地导入代码到服务器(第一次初始化导入)，在终端中输入：svn import /Users/apple/Documents/workspace/project svn://hostname/svn/project --username=mj --password=1...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-10-18 15:58:25 +0800" class="post-list__meta--date date">2014-10-18</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-development-by-using-svn.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

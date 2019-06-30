@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS8中的Safari Action Extension</title>
+  <meta name="description" content="扩展（Extension）是iOS8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。前面介绍过关于Today Widget的使用，本文介绍Action Extension在iOS8中的开发。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS8中的Safari Action Extension">
+  <meta name="twitter:description" content="扩展（Extension）是iOS8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。前面介绍过关于Today Widget的使用，本文介绍Action Extension在iOS8中的开发。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS8中的Safari Action Extension">
+  <meta property="og:description" content="扩展（Extension）是iOS8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。前面介绍过关于Today Widget的使用，本文介绍Action Extension在iOS8中的开发。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios8-safari-action-extension.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-03-29 20:12:53 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-29</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS8中的Safari Action Extension</h1>
+  </header>
+
+  <section class="post">
+    <p>扩展（Extension）是iOS8中引入的一个非常重要的新特性。扩展让app之间的数据交互成为可能。用户可以在app中使用其他应用提供的功能，而无需离开当前的应用。前面介绍过关于<a href="http://blog.devzeng.com/blog/ios8-today-extension.html">Today Widget</a>的使用，本文介绍Action Extension在iOS8中的开发。</p>
+
+<p><img src="/images/action_extension/201111194125034.png" alt="201111194125034.png" /></p>
+
+<p>###创建Action Extension</p>
+
+<p>1、使用Xcode6创建一个iOS工程，菜单栏File-&gt;New-&gt;Target出现下面的可选项，选择Action Extension:</p>
+
+<p><img src="/images/action_extension/action_extension_01.png" alt="action_extension_01.png" /></p>
+
+<p>2、配置Extension的Product Name等内容。</p>
+
+<p><img src="/images/action_extension/action_extension_02.png" alt="action_extension_02.png" /></p>
+
+<p>###配置Action Extension</p>
+
+<p>1、默认Action Extension中的布局使用StoryBoard，如果不想使用StoryBoard布局将Info.plist中的如下配置：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;NSExtensionMainStoryboard&lt;/key&gt;
+&lt;string&gt;MainInterface&lt;/string&gt;
+</code></pre></div></div>
+
+<p>改为下面的配置：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;NSExtensionPrincipalClass&lt;/key&gt;
+&lt;string&gt;ActionViewController&lt;/string&gt;
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>插件在UI上以UIViewController模式存在，被parentViewController（Host App）以模态窗口形式弹出（present as modal viewController）。插件工程在Info.plist的NSExtension中通过NSExtensionMainStoryboard指定UI视图入口。当然，如果不想使用storyboard，也可以使用NSExtensionPrincipalClass指定自定义UIViewController子类名（也可以封装到UINavigationController）。</p>
+
+<p>2、NSExtensionActivationRule定义了当前的扩展支持的数据类型及数据项个数，例如设置只支持图片格式和视频格式的数据，并且最多不超过10张图片和1个视频。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;NSExtensionActivationSupportsWebPageWithMaxCount&lt;/key&gt;
+&lt;string&gt;1&lt;/string&gt;
+</code></pre></div></div>
+
+<p>3、NSExtensionJavaScriptPreprocessingFile用于配置与脚本交互的JS脚本文件的名字。为了告知Safari你的应用扩展中包含一个JavaScript文件，你需要在应用扩展的Info.plist文件中，向NSExtensionAttributes字典添加NSExtensionJavaScriptPreprocessingFile关键字来指明你的JavaScript文件。这个关键字的值就是你希望当你的应用扩展运行前，Safari要加载的JavaScript文件的名称。比如：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;NSExtensionJavaScriptPreprocessingFile&lt;/key&gt;
+&lt;string&gt;ScreenShotJavaScript&lt;/string&gt;
+</code></pre></div></div>
+
+<p>4、NSExtensionPointIdentifier用于表示扩展点，每一个扩展点拥有一个唯一的名字。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;NSExtensionPointIdentifier&lt;/key&gt;
+&lt;string&gt;com.apple.ui-services&lt;/string&gt;
+</code></pre></div></div>
+
+<p>###示例程序</p>
+
+<p>实现一个网页截屏的功能，用户在Safari中的Action选择指定的动作，然后将网页的内容以图片的形式保存下来，类似于<a href="https://itunes.apple.com/cn/app/awesome-screenshot-for-safari/id918780145?l=en&amp;mt=8"><code class="highlighter-rouge">Screenshot</code></a>.</p>
+
+<p><img src="/images/action_extension/action_extension_03.png" alt="action_extension_03.png" /></p>
+
+<p>1、将UIWebView进行截屏</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (UIImage *)screenshot
+{
+    CGSize boundsSize = self.bounds.size;
+    CGFloat boundsWidth = self.bounds.size.width;
+    CGFloat boundsHeight = self.bounds.size.height;
+    
+    CGPoint offset = self.scrollView.contentOffset;
+    [self.scrollView setContentOffset:CGPointMake(0, 0)];
+    
+    CGFloat contentHeight = self.scrollView.contentSize.height;
+    NSMutableArray *images = [NSMutableArray array];
+    while (contentHeight &gt; 0) {
+        UIGraphicsBeginImageContext(boundsSize);
+        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        [images addObject:image];
+        
+        CGFloat offsetY = self.scrollView.contentOffset.y;
+        [self.scrollView setContentOffset:CGPointMake(0, offsetY + boundsHeight)];
+        contentHeight -= boundsHeight;
+    }
+    [self.scrollView setContentOffset:offset];
+    
+    UIGraphicsBeginImageContext(self.scrollView.contentSize);
+    [images enumerateObjectsUsingBlock:^(UIImage *image, NSUInteger idx, BOOL *stop) {
+        [image drawInRect:CGRectMake(0, boundsHeight * idx, boundsWidth, boundsHeight)];
+    }];
+    UIImage *fullImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return fullImage;
+}
+</code></pre></div></div>
+
+<p>2、在ActionViewController中获取网页的URL地址</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for (NSExtensionItem *item in self.extensionContext.inputItems) {
+	for (NSItemProvider *itemProvider in item.attachments) {
+		__weak UIWebView *webView = self.myWebView;
+		NSString *identifier = (NSString *)kUTTypeURL;
+		BOOL status = [itemProvider hasItemConformingToTypeIdentifier:identifier];
+		if(status){
+			[itemProvider loadItemForTypeIdentifier:identifier options:nil completionHandler:^(NSURL *item, NSError *error) {
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        [webView loadRequest:[NSURLRequest requestWithURL:item]];
+                    }];
+             }];		
+             break;
+        }
+    }
+}
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://www.cnblogs.com/tracy-e/p/3151463.html">《将UIWebView显示的内容转为图片和PDF》</a></p>
+
+<p>2、<a href="http://blog.csdn.net/songhongri/article/details/43270293">《如何给UITableView 或 UIScrollView 的content 做截图》</a></p>
+
+<p>3、<a href="https://developer.apple.com/library/ios/documentation/General/Conceptual/ExtensibilityPG/Services.html#//apple_ref/doc/uid/TP40014214-CH13-SW1">《App Extension Programming Guide》</a></p>
+
+<p>4、<a href="http://blog.csdn.net/phunxm/article/details/42715145">《iOS8扩展插件开发配置》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-logging-tools-in-ios.html" title="link to iOS开发中善用日志记录工具">iOS开发中善用日志记录工具</a></h2>
+       <p class="excerpt">在iOS开发中经常需要靠记录日志来调试应用程序，最常见的做法是使用NSLog来输出相关的信息。大量的使用NSLog存在一定的弊端，将设备连接到电脑，打开XCode中的Device-&gt;Console，就可以从console查看到每条日志信息（或者是使用iTools的实时日志,推荐使用）。试想如果将很多核心的算法或者是信息都通过NSLog打印到控制台上，那么很有可能会被其他人获取到相关信息造成很多安全隐患，另外这样的应用也极有可能被Apple拒绝审核通过。###使用宏来处理常用的做法是在...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-04-14 23:08:11 +0800" class="post-list__meta--date date">2015-04-14</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/using-logging-tools-in-ios.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-arc-block-retain-cycle.html" title="link to iOS中ARC下block的循环引用">iOS中ARC下block的循环引用</a></h2>
+       <p class="excerpt">在iOS4.2时，Apple推出ARC的内存管理机制。这是一种编译期的内存管理方式，在编译期间，编译器会判断对象的使用情况，并适当的加上retain和release，使得对象的内存被合理的管理。所以，从本质上说ARC和MRC在本质上是一样的，都是通过引用计数的内存管理方式。使用ARC虽然可以简化内存管理，但是ARC并不是万能的，有些情况程序为了能够正常运行，会隐式地持有或者复制对象，如果不加以注意，便会造成内存泄露。在ARC下，当block获取到外部变量时，由于编译器无法预测获取到的变量何...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-22 18:07:19 +0800" class="post-list__meta--date date">2015-03-22</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-arc-block-retain-cycle.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

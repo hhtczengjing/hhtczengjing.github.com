@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>React Native开发初探</title>
+  <meta name="description" content="">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="React Native开发初探">
+  <meta name="twitter:description" content="">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="React Native开发初探">
+  <meta property="og:description" content="">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/hello-react-native.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-01-23 18:49:35 +0800" itemprop="datePublished" class="post-meta__date date">2016-01-23</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">React Native开发初探</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="/images/hello-react-native/react-native-logo.jpg" alt="React Native Logo" /></p>
+
+<p>Facebook在React.js Conf 2015大会(2015.3.26)上开源了React Native。最开始只支持iOS，2015年9月15日发布了React Native for Android，至此React Native支持主流的两大平台（iOS和Android）。</p>
+
+<p>新事物的出现，都会引发行业的热烈讨论，自React Native发布起，一直都是热门的讨论话题。React Native的出现在一定程度上解决了我们目前在移动开发上面临的问题。我们身处在移动互联网的黄金时代，越来越多的业务移植到移动端。我们都清楚，原生的APP开发是需要一定的门槛的，这就导致了市场需求大，而相关的开发人员稀缺的问题。相比较而言，React Native采用的开发语言是JavaScript，相关的开发者也就比较多。</p>
+
+<p>如果你是一个原生APP的开发者，React Native的出现会帮你打开一扇门，会让你发掘开发中的更多可能性(比如跨平台开发、动态更新等等)。如果你是使用JavaScript的开发者，它的出现无疑会带来巨大的影响，会有越来越多的前端开发人员投入到移动APP开发的领域。</p>
+
+<p>本文主要是介绍React Native在本人开发中的一些实践，React Native的详细使用是一个很庞大的话题，本文不会详细介绍，建议仔细阅读官方的文档和示例程序。</p>
+
+<p>###React Native背景</p>
+
+<blockquote>
+  <p>What we really want is the <strong>user experience</strong> of the <strong>native mobile</strong> platforms, combined with the <strong>developer experience</strong> we have when building with <strong>React</strong> on the web.</p>
+</blockquote>
+
+<p>上面的这段话摘自<a href="http://facebook.github.io/react/blog/2015/03/26/introducing-react-native.html">《Introducing React Native》</a>，加粗的关键字传达了React Native的设计理念：既拥有Native的用户体验，又保留React的开发效率。这个理念迎合了业界普遍存在的痛点，开源不到一周github star过万，目前是26162(2016/01/22)。</p>
+
+<p><img src="/images/hello-react-native/react-native-github-stars.png" alt="react-native-github-stars.png" /></p>
+
+<blockquote>
+  <p>It’s worth noting that we’re not chasing “<strong>write once, run anywhere.</strong>” Different platforms have different looks, feels, and capabilities, and as such, we should still be developing discrete apps for each platform, but the same set of engineers should be able to build applications for whatever platform they choose, without needing to learn a fundamentally different set of technologies for each. We call this approach “<strong>learn once, write anywhere</strong>.”</p>
+</blockquote>
+
+<p>上面的这段话也是摘自<a href="http://facebook.github.io/react/blog/2015/03/26/introducing-react-native.html">《Introducing React Native》</a>，在软件开发中最理想的情况是像Java这样“write once, run anywhere”，但是不同的平台有不同的用户体验(looks, feels, and capabilities)，过分要求应用在不同的平台上的一致性是不太合适的。React Native提出了一种理念，learn once, write anywhere， 可以在不同平台上编写基于React的代码。</p>
+
+<p>###开发环境配置</p>
+
+<p>1.需要一台Mac(OSX)，上面要安装Xcode(建议Xcode7及以上的版本)，Xcode可以在Mac App Store下载</p>
+
+<p>2.安装Homebrew，后面安装Watchman和Flow推荐使用Homebrew安装</p>
+
+<p><code class="highlighter-rouge">ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</code></p>
+
+<p>如果之前安装过Homebrew，可以先更新下：</p>
+
+<p><code class="highlighter-rouge">brew update &amp;&amp; brew upgrade</code></p>
+
+<p>3.安装node.js</p>
+
+<p>(1)安装nvm(Node Version Manager)</p>
+
+<p><code class="highlighter-rouge">curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.30.2/install.sh | bash</code></p>
+
+<p>(2)安装最新版本的Node.js</p>
+
+<p><code class="highlighter-rouge">nvm install node &amp;&amp; nvm alias default node</code></p>
+
+<p>当然可以直接到Node.js官网下载dmg文件直接安装，下载地址是<code class="highlighter-rouge">https://nodejs.org/download/</code></p>
+
+<p>4.建议安装watchman：</p>
+
+<p><code class="highlighter-rouge">brew install watchman</code></p>
+
+<p>5.安装flow：</p>
+
+<p><code class="highlighter-rouge">brew install flow</code></p>
+
+<p>ok，按照以上步骤，你应该已经配置好了环境。</p>
+
+<p>###在现有项目中集成</p>
+
+<p>####1.CocoaPods</p>
+
+<p>推荐使用CocoaPods的方式进行集成，如果没有使用过，可以参考<a href="http://blog.devzeng.com/blog/ios-cocoapods-dependency-manager.html">《使用CocoaPods管理iOS项目中的依赖库》</a>这篇文章安装配置。</p>
+
+<p>####2.安装react-native package
+react native现在使用npm的方式进行安装</p>
+
+<p>(1)如果没有安装Node.js,需要按照前面的方式进行安装</p>
+
+<p>(2)安装完Node.js之后再项目根目录(.xcodeproj文件所在目录)下执行<code class="highlighter-rouge">npm install react-native</code>的命令，执行完成之后会创建一个node_modules的文件夹。</p>
+
+<p>####3.修改Podfile配置</p>
+
+<p>在项目根目录下的Podfile（如果没有该文件可以使用pod init命令生成）文件中加入如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pod 'React', :path =&gt; './node_modules/react-native', :subspecs =&gt; [
+  'Core',
+  'RCTImage',
+  'RCTNetwork',
+  'RCTText',
+  'RCTWebSocket',
+  #添加其他需要的subspecs
+]
+</code></pre></div></div>
+<p>如果你在项目中使用了<code class="highlighter-rouge">&lt;Text&gt;</code>的组件，那么你必须添加<code class="highlighter-rouge">RCTText</code>的subspecs。配置完成之后执行<code class="highlighter-rouge">pod install</code>即可。</p>
+
+<p>####4.编写React Native代码</p>
+
+<p>(1)在项目的根目录创建存放React Native代码的目录：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir ReactComponent
+</code></pre></div></div>
+
+<p>(2)新建一个示例的index.ios.js的代码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>touch ReactComponent/index.ios.js
+</code></pre></div></div>
+
+<p>index.ios.js文件内容，示例如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'use strict';
+
+var React = require('react-native');
+var {
+  Text,
+  View
+} = React;
+
+var styles = React.StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'red'
+  }
+});
+
+class SimpleApp extends React.Component {
+  render() {
+    return (
+      &lt;View style={styles.container}&gt;
+        &lt;Text&gt;This is a simple application.&lt;/Text&gt;
+      &lt;/View&gt;
+    )
+  }
+}
+
+React.AppRegistry.registerComponent('SimpleApp', () =&gt; SimpleApp);
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">SimpleApp</code>即为你的Module Name,在后面会使用到。</p>
+
+<p>####5.在项目中加载React Native代码</p>
+
+<p>React Native不是通过UIWebView的方式进行代码的加载，而是使用了<code class="highlighter-rouge">RCTRootView</code>自定义的组件。RCTRootView提供了一个初始化的方法，支持在初始化视图组件的时候加载React的代码。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (instancetype)initWithBundleURL:(NSURL *)bundleURL
+                       moduleName:(NSString *)moduleName
+                initialProperties:(NSDictionary *)initialProperties
+                    launchOptions:(NSDictionary *)launchOptions;
+</code></pre></div></div>
+
+<p>使用方式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSURL *jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
+RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
+                                                    moduleName: @"SimpleApp"
+                                             initialProperties:nil
+                                                 launchOptions:nil];
+[self.view addSubview:rootView];
+rootView.frame = self.view.bounds;                                              
+</code></pre></div></div>
+
+<p>需要指出的是在初始化的时候支持通过URL的方式进行加载，上面的方法是在线的服务器地址使用在发布环境下替换localhost为正式服务器的地址，另外一个是Bundle的路径地址,示例如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSURL *jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+</code></pre></div></div>
+
+<p>为了生成jsbundle文件，可以通过下面的命令：</p>
+
+<p><code class="highlighter-rouge">curl http://localhost:8081/index.ios.bundle -o main.jsbundle</code></p>
+
+<p>####6.启动Development Server</p>
+
+<p>终端进入项目所在根目录，执行下面的代码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(JS_DIR=`pwd`/ReactComponent; cd node_modules/react-native; npm run start -- --root $JS_DIR)
+</code></pre></div></div>
+<p>启动完成之后可以通过：<code class="highlighter-rouge">http://localhost:8081/index.ios.bundle</code>进行调用</p>
+
+<p>###Native和React的交互</p>
+
+<p>关于React Native的通信机制，这里不再介绍，推荐两篇文章：</p>
+
+<p>1.<a href="http://blog.cnbang.net/tech/2698/">《React Native通信机制详解》</a></p>
+
+<p>2.<a href="http://www.hotobear.com/?p=1015">《React Native 初探（iOS）》</a></p>
+
+<p>通信的流程图如下：</p>
+
+<p><img src="/images/hello-react-native/react-native-communication.png" alt="react-native-communication.png" /></p>
+
+<p>React Native中JavaScript和Native之间交互是同Module的方式进行的。Module是一个实现RCTBridgeModule协议的普通Objective-C的类，示例如下：</p>
+
+<p>在.h文件中实现<code class="highlighter-rouge">RCTBridgeModule</code>的协议，示例如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//CalendarManager.h
+#import "RCTBridgeModule.h"
+
+@interface CalendarManager : NSObject &lt;RCTBridgeModule&gt;
+
+@end
+</code></pre></div></div>
+
+<p>在.m文件中声明是Module，添加<code class="highlighter-rouge">RCT_EXPORT_MODULE</code>的标记，示例如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// CalendarManager.m
+@implementation CalendarManager
+
+RCT_EXPORT_MODULE();
+
+@end
+</code></pre></div></div>
+
+<p>####1.JavaScript调用Native Method</p>
+
+<p>(1)Native的Module中使用RCT_EXPORT_METHOD()标记方法:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RCT_EXPORT_METHOD(addEvent:(NSString *)name location:(NSString *)location) {
+  RCTLogInfo(@"Pretending to create an event %@ at %@", name, location);
+}
+</code></pre></div></div>
+
+<p>(2)在JavaScript代码中使用</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var CalendarManager = require('react-native').NativeModules.CalendarManager;
+CalendarManager.addEvent('Birthday Party', '4 Privet Drive, Surrey');
+</code></pre></div></div>
+
+<p>####2.Native发送Events -&gt; JavaScript</p>
+
+<p>在西北督查中心项目表单的填写页面上右上角放了一个提交按钮，点击提交按钮后iOS的Objective-C会向React的Javascript代码发送消息，代码示例如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSDictionary *parameters = @{@"data":@"hello"};
+[self.rootView.bridge.eventDispatcher sendDeviceEventWithName:@"DemoEventName" body:parameters];
+</code></pre></div></div>
+
+<p>JavaScript端的处理代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var subscription;
+//在组件mount的时候注册
+subscription = DeviceEventEmitter.addListener('DemoEventName', (data) =&gt; {
+      //todo something
+});
+//在组件unmount的时候移除
+subscription.remove();
+</code></pre></div></div>
+
+<p>更多用法请参考官方文档中关于Native Modules的介绍<a href="http://facebook.github.io/react-native/docs/native-modules-ios.html#content">《Native Modules》</a></p>
+
+<p>###参考资料</p>
+
+<p>1.<a href="http://facebook.github.io/react-native/">《React Native官方文档》</a></p>
+
+<p>2.<a href="https://github.com/tmallfe/tmallfe.github.io/issues/18">《React Native概述：背景、规划和风险》</a></p>
+
+<p>3.<a href="http://www.race604.com/react-native-component-lifecycle/">《React Native 中组件的生命周期》</a></p>
+
+<p>4.<a href="https://github.com/vczero/react-native-lesson">《React-Native入门指南》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/octopress-to-jekyll.html" title="link to 将博客从Octopress迁移到Jekyll">将博客从Octopress迁移到Jekyll</a></h2>
+       <p class="excerpt">一直想把Octopress的主题给换了，没有找到满意的主题。最近发现喵神的博客(OneV’s Den)由ghost迁移到了Jekyll了。这些都不是重点，重点是他把之前使用的主题也一起弄到Jekyll上面来了，而且代码开源在GitHub上面了(项目地址：https://github.com/onevcat/vno-jekyll),效果如下：###安装Vno Jekyll####（1）从GitHub把项目的源码clone下来git clone https://github.com/onevc...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-01-23 18:49:35 +0800" class="post-list__meta--date date">2016-01-23</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/octopress-to-jekyll.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios9-3d-touch.html" title="link to 在iOS9中使用3D Touch">在iOS9中使用3D Touch</a></h2>
+       <p class="excerpt">在iPhone 6s和iPhone 6s Plus中Apple引入了3D Touch技术。3D Touch的触控技术，被苹果称为新一代多点触控技术。其实，就是此前在Apple Watch上采用的Force Touch，屏幕可感应不同的感压力度。iOS9提供了四类API（Home Screen Quick Action、UIKit Peek &amp; Pop 、WebView Peek &amp; Pop 和UITouch Force Properties）用于操作3D Touch(Pre...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-10-24 21:19:25 +0800" class="post-list__meta--date date">2015-10-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios9-3d-touch.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

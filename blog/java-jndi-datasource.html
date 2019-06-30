@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Java使用JNDI配置WEB项目数据源</title>
+  <meta name="description" content="JNDI(Java Naming and Directory Interface,Java命名与目录接口)是Java提供的一种标准的命名系统接口，JNDI提供统一的客户端API，通过不同的访问提供者接口JNDI SPI(Service Provider Interface,服务提供者接口)的实现，由管理者将JND...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Java使用JNDI配置WEB项目数据源">
+  <meta name="twitter:description" content="JNDI(Java Naming and Directory Interface,Java命名与目录接口)是Java提供的一种标准的命名系统接口，JNDI提供统一的客户端API，通过不同的访问提供者接口JNDI SPI(Service Provider Interface,服务提供者接口)的实现，由管理者将JND...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Java使用JNDI配置WEB项目数据源">
+  <meta property="og:description" content="JNDI(Java Naming and Directory Interface,Java命名与目录接口)是Java提供的一种标准的命名系统接口，JNDI提供统一的客户端API，通过不同的访问提供者接口JNDI SPI(Service Provider Interface,服务提供者接口)的实现，由管理者将JND...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/java-jndi-datasource.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-06 21:28:49 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-06</time> &#8226; <span class="post-meta__tags tags">Java</span>
+    </div>
+    <h1 class="post-title">Java使用JNDI配置WEB项目数据源</h1>
+  </header>
+
+  <section class="post">
+    <p><code class="highlighter-rouge">JNDI(Java Naming and Directory Interface,Java命名与目录接口)</code>是Java提供的一种标准的命名系统接口，JNDI提供统一的客户端API，通过不同的访问提供者接口<code class="highlighter-rouge">JNDI SPI(Service Provider Interface,服务提供者接口)</code>的实现，由管理者将JNDI API映射为特定的命名服务和目录系统，使得Java应用程序可以和这些命名服务和目录服务之间进行交互。</p>
+
+<p>##使用传统的方式</p>
+
+<p>一般对于普通的项目，习惯上使用<code class="highlighter-rouge">.properties</code>的文件来配置数据源的一些信息。在<code class="highlighter-rouge">.properties</code>文件中配置数据源连接字符串、用户名、密码和驱动的类，然后在代码中读取配置文件的信息再通过<code class="highlighter-rouge">DriverManager.getConnection(url,  username, password)</code>的方式获取数据源连接对象，步骤如下,以SQLServer为例:</p>
+
+<p>(1)注册驱动</p>
+
+<p><code class="highlighter-rouge">Class.forName(“com.microsoft.sqlserver.jdbc.SQLServerDriver”);</code></p>
+
+<p>(2)获取连接对象</p>
+
+<p><code class="highlighter-rouge">Connection conn = DriverManager.getConnection(url,  username, password);</code></p>
+
+<p>(3)示例代码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static Connection getDefaultConnection() {
+	try {
+		String url = "jdbc:sqlserver://localhost:1433;databaseName=DBName";
+		String username = "sa";
+		String password = "*";
+		String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+		//注册SQLServer的驱动
+		Class.forName(driver);
+		//获取数据源连接对象
+		Connection conn = DriverManager.getConnection(url,  username, password);
+		return conn;
+	} catch (Exception e) {
+		e.printStackTrace();
+		return null;
+	}
+}
+</code></pre></div></div>
+
+<p>##使用JNDI的方式</p>
+
+<p>1、获取数据源的连接对象<code class="highlighter-rouge">Connection</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static Connection getConnection(String jndi) {
+	DataSource datasource = null;
+	Connection connection = null;
+	try {
+		Context context = new InitialContext();
+		Context envContext = null;
+		try {
+			envContext = (Context) context.lookup("java:/comp/env");
+		} catch (Exception e1) {
+			// 无法通过java:方式获得换用/comp/env的方式
+			try {
+				envContext = (Context) context.lookup("/comp/env");
+			} catch (Exception fff) {
+				e1.printStackTrace();
+			}
+		}
+		//如果数据源的名称不为空的话使用指定的数据源的名称来获取数据库连接对象
+		if(StringUtils.isNotEmpty(jndi)) {
+			datasource = (DataSource) envContext.lookup(jndi);
+		} else {
+			datasource = (DataSource) envContext.lookup("sqlserver/default");
+		}
+		connection = datasource.getConnection();
+	} catch (Exception e2) {
+		e2.printStackTrace();
+	}
+	return connection;
+}
+</code></pre></div></div>
+<p>2、在Tomcat中的webapp中加入<code class="highlighter-rouge">Resource</code>配置</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;Resource name="sqlserver/default"
+	auth="Container"
+	type="javax.sql.DataSource"
+	maxActive="100"
+	maxIdle="30"
+	maxWait="10000"
+	username="sa"
+	password="*"
+	driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+	url="jdbc:sqlserver://localhost:1433;databasename=DBNAME"/&gt;
+</code></pre></div></div>
+<p>常见配置属性描述:</p>
+
+<ul>
+  <li>
+    <p>name：JDBC数据源的名称</p>
+  </li>
+  <li>
+    <p>auth：认证方式，一般设置为<code class="highlighter-rouge">Container</code>,还有一种是<code class="highlighter-rouge">Application</code></p>
+  </li>
+  <li>
+    <p>type：当前配置资源的类别</p>
+  </li>
+  <li>
+    <p>factory：数据源工厂,默认为”org.apache.commons.dbcp.BasicDataSourceFactory”</p>
+  </li>
+  <li>
+    <p>driverClassName：驱动的全路径类名</p>
+  </li>
+  <li>
+    <p>maxActive：当前数据源支持的最大并发数</p>
+  </li>
+  <li>
+    <p>maxIdle：连接池中保留最大数目的闲置连接数</p>
+  </li>
+  <li>
+    <p>maxWait：当连接池中无连接时的最大等待毫秒数，在等当前设置时间过后还无连接则抛出异常</p>
+  </li>
+  <li>
+    <p>username：访问数据库的用户名</p>
+  </li>
+  <li>
+    <p>password：访问数据库的密码</p>
+  </li>
+  <li>
+    <p>url：JDBC驱动的连接字符串</p>
+  </li>
+  <li>
+    <p>validationQuery：在返回应用之前，用于校验当前连接是否有效的SQL语句，如果指定了，当前查询语句至少要返回一条记录,可以写成<code class="highlighter-rouge">select top 1 * from sysobjects</code></p>
+  </li>
+</ul>
+
+<p>3、在Tomcat的<code class="highlighter-rouge">lib</code>目录下面添加数据库的驱动文件</p>
+
+<p>MySQL:<code class="highlighter-rouge">mysql-connector-java-5.1.20-bin.jar</code></p>
+
+<p>SQLServer:<code class="highlighter-rouge">sqljdbc4.jar</code></p>
+
+<p>Oracle:<code class="highlighter-rouge">ojdbc14.jar</code></p>
+
+<p>4、在web.xml加入如下配置</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;resource-ref&gt;
+	&lt;res-ref-name&gt;sqlserver/default&lt;/res-ref-name&gt;
+	&lt;res-type&gt;javax.sql.DataSource&lt;/res-type&gt;
+	&lt;res-auth&gt;Container&lt;/res-auth&gt;
+&lt;/resource-ref&gt;
+</code></pre></div></div>
+<p>注:属于可选配置，如果在web.xml中加入了上面的配置，则需要在Tomcat中一定要配置对应的<code class="highlighter-rouge">Resource</code>，否则会报错。</p>
+
+<p>5、使用方式</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Connection conn = getConnection("sqlserver/default");
+...
+</code></pre></div></div>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://www.cnblogs.com/cyjch/archive/2012/03/28/2420806.html">《Java使用JNDI技术获取DataSource对象》</a></p>
+
+<p>2、<a href="http://nything.iteye.com/blog/420018">《JNDI配置原理详解》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/xuhuanchao/article/details/4862895">《JAVA配置JNDI数据源》</a></p>
+
+<p>4、<a href="http://blog.csdn.net/zhaosg198312/article/details/3979435">《JNDI 是什么》</a></p>
+
+<p>5、<a href="http://blog.csdn.net/kkdelta/article/details/7301965">《Web项目开发环境中运行在Tomcat时涉及到JNDI的Datasource的解决方法》</a></p>
+
+<p>6、<a href="http://blog.csdn.net/lgm277531070/article/details/6711177">《tomcat下jndi的三种配置方式》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-qrcode-scan.html" title="link to iOS中的二维码扫描">iOS中的二维码扫描</a></h2>
+       <p class="excerpt">二维码（Two-dimensional code），又称二维条码，它是用特定的几何图形按一定规律在平面（二维方向）上分布的黑白相间的图形，是所有信息数据的一把钥匙。在现代商业活动中，可实现的应用十分广泛，如：产品防伪/溯源、广告推送、网站链接、数据下载、商品交易、定位/导航、电子凭证、车辆管理、信息传递、名片交流、wifi共享等。如今智能手机扫一扫功能的应用使得二维码更加普遍。##ZXing   ZXing是一个开源的条码生成和扫描库，支持众多的条码格式，而且有各种语言的实现版本，支持的语...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-09 17:44:36 +0800" class="post-list__meta--date date">2014-08-09</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-qrcode-scan.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-auto-build-by-ant.html" title="link to 使用Ant实现iOS项目的自动编译打包">使用Ant实现iOS项目的自动编译打包</a></h2>
+       <p class="excerpt">Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供维护，目前最新的版本是1.9.4。本文主要介绍如何在iOS开发中使用Ant来提高开发效率，重点涉及到ant的安装、build配置文件的基本语法和iOS build脚本等内容。##安装ANT工具1、到Apache Ant的官网上下载最新的ant工具包可以直接使用浏览器下载，或者是其他下载工具。下载地址也可以使用如下的命令:wget http:...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-02 00:13:17 +0800" class="post-list__meta--date date">2014-08-02</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-auto-build-by-ant.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

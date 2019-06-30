@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发中集成Reveal</title>
+  <meta name="description" content="Reveal 是一个界面调试工具。使用Reveal，我们可以在iOS开发时动态地查看和修改应用程序的界面。它类似Chrome的“审查元素”功能，我们不但可以在运行时看到iOS程序的界面层级关系，还可以实时地修改程序界面，不用重新运行程序就可以看到修改之后的效果。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发中集成Reveal">
+  <meta name="twitter:description" content="Reveal 是一个界面调试工具。使用Reveal，我们可以在iOS开发时动态地查看和修改应用程序的界面。它类似Chrome的“审查元素”功能，我们不但可以在运行时看到iOS程序的界面层级关系，还可以实时地修改程序界面，不用重新运行程序就可以看到修改之后的效果。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发中集成Reveal">
+  <meta property="og:description" content="Reveal 是一个界面调试工具。使用Reveal，我们可以在iOS开发时动态地查看和修改应用程序的界面。它类似Chrome的“审查元素”功能，我们不但可以在运行时看到iOS程序的界面层级关系，还可以实时地修改程序界面，不用重新运行程序就可以看到修改之后的效果。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-reveal-integrating.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-05-31 00:50:23 +0800" itemprop="datePublished" class="post-meta__date date">2015-05-31</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS开发中集成Reveal</h1>
+  </header>
+
+  <section class="post">
+    <p><a href="http://revealapp.com/">Reveal</a> 是一个界面调试工具。使用Reveal，我们可以在iOS开发时动态地查看和修改应用程序的界面。它类似Chrome的“审查元素”功能，我们不但可以在运行时看到iOS程序的界面层级关系，还可以实时地修改程序界面，不用重新运行程序就可以看到修改之后的效果。</p>
+
+<p>在使用时，我们将Reveal连接上模拟器或真机上正在运行的iOS程序，然后就可以查看和调试iOS程序的界面。</p>
+
+<p><img src="/images/reveal_integrating/reveal-hero.png" alt="reveal-hero.png" /></p>
+
+<p>###下载安装</p>
+
+<p>Releal官方提供试用版本，免费试用期是30天，功能和正式版没有差别.<a href="http://revealapp.com/download/">点此下载</a>。</p>
+
+<p>###配置Reveal</p>
+
+<p>####1、配置方式一</p>
+
+<p>(1)启动Reveal，选择<code class="highlighter-rouge">Reveal -&gt; Help -&gt; Show Reveal Library in Finder</code>。</p>
+
+<p><img src="/images/reveal_integrating/show-reveal-library-in-finder.jpg" alt="show-reveal-library-in-finder.jpg" /></p>
+
+<p>(2)在Xcode中打开iOS项目,将<code class="highlighter-rouge">Reveal.framework</code>拖到项目中，如果升级了Reveal，对应的<code class="highlighter-rouge">Reveal.framework</code>文件也要更新到对应的版本。</p>
+
+<p><img src="/images/reveal_integrating/add-resource-to-project.jpg" alt="add-resource-to-project.jpg" /></p>
+
+<p>(3)选择Target -&gt; Build Phases -&gt; Link Binary With Libraries将Reveal.framework移除。经测试本步骤不是必须的</p>
+
+<p><img src="/images/reveal_integrating/remove-framework-from-project.jpg" alt="remove-framework-from-project.jpg" /></p>
+
+<p>(4)在Xcode的<code class="highlighter-rouge">Target -&gt; Build Setting -&gt; Other Linker Flags</code>添加如下几个配置项</p>
+
+<p><code class="highlighter-rouge"> -ObjC -lz -framework Reveal</code></p>
+
+<p><img src="/images/reveal_integrating/add-linker-flags.jpg" alt="add-linker-flags.jpg" /></p>
+
+<p>(5)运行项目，然后打开Reveal的界面，在左上角选择连接的设备</p>
+
+<p><img src="/images/reveal_integrating/reveal-app-chooser.jpg" alt="reveal-app-chooser.jpg" /></p>
+
+<p>然后就可以看到实际的运行效果</p>
+
+<p><img src="/images/reveal_integrating/reveal_demo.png" alt="reveal_demo.png" /></p>
+
+<p>####2、配置方式二</p>
+
+<p>Reveal官方介绍了好几种办法使Reveal连接模拟器，都需要修改工程文件。但如果修改了工程文件，就需要参与项目开发的所有人都装有Reveal，下面介绍一种比较方便的方式来集成Reveal，步骤如下：</p>
+
+<p>首先打开Terminal，输入<code class="highlighter-rouge">vim ~/.lldbinit</code>创建一个名为.lldbinit的文件，然后将如下内容输入到该文件中：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>command alias reveal_load_sim expr (void*)dlopen("/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib", 0x2);
+command alias reveal_load_dev expr (void*)dlopen([(NSString*)[(NSBundle*)[NSBundle mainBundle]               pathForResource:@"libReveal" ofType:@"dylib"] cStringUsingEncoding:0    x4], 0x2);
+command alias reveal_start expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter]           postNotificationName:@"IBARevealRequestStart" object:nil];
+command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter]            postNotificationName:@"IBARevealRequestStop" object:nil];
+</code></pre></div></div>
+
+<p>该步骤其实是为lldb设置了4个别名，为了后续方便操作，这4个别名意义如下：</p>
+
+<p><code class="highlighter-rouge">reveal_load_sim</code> 为模拟器加载reveal调试用的动态链接库</p>
+
+<p><code class="highlighter-rouge">reveal_load_dev</code> 为真机加载reveal调试用的动态链接库</p>
+
+<p><code class="highlighter-rouge">reveal_start</code> 启动reveal调试功能</p>
+
+<p><code class="highlighter-rouge">reveal_stop</code>  结束reveal调试功能</p>
+
+<p>(1)Reveal连接模拟器</p>
+
+<p><img src="/images/reveal_integrating/reveal_load_sim.png" alt="reveal_load_sim.png" /></p>
+
+<p>在AppDelegate类的<code class="highlighter-rouge">application:didFinishLaunchingWithOptions:</code>方法中，作如下3步操作（如下图所示）：</p>
+
+<p>1)点击该方法左边的行号区域，增加一个断点，之后右击该断点，选择“Edit Breakpoint”。</p>
+
+<p>2)点击”Action”项边右的”Add Action”,然后输入“reveal_load_sim”</p>
+
+<p>3)勾选上Options上的”Automatically continue after evaluating”选项。</p>
+
+<p>(2)Reveal连接真机</p>
+
+<p>要用Reveal连接真机调试，我们需要先把Reveal的动态链接库上传到真机上。由于iOS设备有沙盒存在，所以我们只能将Reveal的动态链接库添加到工程中。</p>
+
+<p>1)点击Reveal菜单栏的”Help”-&gt;”Show Reveal Library in Finder”选项，可以在Finder中显示出Reveal的动态链接库：<code class="highlighter-rouge">libReveal.dylib</code></p>
+
+<p><img src="/images/reveal_integrating/show-reveal-library-in-finder.jpg" alt="show-reveal-library-in-finder.jpg" /></p>
+
+<p>2)调整<code class="highlighter-rouge">libReveal.dylib</code>的引用方式，这里我们只需要将<code class="highlighter-rouge">libReveal.dylib</code>文件拷贝到Sandbox中，但是我们在引入<code class="highlighter-rouge">libReveal.dylib</code>的时候Xcode默认是以<code class="highlighter-rouge">Link Binary With Libraries</code>的方式的，实际上应该是<code class="highlighter-rouge">Copy Bundle Resources</code>,所以应该先将<code class="highlighter-rouge">libReveal.dylib</code>从<code class="highlighter-rouge">Link Binary With Libraries</code>中移除掉，然后在<code class="highlighter-rouge">Copy Bundle Resources</code>中添加。</p>
+
+<p>3)安装之前处理模拟器的方式，将配置文件改成<code class="highlighter-rouge">reveal_load_dev</code>.</p>
+
+<p><img src="/images/reveal_integrating/reveal_load_dev.png" alt="reveal_load_dev.png" /></p>
+
+<p>启动后在控制台会出现如下内容：</p>
+
+<p><img src="/images/reveal_integrating/reveal_load_console.png" alt="reveal_load_console.png" /></p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://wufawei.com/2013/12/use-reveal-to-inspect-ios-apps/">《使用Reveal来查看、修改、调试iOS应用》</a></p>
+
+<p>2、<a href="http://blog.ittybittyapps.com/blog/2013/11/07/integrating-reveal-without-modifying-your-xcode-project/">《Integrating Reveal without modifying your Xcode project》</a></p>
+
+<p>3、<a href="http://c.blog.sina.com.cn/profile.php?blogid=cb8a22ea89000gtw">《Reveal查看任意app的高级技巧》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-python-in-ios.html" title="link to 合理使用Python助力iOS开发">合理使用Python助力iOS开发</a></h2>
+       <p class="excerpt">说明：本文并不是介绍关于Python如何使用或者是Python的语法知识的，重点是分享在开发中使用Python来减少重复性的劳动的思路。Python是一种面向对象、解释型计算机程序设计语言，由Guido van Rossum于1989年底发明，第一个公开发行版发行于1991年，Python 源代码同样遵循 GPL(GNU General Public License)协议 。Python语法简洁而清晰，具有丰富和强大的类库。它常被昵称为胶水语言，能够把用其他语言制作的各种模块（尤其是C/C...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-06-07 03:37:56 +0800" class="post-list__meta--date date">2015-06-07</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/using-python-in-ios.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-patch-by-wax.html" title="link to 使用Wax给你的应用程序打补丁">使用Wax给你的应用程序打补丁</a></h2>
+       <p class="excerpt">在iOS开发中经常遇到需要对已经上线的APP进行功能微调，或者是一些紧急的Bug修复。对于需要提交到AppStore的程序来说，每次审核的周期都会较长，在审核过程中很有可能因为各种原因被拒。由于Apple的限制，开发者无法在iOS上动态的加载Objective-C源码，使用脚本语言就可以在一定程度上解决这个问题。比如使用HTML+Javascript的方式，支付宝钱包的彩票等功能就是使用这一方式实现的。另外也可以使用Lua脚本来实现，最初我了解到的Lua是使用在游戏上面的，包括Angry ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-05-09 16:36:36 +0800" class="post-list__meta--date date">2015-05-09</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-patch-by-wax.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

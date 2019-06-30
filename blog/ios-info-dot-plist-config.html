@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中Info.plist文件的常见配置</title>
+  <meta name="description" content="在创建一个新的Xcode工程后，会在Supporting Files文件夹下自动生成一个工程名-Info.plist的文件，这个是对工程做一些运行期配置的文件(很重要，必须有该文件)。如果使用文本编辑器打开这个文件，会发现这是一个XML格式的文本文件，使用Xcode的Open As-&gt;Source Code...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中Info.plist文件的常见配置">
+  <meta name="twitter:description" content="在创建一个新的Xcode工程后，会在Supporting Files文件夹下自动生成一个工程名-Info.plist的文件，这个是对工程做一些运行期配置的文件(很重要，必须有该文件)。如果使用文本编辑器打开这个文件，会发现这是一个XML格式的文本文件，使用Xcode的Open As-&gt;Source Code...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中Info.plist文件的常见配置">
+  <meta property="og:description" content="在创建一个新的Xcode工程后，会在Supporting Files文件夹下自动生成一个工程名-Info.plist的文件，这个是对工程做一些运行期配置的文件(很重要，必须有该文件)。如果使用文本编辑器打开这个文件，会发现这是一个XML格式的文本文件，使用Xcode的Open As-&gt;Source Code...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-info-dot-plist-config.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-24 16:06:02 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-24</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中Info.plist文件的常见配置</h1>
+  </header>
+
+  <section class="post">
+    <p>在创建一个新的Xcode工程后，会在<code class="highlighter-rouge">Supporting Files</code>文件夹下自动生成一个<code class="highlighter-rouge">工程名-Info.plist</code>的文件，这个是对工程做一些运行期配置的文件(很重要，必须有该文件)。如果使用文本编辑器打开这个文件，会发现这是一个XML格式的文本文件，使用Xcode的<code class="highlighter-rouge">Open As</code>-&gt;<code class="highlighter-rouge">Source Code</code>或者<code class="highlighter-rouge">Property List</code>可以进行编辑，本文会重点介绍一些在iOS开发中常见的的Info.plist的配置项。</p>
+
+<p>##Info.plist配置项说明</p>
+
+<p>1、设置启动图标(<code class="highlighter-rouge">CFBundleIcons</code>)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;CFBundleIcons&lt;/key&gt;
+&lt;dict&gt;
+	&lt;key&gt;CFBundlePrimaryIcon&lt;/key&gt;
+	&lt;dict&gt;
+		&lt;key&gt;CFBundleIconFiles&lt;/key&gt;
+		&lt;array&gt;
+			&lt;string&gt;Icon&lt;/string&gt;
+			&lt;string&gt;Icon@2x&lt;/string&gt;
+			&lt;string&gt;Icon_120@2x&lt;/string&gt;
+		&lt;/array&gt;
+	&lt;/dict&gt;
+&lt;/dict&gt;
+</code></pre></div></div>
+
+<p>2、设置启动闪屏图片(<code class="highlighter-rouge">UILaunchImages</code>)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;UILaunchImages&lt;/key&gt;
+&lt;array&gt;
+	&lt;dict&gt;
+		&lt;key&gt;UILaunchImageMinimumOSVersion&lt;/key&gt;
+		&lt;string&gt;7.0&lt;/string&gt;
+		&lt;key&gt;UILaunchImageName&lt;/key&gt;
+		&lt;string&gt;Default&lt;/string&gt;
+		&lt;key&gt;UILaunchImageOrientation&lt;/key&gt;
+		&lt;string&gt;Portrait&lt;/string&gt;
+		&lt;key&gt;UILaunchImageSize&lt;/key&gt;
+		&lt;string&gt;{320, 568}&lt;/string&gt;
+	&lt;/dict&gt;
+	&lt;dict&gt;
+		&lt;key&gt;UILaunchImageMinimumOSVersion&lt;/key&gt;
+		&lt;string&gt;7.0&lt;/string&gt;
+		&lt;key&gt;UILaunchImageName&lt;/key&gt;
+		&lt;string&gt;Default&lt;/string&gt;
+		&lt;key&gt;UILaunchImageOrientation&lt;/key&gt;
+		&lt;string&gt;Portrait&lt;/string&gt;
+		&lt;key&gt;UILaunchImageSize&lt;/key&gt;
+		&lt;string&gt;{320, 480}&lt;/string&gt;
+	&lt;/dict&gt;
+&lt;/array&gt;
+</code></pre></div></div>
+
+<p>3、设置版本号相关</p>
+
+<p>(1)设置Bundle的版本号(<code class="highlighter-rouge">Bundle versions string, short</code>)。</p>
+
+<p>一般包含该束的主、次版本号，这个字符串的格式通常是“n.n.n”（n表示某个数字，如1.1.1）。第一个数字是束的主要版本号，另两个是次要版本号。该关键字的值会被显示在Cocoa应用程序的关于对话框中。该关键字不同于CFBundleVersion，它指定了一个特殊的创建号。而CFBundleShortVersionString的值描述了一种更加正式的并且不随每一次创建而改变的版本号。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;CFBundleShortVersionString&lt;/key&gt;
+&lt;string&gt;1.0&lt;/string&gt;
+</code></pre></div></div>
+
+<p>(2)设置应用程序版本号(<code class="highlighter-rouge">Bundle version</code>)。</p>
+
+<p>每次部署应用程序的一个新版本时，将会增加这个编号，用于标识不同的版本。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;CFBundleVersion&lt;/key&gt;
+&lt;string&gt;1.0&lt;/string&gt;
+</code></pre></div></div>
+
+<p>4、设置字体相关(<code class="highlighter-rouge">Fonts provided by application</code>)</p>
+
+<p>在iOS应用中需要使用系统提供的字体之外的字体，可以将字体文件(<code class="highlighter-rouge">.ttf/.odf</code>)复制到项目文件中，另外需要在Info.plist中添加<code class="highlighter-rouge">Fonts provided by application</code>的项，对应的源码文件如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;UIAppFonts&lt;/key&gt;
+&lt;array&gt;
+	&lt;string&gt;华文行楷.ttf&lt;/string&gt;
+	&lt;string&gt;华文新魏.ttf&lt;/string&gt;
+	&lt;string&gt;黑体_GB2312.ttf&lt;/string&gt;
+&lt;/array&gt;
+</code></pre></div></div>
+<p>P.S关于如何使用系统支持的字体信息:</p>
+
+<p>(1)在调用字体的时候，要使用字体名。字体名不是文件名，而是字体的<code class="highlighter-rouge">Family Name</code>。Family Name可以在Font Book中查看。</p>
+
+<p><code class="highlighter-rouge">label.font = [UIFont fontWithName:@"字体名称" size:16.0];</code></p>
+
+<p>(2)遍历出系统支持的全部字体</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSArray *familyNames = [[NSArray alloc] initWithArray:[UIFont familyNames]];
+for(int indFamily = 0; indFamily &lt; familyNames.count; ++indFamily)
+{
+	NSLog(@"Family Name: %@", [familyNames objectAtIndex:indFamily]);
+	NSString *fontFamilyName = [familyNames objectAtIndex:indFamily];
+	NSArray *fontNames = [[NSArray alloc] initWithArray:[UIFont fontNamesForFamilyName:fontFamilyName]];
+	for(int indFont = 0; indFont &lt; fontNames.count; ++indFont)
+	{
+		NSLog(@"   Font Name: %@", [fontNames objectAtIndex:indFont]);
+	}
+}
+</code></pre></div></div>
+
+<p>5、设置应用名称(<code class="highlighter-rouge">Bundle display name</code>)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
+&lt;string&gt;应用程序名称&lt;/string&gt;
+</code></pre></div></div>
+<p>可以通过在InfoPlist.strings中使用配置让应用在不同的语言环境下显示不同的应用名称，如在<code class="highlighter-rouge">English</code>中使用<code class="highlighter-rouge">CFBundleDisplayName="Hello World";</code>配置应用程序的名称为<code class="highlighter-rouge">Hello World</code>，在<code class="highlighter-rouge">Chinese</code>的环境下使用<code class="highlighter-rouge">CFBundleDisplayName="你好世界";</code>配置应用程序的名称为<code class="highlighter-rouge">你好世界</code>。</p>
+
+<p>6、设置应用标识号(<code class="highlighter-rouge">Bundle identifier</code>)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+&lt;string&gt;com.devzeng.demo&lt;/string&gt;
+</code></pre></div></div>
+
+<p>7、设置应用支持的屏幕方向(<code class="highlighter-rouge">Supported interface orientations</code>)</p>
+
+<p>iOS应用程序支持以下四个方向的设置：<code class="highlighter-rouge">UIInterfaceOrientationPortrait</code>(默认竖直方向，HOME键向下)、<code class="highlighter-rouge">UIInterfaceOrientationLandscapeLeft</code>(横屏靠左)、<code class="highlighter-rouge">UIInterfaceOrientationLandscapeRight</code>(横屏向右)和<code class="highlighter-rouge">UIInterfaceOrientationPortraitUpsideDown</code>(竖直方向倒置，HOME键向上)</p>
+
+<p>对应的配置源码如下:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;UISupportedInterfaceOrientations&lt;/key&gt;
+&lt;array&gt;
+	&lt;string&gt;UIInterfaceOrientationPortrait&lt;/string&gt;
+	&lt;string&gt;UIInterfaceOrientationLandscapeLeft&lt;/string&gt;
+	&lt;string&gt;UIInterfaceOrientationLandscapeRight&lt;/string&gt;
+	&lt;string&gt;UIInterfaceOrientationPortraitUpsideDown&lt;/string&gt;
+&lt;/array&gt;
+</code></pre></div></div>
+
+<p>8、设置应用程序是否支持后台运行(<code class="highlighter-rouge">Application does not run in background</code>)</p>
+
+<p>通过<code class="highlighter-rouge">UIApplicationExitsOnSuspend</code>可以设置iOS的应用程序进入到挂起状态下是否立即退出，设置为<code class="highlighter-rouge">YES</code>表示不支持后台运行退出到后台立即退出，设置为<code class="highlighter-rouge">NO</code>表示支持后台运行。</p>
+
+<p>(1)设置支持后台运行</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;UIApplicationExitsOnSuspend&lt;/key&gt;
+&lt;false/&gt;
+</code></pre></div></div>
+
+<p>(2)设置不支持后台运行</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;key&gt;UIApplicationExitsOnSuspend&lt;/key&gt;
+&lt;true/&gt;
+</code></pre></div></div>
+
+<p>##参考资料</p>
+
+<p>1、<a href="https://developer.apple.com/library/ios/documentation/general/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html#//apple_ref/doc/uid/TP40009252-SW1">《Information Property List Key Reference》</a></p>
+
+<p>2、<a href="http://blog.csdn.net/nicktang/article/details/6875234">《iOS工程中的info.plist文件的完整研究》</a></p>
+
+<p>3、<a href="http://www.cnblogs.com/gaoxiao228/archive/2012/07/04/2576645.html">《在iOS程序中使用自定义字体》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-nsoperation-and-nsoperationqueue.html" title="link to iOS多线程之NSOperation和NSOperationQueue">iOS多线程之NSOperation和NSOperationQueue</a></h2>
+       <p class="excerpt">如果对Java或者与Java类似的语言熟悉的话，可以说NSOperation对象很像java.lang.Runnable接口。类似的，在Java的Runnable接口中，NSOperation对象被设计为可以扩展的。还是和Java一样，这里也有一个方法可以被重载次数的最小值。对于NSOpetation来说，这个方法就是-(void)main方法.使用NSOperation的最简单的一种方法是把它加入一个NSOperationQueue。一旦operation被加入了这个队列，队列就马上把它...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-24 18:31:30 +0800" class="post-list__meta--date date">2014-08-24</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-nsoperation-and-nsoperationqueue.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/adapt-for-ios7.html" title="link to iOS应用程序适配iOS7">iOS应用程序适配iOS7</a></h2>
+       <p class="excerpt">Apple自去年发布iOS7以来一直以来都有关注目前各个大厂发布的app，到目前为止基本上绝大多数App Store上的app已经做到iOS7适配，不光是支持iOS7的布局调整更多的是在iOS7整体设计方面的改进，朝着扁平化和简单线条话的方式进行设计。##UI适配在iOS7中view默认是全屏模式，状态栏的高度也加在了view的高度上，例如iOS7之前iPhone5/5s/5c中self.view.frame.size.height = 548，在iOS7中就是568了，在iOS7中nav...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-16 23:02:33 +0800" class="post-list__meta--date date">2014-08-16</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/adapt-for-ios7.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

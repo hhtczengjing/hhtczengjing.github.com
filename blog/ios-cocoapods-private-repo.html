@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>在iOS项目中使用CocoaPods私有库</title>
+  <meta name="description" content="CocoaPods的出现极大的减轻了我们日常开发的工作量，特别是在做一些繁琐的配置上面，正如CocoaPods官网上面的Get on with building your app, not duplicating code.这句话一样CocoaPods让我们把精力放在打磨我们的产品，而不是把时间浪费在做一些重复的...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在iOS项目中使用CocoaPods私有库">
+  <meta name="twitter:description" content="CocoaPods的出现极大的减轻了我们日常开发的工作量，特别是在做一些繁琐的配置上面，正如CocoaPods官网上面的Get on with building your app, not duplicating code.这句话一样CocoaPods让我们把精力放在打磨我们的产品，而不是把时间浪费在做一些重复的...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="在iOS项目中使用CocoaPods私有库">
+  <meta property="og:description" content="CocoaPods的出现极大的减轻了我们日常开发的工作量，特别是在做一些繁琐的配置上面，正如CocoaPods官网上面的Get on with building your app, not duplicating code.这句话一样CocoaPods让我们把精力放在打磨我们的产品，而不是把时间浪费在做一些重复的...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-cocoapods-private-repo.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-06-18 22:36:53 +0800" itemprop="datePublished" class="post-meta__date date">2016-06-18</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">在iOS项目中使用CocoaPods私有库</h1>
+  </header>
+
+  <section class="post">
+    <p><code class="highlighter-rouge">CocoaPods</code>的出现极大的减轻了我们日常开发的工作量，特别是在做一些繁琐的配置上面，正如CocoaPods官网上面的<code class="highlighter-rouge">Get on with building your app, not duplicating code.</code>这句话一样CocoaPods让我们把精力放在打磨我们的产品，而不是把时间浪费在做一些重复的事情上面。</p>
+
+<p>在开发项目的过程中引入第三方代码库会涉及到许多内容。有的时候需要配置<code class="highlighter-rouge">build phases</code>和<code class="highlighter-rouge">linker flags</code>，这样的细节配置会引起许多人为因素的错误导致整个项目无法正常编译。<code class="highlighter-rouge">CocoaPods</code>的出现简化了这些，它能够自动配置编译选项。另外，通过<code class="highlighter-rouge">CocoaPods</code>的搜索功能，可以很方便的查找和使用第三方库文件。</p>
+
+<p>一直想把公司的项目中常用到的一些代码提取出来做成公用的库(同一套代码每个项目中都基本上会用到，而且每次改动之后所有的项目都需要进行同步修改，特别繁琐)，恰好最近在调整新项目的代码，趁着这个机会就整理了一下代码。因为有些代码是公司级别的所以不能直接使用CocoaPods的Spec，需要把代码托管在公司的内部服务器上面，使用CocoaPod私有的Spec。之前写过一篇笔记<a href="http://.devzeng.com/blog/ios-cocoapods-dependency-manager.html">《使用CocoaPods管理iOS项目中的依赖库》</a>，介绍如何安装CocoaPods如何在项目中使用。本文主要是介绍如何搭建和使用私有库。</p>
+
+<p>###创建私有的Spec仓库</p>
+
+<p>1.在Git上创建Spec仓库</p>
+
+<p>Spec是Pods索引库，所有公开的Pods都在这个里面，他实际是一个Git仓库remote端
+在GitHub上，但是当你使用了Cocoapods后他会被clone到本地的<code class="highlighter-rouge">~/.cocoapods/repos</code>目录下，可以进入到这个目录看到master文件夹就是这个官方的Spec Repo了。这个master目录的结构是这个样子的:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>├── Specs
+    └── [SPEC_NAME]
+        └── [VERSION]
+            └── [SPEC_NAME].podspec            
+</code></pre></div></div>
+
+<p>每次我们在执行<code class="highlighter-rouge">pod install</code>或者是<code class="highlighter-rouge">pod update</code>的时候都会自动更新这个spec里面的内容，拉取最新的数据回来。然后我们使用<code class="highlighter-rouge">pod search</code>的时候就是直接从这个里面进行查询的。</p>
+
+<p>2.向CocoaPods添加该仓库</p>
+
+<p><code class="highlighter-rouge">pod repo add 仓库名 仓库地址</code></p>
+
+<p>示例如下:</p>
+
+<p><code class="highlighter-rouge">pod repo add zengjing-spec git@gitlab.com:zengjing/Specs.git</code></p>
+
+<p>添加成功之后可以通过<code class="highlighter-rouge">pod repo list</code>的命令查看，结果如下所示：</p>
+
+<p><img src="/images/ios-cocoapods-private-repo/repo-list.png" alt="repo-list" /></p>
+
+<p>###编写podspec文件</p>
+
+<p>####1.搭建项目的结构，创建podspec文件</p>
+
+<p><code class="highlighter-rouge">podspec</code>是一个配置文件，该文件描述了一个库是怎样被添加到工程中的。在这个配置文件里面配置了：库文件的名称、源码存放路径、版本号、依赖库和编译条件等。为了避免写错，建议使用命令行的方式生成。</p>
+
+<p>在终端执行<code class="highlighter-rouge">pod spec create Foundation-pd</code>，CocoaPods会自动帮我们生成<code class="highlighter-rouge">Foundation-pd.podspec</code>的模板文件。推荐搭建项目的文件组织结构如下所示：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Foundation-pd
+  ├── Example(示例项目)
+  ├── LICENSE(LICENSE文件)
+  ├── Foundation-pd.podspec
+  ├── Pod
+  │   ├── Assets(资源文件)
+  │   └── Classes(代码文件)
+  └── README.md(一些说明信息)
+</code></pre></div></div>
+
+<p>####2.提交代码到git服务器</p>
+
+<p>(1)提交代码到远程仓库</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add .
+git commit -s -m "first commit"
+git push origin master
+</code></pre></div></div>
+
+<p>(2)给当前的版本加上tag，提交到远程仓库</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag -a 0.1.0 -m 'v0.1.0' HEAD
+git push origin tag 0.1.0
+</code></pre></div></div>
+
+<p>####3.编写podspec文件</p>
+
+<p>示例podspec内容如下，建议参考CocoaPods上面的来做，照着那些第三库的podspec文件写就行了：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Pod::Spec.new do |s|
+  s.name              = "Foundation-pd"
+  s.version           = "0.1.0"
+  s.summary           = "Powerdata Foundation for iOS Team"
+  s.homepage          = "http://blog.devzeng.com"
+  s.license			   = { :type =&gt; 'MIT', :file =&gt; 'LICENSE' }
+  s.author            = { "zengjing" =&gt; "hhtczengjing@gmail.com" }
+  s.source            = { :git =&gt; "YOUR_REPO_URL", :tag =&gt; "#{s.version}" }
+  s.default_subspec   = 'Core'
+  s.platform          = :ios, "7.0"
+  s.requires_arc      = true
+  s.framework         = 'UIKit'
+
+  s.subspec 'Core' do |ss|
+    ss.source_files = "Pod/Classes/{Core,Util}/**/*.{h,m,mm,c}"
+  end
+
+  s.subspec 'CrashReporter' do |ss|
+    ss.source_files = "Pod/Classes/CrashReporter/**/*.{h,m,mm,c}"
+    ss.dependency 'PLCrashReporter', '~&gt; 1.2.0'
+  end
+
+  s.subspec 'DB' do |ss|
+    ss.source_files = "Pod/Classes/DB/**/*.{h,m,mm,c}"
+    ss.dependency 'Foundation-pd/Core'
+    ss.dependency 'FMDB', '~&gt; 2.6.2'
+    ss.dependency 'FMDBMigrationManager', '~&gt; 1.4.1'
+  end
+
+  s.subspec 'Logger' do |ss|
+    ss.source_files = "Pod/Classes/PDFoundation/src/Logger/**/*.{h,m,mm,c}"
+    ss.dependency 'Foundation-pd/Core'
+    ss.dependency 'CocoaLumberjack', '~&gt; 2.2.0'
+  end
+
+  s.subspec 'UI' do |ss|
+    ss.source_files = "Pod/Classes/UI/**/*.{h,m,mm,c}"
+    ss.dependency 'Foundation-pd/Core'
+    ss.dependency 'Masonry', '~&gt; 1.0.0'
+  end
+
+  s.subspec 'Model' do |ss|
+    ss.source_files = "Pod/Classes/Model/**/*.{h,m,mm,c}"
+    ss.dependency 'Foundation-pd/Core'
+    ss.dependency 'Mantle', '~&gt; 2.0.7'
+    ss.dependency 'RPJSONValidator', '~&gt; 0.2.0'
+    ss.dependency 'libextobjc', '~&gt; 0.4.1'
+  end
+
+  s.subspec 'Store' do |ss|
+    ss.source_files = "Pod/Classes/Store/**/*.{h,m,mm,c}"
+    ss.dependency 'Foundation-pd/Core'
+    ss.dependency 'Foundation-pd/Network'
+  end
+
+  s.subspec 'Service' do |ss|
+    service.source_files = "Pod/Classes/Service/**/*.{h,m,mm,c}"
+    service.dependency 'Foundation-pd/Core'
+  end
+  
+  s.subspec 'Network' do |ss|
+    ss.source_files = "Pod/Classes/Network/**/*.{h,m,mm,c}"
+    ss.dependency 'Foundation-pd/Core'
+    ss.dependency 'AFNetworking', '~&gt; 2.5.4'
+  end
+
+  s.subspec 'WebService' do |ss|
+    ss.source_files = "Pod/Classes/WebService/**/*.{h,m,mm,c}"
+    ss.dependency 'Foundation-pd/Core'
+    ss.dependency 'AFNetworking', '~&gt; 2.5.4'
+    ss.dependency 'KissXML', '~&gt; 5.0.3'
+    ss.xcconfig = { 'HEADER_SEARCH_PATHS' =&gt; '$(SDKROOT)/usr/include/libxml2' }
+  end
+
+  s.subspec 'Manager' do |ss|
+    ss.source_files = "Pod/Classes/Manager/**/*.{h,m,mm,c}"
+    ss.dependency 'Foundation-pd/Core'
+  end
+
+end
+</code></pre></div></div>
+
+<p>语法说明请参考：<a href="https://guides.cocoapods.org/syntax/podspec.html">《Podspec Syntax Reference》</a></p>
+
+<p>###提交podspec文件到Spec仓库</p>
+
+<p>####1.检查podspec文件是否正确</p>
+
+<p><code class="highlighter-rouge">pod spec lint Foundation-pd.podspec --verbose --sources='git@gitlab.com:zengjing/Specs.git,https://github.com/CocoaPods/Specs' --use-libraries</code></p>
+
+<p>####2.提交podspec文件到Spec库</p>
+
+<p><code class="highlighter-rouge">pod repo push zengjing-spec Foundation-pd.podspec --verbose --sources='git@gitlab.com:zengjing/Specs.git,https://github.com/CocoaPods/Specs' --use-libraries --allow-warnings</code></p>
+
+<p>提交完成之后可以通过<code class="highlighter-rouge">pod search Foundation-pd</code>检验是否成功：</p>
+
+<p><img src="/images/ios-cocoapods-private-repo/pod-search.png" alt="pod-search" /></p>
+
+<p>说明：</p>
+
+<p>(1)<code class="highlighter-rouge">--verbose</code>:表示显示全部的日志信息，建议加上这个，方便判断错误信息。</p>
+
+<p>(2)<code class="highlighter-rouge">--sources</code>:如果我们在podspec里面依赖到一些私有的库之后，直接进行校验是会报错的提示找不到，这里加上我们的Spec仓库的地址告诉CocoaPods找不到的时候去哪里找。</p>
+
+<p>(3)<code class="highlighter-rouge">--allow-warnings</code>:表示允许警告.</p>
+
+<p>(4)<code class="highlighter-rouge">--use-libraries</code>:表示使用静态库或者是framework，这里主要是解决当我们依赖一些framework库后校验提示找不到库的时候用到。</p>
+
+<p>(5)在Podfile的文件开头加上Spec的地址，然后就可以向以前一样使用了</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source 'https://github.com/CocoaPods/Specs.git'
+source 'git@gitlab.com:zengjing/Specs.git'
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1.<a href="http://blog.wtlucky.com/blog/2015/02/26/create-private-podspec/">《使用Cocoapods创建私有podspec》</a></p>
+
+<p>2.<a href="http://objccn.io/issue-6-4/">《深入理解 CocoaPods》</a></p>
+
+<p>3.<a href="https://guides.cocoapods.org">《CocoaPods Guides》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-webp-usage.html" title="link to 在iOS项目中使用WebP格式图片">在iOS项目中使用WebP格式图片</a></h2>
+       <p class="excerpt">WebP是Google开发的一种旨在加快图片加载速度的图片格式。图片压缩体积大约只有JPEG的2/3，并能节省大量的服务器带宽资源和数据空间。Facebook Ebay等知名网站已经开始测试并使用WebP格式。下图是Google已经和正在部署的WebP的产品。与JPEG相同，WebP是一种有损压缩。Google表示这种格式的主要优势在于高效率。他们发现，“在质量相同的情况下，WebP格式图像的体积要比JPEG格式图像小40%，美中不足的是，WebP格式图像的编码时间“比JPEG格式图像长8...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-06-19 11:40:53 +0800" class="post-list__meta--date date">2016-06-19</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-webp-usage.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-plcrashreporter.html" title="link to iOS中使用PLCrashReporter收集Crash">iOS中使用PLCrashReporter收集Crash</a></h2>
+       <p class="excerpt">iOS应用程序在上线过程中可能会出现各种闪退，如果APP经常出现闪退会让一部分用户选择卸载，这样会带来很大的损失，下图(来自于Bugly)可以看出APP出现崩溃后会带来的影响。对于这些崩溃信息怎么收集分析就是一个很大的问题，通过解析Crash文件可以帮助我们改善APP，修复bug等。收集Crash信息的方式有很多，比较常见的是使用第三方服务，比如友盟、百度统计、Bugly等。(下图为Bugly）###使用系统自带的Crash收集//需要捕获的signalstatic int s_fatal...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-05-21 23:40:53 +0800" class="post-list__meta--date date">2016-05-21</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-plcrashreporter.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

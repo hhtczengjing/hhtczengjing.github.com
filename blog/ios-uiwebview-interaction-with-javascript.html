@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中JavaScript和OC交互</title>
+  <meta name="description" content="在iOS开发中很多时候我们会和UIWebView打交道，目前国内的很多应用都采用了UIWebView的混合编程技术，最常见的是微信公众号的内容页面。前段时间在做微信公众平台相关的开发，发现很多应用场景都是利用HTML5和UIWebView来实现的。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中JavaScript和OC交互">
+  <meta name="twitter:description" content="在iOS开发中很多时候我们会和UIWebView打交道，目前国内的很多应用都采用了UIWebView的混合编程技术，最常见的是微信公众号的内容页面。前段时间在做微信公众平台相关的开发，发现很多应用场景都是利用HTML5和UIWebView来实现的。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中JavaScript和OC交互">
+  <meta property="og:description" content="在iOS开发中很多时候我们会和UIWebView打交道，目前国内的很多应用都采用了UIWebView的混合编程技术，最常见的是微信公众号的内容页面。前段时间在做微信公众平台相关的开发，发现很多应用场景都是利用HTML5和UIWebView来实现的。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-uiwebview-interaction-with-javascript.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-01-10 20:16:21 +0800" itemprop="datePublished" class="post-meta__date date">2015-01-10</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中JavaScript和OC交互</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS开发中很多时候我们会和UIWebView打交道，目前国内的很多应用都采用了UIWebView的混合编程技术，最常见的是微信公众号的内容页面。前段时间在做微信公众平台相关的开发，发现很多应用场景都是利用HTML5和UIWebView来实现的。</p>
+
+<p>###机制</p>
+
+<p>Objective-C语言调用JavaScript语言，是通过UIWebView的
+<code class="highlighter-rouge">- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;</code>的方法来实现的。该方法向UIWebView传递一段需要执行的JavaScript代码最后获取执行结果。</p>
+
+<p>JavaScript语言调用Objective-C语言，并没有现成的API，但是有些方法可以达到相应的效果。具体是利用UIWebView的特性：在UIWebView的内发起的所有网络请求，都可以通过delegate函数得到通知。</p>
+
+<p>###示例</p>
+
+<p>下面提供一个简单的例子介绍如何相互的调用，实现的效果是在界面上点击一个链接，然后弹出一个对话框判断是否登录成功。</p>
+
+<p><img src="/images/uiwebview_js/uiwebview_js_demo.png" alt="uiwebview_js_demo.png" /></p>
+
+<p>（1）示例的HTML的源码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"content-type"</span> <span class="na">content=</span><span class="s">"text/html;charset=utf-8"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=Edge"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">content=</span><span class="s">"always"</span> <span class="na">name=</span><span class="s">"referrer"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;title&gt;</span>测试网页<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"devzeng://login?name=zengjing&amp;password=123456"</span><span class="nt">&gt;</span>点击链接<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>（2）UIWebView Delegate回调方法为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSURL *url = [request URL];
+    if([[url scheme] isEqualToString:@"devzeng"]) {
+        //处理JavaScript和Objective-C交互
+        if([[url host] isEqualToString:@"login"])
+        {
+            //获取URL上面的参数
+            NSDictionary *params = [self getParams:[url query]];
+            BOOL status = [self login:[params objectForKey:@"name"] password:[params objectForKey:@"password"]];
+            if(status)
+            {
+                //调用JS回调
+                [webView stringByEvaluatingJavaScriptFromString:@"alert('登录成功!')"];
+            }
+            else
+            {
+                [webView stringByEvaluatingJavaScriptFromString:@"alert('登录失败!')"];
+            }
+        }
+        return NO;
+    }
+    return YES;
+}
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<p>1、同步和异步的问题</p>
+
+<p>（1）Objective-C调用JavaScript代码的时候是同步的</p>
+
+<p><code class="highlighter-rouge">- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;</code></p>
+
+<p>（2）JavaScript调用Objective-C代码的时候是异步的</p>
+
+<p><code class="highlighter-rouge">- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;</code></p>
+
+<p>2、常见的JS调用</p>
+
+<p>（1）获取页面title</p>
+
+<p><code class="highlighter-rouge">NSString *title = [webview stringByEvaluatingJavaScriptFromString:@"document.title"];</code></p>
+
+<p>（2）获取当前的URL</p>
+
+<p><code class="highlighter-rouge">NSString *url = [webview stringByEvaluatingJavaScriptFromString:@"document.location.href"];</code></p>
+
+<p>3、使用第三方库</p>
+
+<p><code class="highlighter-rouge">https://github.com/marcuswestin/WebViewJavascriptBridge</code></p>
+
+<p>###使用案例</p>
+
+<p>1、动态将网页上的图片全部缩放</p>
+
+<p>JavaScript脚本如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function ResizeImages() {
+	var myImg, oldWidth;
+	var maxWidth = 320;
+	for(i = 0; i &lt; document.images.length; i++) {
+		myImg = document.images[i];
+		if(myImg.width &gt; maxWidth) {
+			oldWidth = myImg.width;
+			myImg.width = maxWidth;
+			myImg.heith = myImg.height*(maxWidth/oldWidth);
+		}
+	}
+}
+</code></pre></div></div>
+
+<p>在iOS代码中添加如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[webView stringByEvaluatingJavaScriptFromString:  
+ @"var script = document.createElement('script');"   
+ "script.type = 'text/javascript';"   
+ "script.text = \"function ResizeImages() { "   
+     "var myimg,oldwidth;"  
+     "var maxwidth=380;" //缩放系数   
+     "for(i=0;i &lt;document.images.length;i++){"   
+         "myimg = document.images[i];"  
+         "if(myimg.width &gt; maxwidth){"   
+             "oldwidth = myimg.width;"   
+             "myimg.width = maxwidth;"   
+             "myimg.height = myimg.height * (maxwidth/oldwidth);"   
+         "}"   
+     "}"
+ "}\";"   
+ "document.getElementsByTagName('head')[0].appendChild(script);"];
+[webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
+</code></pre></div></div>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://blog.devtang.com/blog/2012/03/24/talk-about-uiwebview-and-phonegap/">《关于UIWebView和PhoneGap的总结》</a></p>
+
+<p>2、<a href="http://www.uml.org.cn/mobiledev/201108181.asp">《iOS开发之Objective-C与JavaScript的交互 》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-html-template-engine.html" title="link to iOS中使用模板引擎渲染HTML界面">iOS中使用模板引擎渲染HTML界面</a></h2>
+       <p class="excerpt">在iOS实际的开发中，使用UIWebView来加载数据使用的场景特别多。很多时候我们会动态的从服务器获取一段HTML的内容，然后App这边动态的处理这段HTML内容用于展示在UIWebView上。使用到的API接口为：- (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;由于HTML内容通常是变化的，所以我们需要动态生成HTML代码。通常我们从服务器端获取到标题、时间、作者和对应的内容，然后我们需要对这些数据处...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-01-17 21:22:04 +0800" class="post-list__meta--date date">2015-01-17</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-html-template-engine.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios8-touch-id.html" title="link to iOS8中使用TouchID校验用户身份">iOS8中使用TouchID校验用户身份</a></h2>
+       <p class="excerpt">在iOS8中，开发者们可使用向第三方应用开放了Touch ID权限的API，以便他们在应用中使用指纹认证来完成用户认证部分。相当一部分的APP（如印象笔记、新版QQ）以及在升级后采用了Touch ID来验证用户身份，用以替代过去使用一般密码或者PIN码，如下图所示：（1）新版QQ：（2）印象笔记高级版本：本文主要介绍如何在应用中集成Touch ID来校验用户的身份。###集成步骤1、环境要求（1）开发环境：Xcode 6（iOS8 SDK）（2）设备要求：iPhone 5s、iPhone ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-12-07 13:09:47 +0800" class="post-list__meta--date date">2014-12-07</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios8-touch-id.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

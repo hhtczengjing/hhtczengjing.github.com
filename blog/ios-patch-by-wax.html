@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用Wax给你的应用程序打补丁</title>
+  <meta name="description" content="在iOS开发中经常遇到需要对已经上线的APP进行功能微调，或者是一些紧急的Bug修复。对于需要提交到AppStore的程序来说，每次审核的周期都会较长，在审核过程中很有可能因为各种原因被拒。由于Apple的限制，开发者无法在iOS上动态的加载Objective-C源码，使用脚本语言就可以在一定程度上解决这个问题。...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用Wax给你的应用程序打补丁">
+  <meta name="twitter:description" content="在iOS开发中经常遇到需要对已经上线的APP进行功能微调，或者是一些紧急的Bug修复。对于需要提交到AppStore的程序来说，每次审核的周期都会较长，在审核过程中很有可能因为各种原因被拒。由于Apple的限制，开发者无法在iOS上动态的加载Objective-C源码，使用脚本语言就可以在一定程度上解决这个问题。...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用Wax给你的应用程序打补丁">
+  <meta property="og:description" content="在iOS开发中经常遇到需要对已经上线的APP进行功能微调，或者是一些紧急的Bug修复。对于需要提交到AppStore的程序来说，每次审核的周期都会较长，在审核过程中很有可能因为各种原因被拒。由于Apple的限制，开发者无法在iOS上动态的加载Objective-C源码，使用脚本语言就可以在一定程度上解决这个问题。...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-patch-by-wax.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-05-09 16:36:36 +0800" itemprop="datePublished" class="post-meta__date date">2015-05-09</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">使用Wax给你的应用程序打补丁</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS开发中经常遇到需要对已经上线的APP进行功能微调，或者是一些紧急的Bug修复。对于需要提交到AppStore的程序来说，每次审核的周期都会较长，在审核过程中很有可能因为各种原因被拒。由于Apple的限制，开发者无法在iOS上动态的加载Objective-C源码，使用脚本语言就可以在一定程度上解决这个问题。比如使用HTML+Javascript的方式，支付宝钱包的彩票等功能就是使用这一方式实现的。另外也可以使用Lua脚本来实现，最初我了解到的Lua是使用在游戏上面的，包括Angry Bird在内的很多知名游戏使用了Lua作为其场景设计的语言。</p>
+
+<p><img src="/images/ios_wax_patch/lua_logo.png" alt="lua_logo.png" /></p>
+
+<p>Lua是一个小巧的脚本语言。是巴西里约热内卢天主教大学（Pontifical Catholic University of Rio de Janeiro）里的一个研究小组，由Roberto Ierusalimschy、Waldemar Celes 和 Luiz Henrique de Figueiredo所组成并于1993年开发。 其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。Lua由标准C编写而成，几乎在所有操作系统和平台上都可以编译，运行。</p>
+
+<p>除了开发游戏，那能不能使用Lua开发iOS的应用程序呢？现在，来着国外的大牛<code class="highlighter-rouge">@probablycorey</code>开源了一个叫做<a href="http://github.com/probablycorey/wax"><code class="highlighter-rouge">wax</code></a>的项目，实现了Lua对于Objective-C的封装，可以使用Lua语言直接写Objective-C的代码了。虽然作者就宣布不再维护了，但是仍然没有降低该框架的关注度，截止到今天都有1620个star和320次Fork。</p>
+
+<p>为什么要用Lua开发iOS的应用程序？作者介绍了如下几点：</p>
+
+<ul>
+  <li>
+    <p>自动垃圾回收机制。开发者无需关注alloc,retain和release这些；</p>
+  </li>
+  <li>
+    <p>代码少。没有那么多的头文件和数据类型（数组、字典等），以较少的代码实现更强大的功能</p>
+  </li>
+  <li>
+    <p>方便使用Cocoa，UITouch，Foundation等framework</p>
+  </li>
+  <li>
+    <p>更加容易使用的HTTP请求工具，同REST WebService交互更方便</p>
+  </li>
+  <li>
+    <p>Lua有闭环（也可以称作blocks）</p>
+  </li>
+  <li>
+    <p>Lua内置正则表达式的匹配的工具</p>
+  </li>
+</ul>
+
+<p>###Xcode快速集成Wax</p>
+
+<p><a href="http://github.com/mmin18/WaxPatch"><code class="highlighter-rouge">WaxPatch</code></a>是来自大众点评的屠毅敏开源的项目，通过修改wax的实现达到动态打Patch的功能。主要是修改了wax中的<code class="highlighter-rouge">wax_instance.m</code>文件。具体做法是：在wax中加入了<code class="highlighter-rouge">class_replaceMethod</code>来替换原始实现。项目实现了在程序启动时会从指定地址下载一个包含所有Lua补丁的zip包，通过Wax加载后改变了既有Objective-C实现方法的指向函数，从而改变了程序的行为。</p>
+
+<p>下面介绍如何在项目中快速集成WaxPatch：</p>
+
+<p>1、下载<a href="http://github.com/mmin18/WaxPatch">WaxPatch</a>和<a href="http://github.com/probablycorey/wax">Wax</a>的项目到本地。</p>
+
+<p>2、将源码进行整合处理</p>
+
+<p>（1）将wax项目中的stdlib目录拷贝到WaxPatch的wax目录下面</p>
+
+<p>（2）删除/extensions/json/目录下面的yajl-1.0.9.tar.gz和Rakefile文件</p>
+
+<p>（3）不要拷贝extensions下面的SQLite和XML文件夹</p>
+
+<p>3、导入到Xcode项目中，除了wax/extensions/json下面yajl的不需要设置ARC外，其他的wax相关的都需要在Build Phrase中设置<code class="highlighter-rouge">-fno-objc-arc</code>（前提条件是项目是ARC工程），拷贝ProtocolLoader.h文件到项目中</p>
+
+<p>4、启动应用前需要在Document下创建lua目，并设置Lua的环境变量，示例代码如下:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (id)init {
+	if(self = [super init]) {
+		NSString *doc = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+		NSString *dir = [doc stringByAppendingPathComponent:@"lua"];
+		if(![[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:NULL] {
+			[[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:NULL];
+		}
+		NSString *pp = [[NSString alloc ] initWithFormat:@"%@/?.lua;%@/?/init.lua;", dir, dir];
+		setenv(LUA_PATH, [pp UTF8String], 1);
+	}
+}
+</code></pre></div></div>
+
+<p>并引入头文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#import "lauxlib.h"
+#import "wax.h"
+</code></pre></div></div>
+
+<p>5、下载到本地的zip包里面的(解压zip包推荐使用ZipArchive)lua文件需要放到上面的lua目录下面，并执行如下代码启动patch包：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wax_start("patch", luaopen_wax_http, luaopen_wax_json, nil);
+</code></pre></div></div>
+
+<p>其中：<code class="highlighter-rouge">luaopen_wax_http</code> (头文件是：<code class="highlighter-rouge">wax_http.h</code>)和 <code class="highlighter-rouge">luaopen_wax_json</code>(头文件是：<code class="highlighter-rouge">wax_json.h</code>) 表示需要使用wax扩展包，参见 <code class="highlighter-rouge">wax/extensions/</code>目录下面的扩展包。</p>
+
+<p>6、wax不支持arm64如果需要兼容到64位的系统，请参考<a href="http://www.cnblogs.com/ygm900/p/3732724.html">《lua（wax框架） 适配 64位操作系统》</a>文章进行处理。</p>
+
+<p>7、运行后如果发现报<code class="highlighter-rouge">Class 'HACK_WAX_DELEGATE_IMPLEMENTOR' defined without specifying a base class</code>的错误，将如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@interface HACK_WAX_DELEGATE_IMPLEMENTOR &lt;WaxServerDelegate&gt; {}
+@end
+</code></pre></div></div>
+
+<p>改为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@interface HACK_WAX_DELEGATE_IMPLEMENTOR : NSObject&lt;WaxServerDelegate&gt; {}
+@end
+</code></pre></div></div>
+<p>添加一个NSObject的基类即可</p>
+
+<p>###示例程序</p>
+
+<p>1、推荐阅读wax提供的示例程序。<a href="http://github.com/probablycorey/wax/tree/master/examples/">Examples</a></p>
+
+<p>2、WaxPatch项目。<a href="http://github.com/mmin18/WaxPatch">WaxPatch</a></p>
+
+<p>3、完整示例程序稍后会同步到GitHub上</p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="https://github.com/mmin18/Create-a-More-Flexible-App">《如何创建更加灵活的App》</a></p>
+
+<p>2、<a href="http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5NTIyNTUyMQ==&amp;appmsgid=10000028&amp;itemidx=1&amp;scene=4#wechat_redirect">《用Lua给你的iOS程序打patch》</a></p>
+
+<p>3、<a href="http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5NTIyNTUyMQ==&amp;appmsgid=10000031&amp;itemidx=1&amp;scene=4#wechat_redirect">《用Lua给你的程序打patch（续）》</a></p>
+
+<p>4、<a href="http://blog.csdn.net/linux_zkf/article/details/17123275">《基于wax的lua IOS插件开发》</a></p>
+
+<p>5、<a href="https://github.com/probablycorey/wax/wiki/Overview">《quick tour of the Wax framework》</a></p>
+
+<p>6、<a href="http://www.cnblogs.com/ygm900/p/3680463.html">《快速将wax配置到项目中进行lua开发》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-reveal-integrating.html" title="link to iOS开发中集成Reveal">iOS开发中集成Reveal</a></h2>
+       <p class="excerpt">Reveal 是一个界面调试工具。使用Reveal，我们可以在iOS开发时动态地查看和修改应用程序的界面。它类似Chrome的“审查元素”功能，我们不但可以在运行时看到iOS程序的界面层级关系，还可以实时地修改程序界面，不用重新运行程序就可以看到修改之后的效果。在使用时，我们将Reveal连接上模拟器或真机上正在运行的iOS程序，然后就可以查看和调试iOS程序的界面。###下载安装Releal官方提供试用版本，免费试用期是30天，功能和正式版没有差别.点此下载。###配置Reveal###...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-05-31 00:50:23 +0800" class="post-list__meta--date date">2015-05-31</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-reveal-integrating.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-logging-tools-in-ios.html" title="link to iOS开发中善用日志记录工具">iOS开发中善用日志记录工具</a></h2>
+       <p class="excerpt">在iOS开发中经常需要靠记录日志来调试应用程序，最常见的做法是使用NSLog来输出相关的信息。大量的使用NSLog存在一定的弊端，将设备连接到电脑，打开XCode中的Device-&gt;Console，就可以从console查看到每条日志信息（或者是使用iTools的实时日志,推荐使用）。试想如果将很多核心的算法或者是信息都通过NSLog打印到控制台上，那么很有可能会被其他人获取到相关信息造成很多安全隐患，另外这样的应用也极有可能被Apple拒绝审核通过。###使用宏来处理常用的做法是在...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-04-14 23:08:11 +0800" class="post-list__meta--date date">2015-04-14</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/using-logging-tools-in-ios.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

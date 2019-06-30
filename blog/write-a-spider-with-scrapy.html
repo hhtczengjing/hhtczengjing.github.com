@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用Scrapy开发爬虫初探</title>
+  <meta name="description" content="近期一直都有关注数据的采集方面的开发，之前也用Python(urllib+BeautifulSoup)写过“爬虫”但是效果不是很好，表现在内存占用过高和做出来的东西不够通用，很多周边的东西（图片下载、缩略图等）都需要自己来实现。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用Scrapy开发爬虫初探">
+  <meta name="twitter:description" content="近期一直都有关注数据的采集方面的开发，之前也用Python(urllib+BeautifulSoup)写过“爬虫”但是效果不是很好，表现在内存占用过高和做出来的东西不够通用，很多周边的东西（图片下载、缩略图等）都需要自己来实现。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用Scrapy开发爬虫初探">
+  <meta property="og:description" content="近期一直都有关注数据的采集方面的开发，之前也用Python(urllib+BeautifulSoup)写过“爬虫”但是效果不是很好，表现在内存占用过高和做出来的东西不够通用，很多周边的东西（图片下载、缩略图等）都需要自己来实现。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/write-a-spider-with-scrapy.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-12-06 04:40:00 +0800" itemprop="datePublished" class="post-meta__date date">2016-12-06</time> &#8226; <span class="post-meta__tags tags">Python</span>
+    </div>
+    <h1 class="post-title">使用Scrapy开发爬虫初探</h1>
+  </header>
+
+  <section class="post">
+    <p>近期一直都有关注数据的采集方面的开发，之前也用Python(urllib+BeautifulSoup)写过“爬虫”但是效果不是很好，表现在内存占用过高和做出来的东西不够通用，很多周边的东西（图片下载、缩略图等）都需要自己来实现。</p>
+
+<p>趁着近期在公司内部弄到了一台新的CentOS服务器的机会就索性使用Scrapy把前段时间写的空气质量采集的程序改写下，同时把SQLServer换成MySQL，顺便熟悉一下这块的知识。</p>
+
+<p><img src="/images/python-scrapy-spider/scrapy_logo.png" alt="scrapy_logo.png" /></p>
+
+<h3 id="开发环境准备">开发环境准备</h3>
+
+<p><code class="highlighter-rouge">CentOS 6.5</code>自带的是<code class="highlighter-rouge">Python 2.6.6</code>,使用Scrapy需要的Python版本是2.7，所以需要将Python的环境先升级。</p>
+
+<h4 id="1准备安装python的环境">1.准备安装Python的环境</h4>
+
+<p>(1)安装devtoolset</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum groupinstall "Development tools"
+</code></pre></div></div>
+
+<p>(2)安装编译Python需要的包</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum install zlib-devel
+yum install bzip2-devel
+yum install openssl-devel
+yum install ncurses-devel
+yum install sqlite-devel
+</code></pre></div></div>
+
+<p>(3)安装MySQL驱动</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum install mysql-devel
+</code></pre></div></div>
+
+<h4 id="2python开发环境安装">2.Python开发环境安装</h4>
+
+<p>(1)下载Python2.7版本</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget --no-check-certificate https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
+</code></pre></div></div>
+
+<p>(2)解压</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tar -jxvf Python-2.7.11.tar.xz
+cd Python-2.7.11
+</code></pre></div></div>
+
+<p>(3)安装和编译</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure --prefix=/usr/local
+make &amp;&amp; make altinstall
+</code></pre></div></div>
+
+<p>(4)将python命令指向最新的</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ln -s /usr/local/bin/python2.7 /usr/bin/python
+</code></pre></div></div>
+
+<p>(5)检查Python的版本</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python --version
+</code></pre></div></div>
+
+<h4 id="3安装pip">3.安装pip</h4>
+
+<p>(1)下载pip安装脚本</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget --no-check-certificate https://bootstrap.pypa.io/get-pip.py
+</code></pre></div></div>
+
+<p>(2)执行安装脚本</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python get-pip.py
+</code></pre></div></div>
+
+<p>(3)使用pip镜像</p>
+
+<p>在安装某些包的时候可能会出现网络方面的问题，推荐使用国内的镜像方式进行安装，有如下镜像地址可供选择：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://mirrors.sohu.com/python/ 搜狐
+http://pypi.douban.com/  豆瓣
+http://pypi.hustunique.com/  华中理工大学
+http://pypi.sdutlinux.org/  山东理工大学
+http://pypi.mirrors.ustc.edu.cn/  中国科学技术大学
+</code></pre></div></div>
+
+<p>安装的时候使用如下的格式：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip  install --index 镜像地址 包名
+</code></pre></div></div>
+
+<h4 id="4安装scrapy">4.安装scrapy</h4>
+
+<p>(1)安装scrapy组件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install scrapy
+</code></pre></div></div>
+
+<p>(2)安装MySQLdb的组件：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install MySQL-python
+</code></pre></div></div>
+
+<h3 id="scrapy快速入门">Scrapy快速入门</h3>
+
+<p>Scrapy是一个为了爬取网站数据，提取结构性数据而编写的应用框架。 可以应用在包括数据挖掘，信息处理或存储历史数据等一系列的程序中。</p>
+
+<p><img src="/images/python-scrapy-spider/scrapy_architecture.png" alt="scrapy_architecture.png" /></p>
+
+<h4 id="1组件介绍">1.组件介绍</h4>
+
+<h5 id="1核心引擎scrapy-engine">(1)核心引擎(Scrapy Engine)：</h5>
+
+<p>引擎负责控制数据流在系统中所有组件中流动，并在相应动作发生时触发事件。</p>
+
+<h5 id="2调度器scheduler">(2)调度器(Scheduler)：</h5>
+
+<p>调度器从引擎接受request并将他们入队，以便之后引擎请求他们时提供给引擎。</p>
+
+<h5 id="3下载器downloader">(3)下载器(Downloader)：</h5>
+
+<p>下载器负责获取页面数据并提供给引擎，而后提供给spider。</p>
+
+<h5 id="4爬虫模块spiders">(4)爬虫模块(Spiders)：</h5>
+
+<p>Spider是Scrapy用户编写用于分析response并提取item(即获取到的item)或额外跟进的URL的类。 每个spider负责处理一个特定(或一些)网站。</p>
+
+<h5 id="5item-pipeline">(5)Item Pipeline：</h5>
+
+<p>Item Pipeline负责处理被spider提取出来的item。典型的处理有清理、 验证及持久化(例如存取到数据库中)。</p>
+
+<h5 id="6下载器中间件downloader-middlewares">(6)下载器中间件(Downloader middlewares):</h5>
+
+<p>下载器中间件是在引擎及下载器之间的特定钩子(specific hook)，处理Downloader传递给引擎的response。 其提供了一个简便的机制，通过插入自定义代码来扩展Scrapy功能。</p>
+
+<h5 id="7spider中间件spider-middlewares">(7)Spider中间件(Spider middlewares)</h5>
+
+<p>Spider中间件是在引擎及Spider之间的特定钩子(specific hook)，处理spider的输入(response)和输出(items及requests)。 其提供了一个简便的机制，通过插入自定义代码来扩展Scrapy功能。</p>
+
+<h4 id="2数据流">2.数据流</h4>
+
+<p>Scrapy中的数据流由执行引擎控制，其过程如下:</p>
+
+<p>(1)引擎打开一个网站(open a domain)，找到处理该网站的Spider并向该spider请求第一个要爬取的URL(s)。</p>
+
+<p>(2)引擎从Spider中获取到第一个要爬取的URL并在调度器(Scheduler)以Request调度。</p>
+
+<p>(3)引擎向调度器请求下一个要爬取的URL。</p>
+
+<p>(4)调度器返回下一个要爬取的URL给引擎，引擎将URL通过下载中间件(请求(request)方向)转发给下载器(Downloader)。</p>
+
+<p>(5)一旦页面下载完毕，下载器生成一个该页面的Response，并将其通过下载中间件(返回(response)方向)发送给引擎。</p>
+
+<p>(6)引擎从下载器中接收到Response并通过Spider中间件(输入方向)发送给Spider处理。</p>
+
+<p>(7)Spider处理Response并返回爬取到的Item及(跟进的)新的Request给引擎。</p>
+
+<p>(8)引擎将(Spider返回的)爬取到的Item给Item Pipeline，将(Spider返回的)Request给调度器。</p>
+
+<p>(9)(从第二步)重复直到调度器中没有更多地request，引擎关闭该网站。</p>
+
+<h3 id="使用示例">使用示例</h3>
+
+<h4 id="1创建项目">1.创建项目</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scrapy startproject tutorial
+</code></pre></div></div>
+
+<h4 id="2创建spider">2.创建Spider</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scrapy genspider pm25
+</code></pre></div></div>
+
+<h4 id="3编写items">3.编写Items</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">scrapy</span>
+
+<span class="k">class</span> <span class="nc">Pm25CityItem</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="n">city_name</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span> <span class="c1">#城市的名称
+</span>    <span class="n">home_link</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span> <span class="c1">#对应数据的链接地址
+</span>    <span class="n">city_pinyin</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span> <span class="c1">#城市的拼音
+</span></code></pre></div></div>
+
+<h4 id="4完善spider">4.完善Spider</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import scrapy
+from tutorial.items import Pm25CityItem
+
+class Pm25Spider(scrapy.Spider):
+    name = "pm25"
+    allowed_domains = ["pm25.in"]
+    start_urls = [
+        'http://www.pm25.in',
+    ]
+
+    def parse(self, response):
+        sel = scrapy.Selector(response)
+        citys = sel.xpath("//div[@class='all']/div[@class='bottom']/ul[@class='unstyled']/div[2]/li")
+        city_items = []
+        for city in citys:
+            city_item = Pm25CityItem()
+            href = ''.join(city.xpath('a/@href').extract()).strip()
+            city_item['city_name'] = ''.join(city.xpath('a/text()').extract()).strip().encode("UTF-8")
+            city_item['home_link'] = 'http://www.pm25.in' + href
+            city_item['city_pinyin'] = href.split('/')[1]
+            city_items.append(city_item)
+       return city_items
+</code></pre></div></div>
+
+<h4 id="5配置settingspy文件">5.配置settings.py文件</h4>
+
+<h5 id="1配置mysql数据源">(1)配置MySQL数据源</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MYSQL_HOST = '127.0.0.1'
+MYSQL_DBNAME = 'test' #数据库名字
+MYSQL_USER = 'root' #数据库账号
+MYSQL_PASSWD = '123456' #数据库密码
+MYSQL_PORT = 3306 #数据库端口
+</code></pre></div></div>
+
+<h5 id="2配置mysql存储的pipeline">(2)配置MySQL存储的Pipeline</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ITEM_PIPELINES = {
+    'tutorial.pipelines.MySQLStoreDataPipeline': 300, #保存到数据库
+}
+</code></pre></div></div>
+
+<h4 id="6数据的存储">6.数据的存储</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scrapy</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">twisted.enterprise</span> <span class="kn">import</span> <span class="n">adbapi</span>
+<span class="kn">import</span> <span class="nn">datetime</span><span class="p">,</span> <span class="n">uuid</span>
+<span class="kn">import</span> <span class="nn">MySQLdb</span>
+<span class="kn">import</span> <span class="nn">MySQLdb.cursors</span>
+
+<span class="k">class</span> <span class="nc">MySQLStoreDataPipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbpool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbpool</span> <span class="o">=</span> <span class="n">dbpool</span>
+
+    <span class="o">@</span><span class="nb">classmethod</span>
+    <span class="k">def</span> <span class="nf">from_settings</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+        <span class="n">dbargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s">'MYSQL_HOST'</span><span class="p">],</span>
+            <span class="n">db</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s">'MYSQL_DBNAME'</span><span class="p">],</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s">'MYSQL_USER'</span><span class="p">],</span>
+            <span class="n">passwd</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s">'MYSQL_PASSWD'</span><span class="p">],</span>
+            <span class="n">charset</span><span class="o">=</span><span class="s">'utf8'</span><span class="p">,</span>
+            <span class="n">cursorclass</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">cursors</span><span class="o">.</span><span class="n">DictCursor</span><span class="p">,</span>
+            <span class="n">use_unicode</span><span class="o">=</span> <span class="bp">True</span><span class="p">,)</span>
+        <span class="n">dbpool</span> <span class="o">=</span> <span class="n">adbapi</span><span class="o">.</span><span class="n">ConnectionPool</span><span class="p">(</span><span class="s">'MySQLdb'</span><span class="p">,</span> <span class="o">**</span><span class="n">dbargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">dbpool</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbpool</span><span class="o">.</span><span class="n">runInteraction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_city</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="n">query</span><span class="o">.</span><span class="n">addErrback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_error</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">item</span>
+
+    <span class="c1">#插入城市的数据到tbl_all_city中
+</span>    <span class="k">def</span> <span class="nf">save_city</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"""
+                select 1 from tbl_all_city where city_pinyin = </span><span class="si">%</span><span class="s">s
+        """</span><span class="p">,</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s">'city_pinyin'</span><span class="p">],))</span>
+        <span class="n">ret0</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ret0</span><span class="p">:</span>
+            <span class="n">ret1</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"""
+                insert into tbl_all_city(city_pinyin, city_name, home_link) values(</span><span class="si">%</span><span class="s">s, </span><span class="si">%</span><span class="s">s, </span><span class="si">%</span><span class="s">s)
+            """</span><span class="p">,</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s">'city_pinyin'</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s">'city_name'</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s">'home_link'</span><span class="p">],))</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s">'save to tbl_all_city: </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">ret1</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">log</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="c1">#异常处理
+</span>    <span class="k">def</span> <span class="nf">handle_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="7执行爬虫程序">7.执行爬虫程序</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scrapy crawl pm25
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1.<a href="http://www.scrapy.org">《官方文档》</a></p>
+
+<p>2.<a href="http://www.cnblogs.com/dudu/p/4294238.html">《在Linux CentOS 6.6上安装Python 2.7.9》</a></p>
+
+<p>3.<a href="http://www.jianshu.com/p/67efc5417249">《解决centos6没办法安装mysql-devel的问题》</a></p>
+
+<p>4.<a href="https://pip.pypa.io/en/stable/installing/">《Python pip安装》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-fastlane-in-action.html" title="link to iOS中fastlane的使用">iOS中fastlane的使用</a></h2>
+       <p class="excerpt">对于一个iOS APP的发布上线，一般来说都需要经历:编译打包 -&gt; 截图 -&gt; 填写一些说明文字 -&gt; 上传ipa到itunes connect -&gt; 提交供审核。每次都要进行这么多“繁琐”的步骤，对于某些步骤可能一次还不能执行成功需要等着界面提示上传错误然后手动重新再来一次（想想都觉得可怕）。在日常开发中，打包也是最后上线不可缺少的环节，如果需要生成ipa文件通常需要在Xcode里点击Product -&gt; Archive，然后在弹出来的Organizer中...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-01-15 21:00:00 +0800" class="post-list__meta--date date">2017-01-15</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-fastlane-in-action.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-docker-on-macos.html" title="link to Mac上Docker的安装和使用初探">Mac上Docker的安装和使用初探</a></h2>
+       <p class="excerpt">Docker 是个划时代的开源项目，它彻底释放了虚拟化的威力，极大提高了应用的运行效率，降低了云计算资源供应的成本，同时让应用的部署、测试和分发都变得前所未有的高效和轻松！Docker 最初是 dotCloud 公司创始人 Solomon Hykes 在法国期间发起的一个公司内部项目，它是基于 dotCloud 公司多年云服务技术的一次革新，并于2013年3月以 Apache 2.0 授权协议开源，主要项目代码在 GitHub 上进行维护。Docker 项目后来还加入了 Linux 基金会...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-11-25 00:05:53 +0800" class="post-list__meta--date date">2016-11-25</time> &#8226; <span class="post-list__meta--tags tags">Docker</span><a class="btn-border-small" href=/blog/using-docker-on-macos.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

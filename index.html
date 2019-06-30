@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>曾静的博客</title>
+  <meta name="description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="曾静的博客">
+  <meta name="twitter:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="曾静的博客">
+  <meta property="og:description" content="嗨，我是曾静 (@devzeng)，目前暂居深圳。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover " style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list hidden">
+
+  <ol class="post-list">
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/publish-npm-package.html" title="访问 如何将自己的Node.js包发布到npm上面">如何将自己的Node.js包发布到npm上面</a></h2>
+      <p class="excerpt">早前写过一篇《使用Verdaccio搭建npm仓库》介绍如何搭建私有的npm包托管的环境的文章，比较适合将私有的Node.js包发布上去。本文主要记录一下发布一个公开的package到npm的过程。1、注册账号前往https://www.npmjs.com注册账号，并按照要求验证邮箱。2、Node.js包创建package.json文件，如下：{  "name": "gitlab-systemhook-handler",  "version": "0.1.0",  "description...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2019-05-31 18:46:37 +0800" class="post-list__meta--date date">2019-05-31</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/publish-npm-package.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/build-webdav-server-in-docker.html" title="访问 在Docker上搭建WebDAV文件共享服务">在Docker上搭建WebDAV文件共享服务</a></h2>
+      <p class="excerpt">近期由于一些不可抗力因素导致AirDrop被禁用了，平时对文档或者是一些安装包的共享还是有比较多的需求，在此记录一下使用Docker快速搭建WebDAV环境的过程。直接在命令行输入下面的命令即可快速完成安装：docker run -d -v /Users/zengjing/docker/webdav:/var/webdav -e USERNAME=test -e PASSWORD=test -p 8888:80 morrisjobke/webdav安装完成后通过浏览器：http://ip:...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2019-02-25 18:46:37 +0800" class="post-list__meta--date date">2019-02-25</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/build-webdav-server-in-docker.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/build-online-excel-in-docker.html" title="访问 在Docker上搭建在线表格服务">在Docker上搭建在线表格服务</a></h2>
+      <p class="excerpt">工作中总少不了需要填写表格的情况，特别是对于一些需要收集信息(比如住址和号码)的表格，最近发现了一个很好用的工具ethercalc, 可以很方便的搭建出多人协作的在线表格服务，而且用法和Excel一致。下面记录一下如何快速搭建的过程：(1) 安装redisdocker run --name redis -d -v /Users/zengjing/docker/redis:/data redis:latest redis-server --appendonly yes(2) 安装etherc...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2019-01-11 18:46:37 +0800" class="post-list__meta--date date">2019-01-11</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/build-online-excel-in-docker.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/install-mysql-in-docker.html" title="访问 Docker安装MySQL数据库">Docker安装MySQL数据库</a></h2>
+      <p class="excerpt">近期经常需要安装MySQL数据库，在此记录一下：1、初始化创建文件夹mkdir -p ~/docker/mysql/conf/mkdir -p ~/docker/mysql/data2、在conf目录下创建配置文件my.cnf[mysqld]character-set-server=utf8[client]default-character-set=utf8[mysql]default-character-set=utf83、安装docker run -d -p 3306:3306 \  ...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-12-20 18:46:37 +0800" class="post-list__meta--date date">2018-12-20</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/install-mysql-in-docker.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/hello-flutter.html" title="访问 Flutter开发初探">Flutter开发初探</a></h2>
+      <p class="excerpt">Flutter是由谷歌创建的一个框架，用于构建“现代移动应用”。目前它还处于beta阶段，不过它的文档和相关工具十分齐全，有些移动应用已经在使用Flutter。开发环境搭建由于在国内访问Flutter有时可能会受到限制，可以通过如下的配置使用国内的镜像(可以在一定程度上加快下载的速度)：export PUB_HOSTED_URL=https://pub.flutter-io.cnexport FLUTTER_STORAGE_BASE_URL=https://storage.flutter-...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-11-11 18:46:37 +0800" class="post-list__meta--date date">2018-11-11</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/hello-flutter.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios-cryptopp-encryption.html" title="访问 iOS中使用cryptopp进行加解密">iOS中使用cryptopp进行加解密</a></h2>
+      <p class="excerpt">Crypto++是一个免费开源的加解密库，支持一些非常丰富的加解密算法(如AES/RSA等)。如果要考虑到实现一套跨平台多端加解密效果一致可以考虑使用该库，当然使用各自平台提供的api也能实现。目前只提供了源码的方式，如果要集成到iOS的项目里面需要先编译成静态库，下面就5.6.2这个版本进行介绍：1.编译静态库(1) 下载源码git clone https://github.com/weidai11/cryptopp.gitgit checkout CRYPTOPP_5_6_2(2) 准...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-10-04 18:46:37 +0800" class="post-list__meta--date date">2018-10-04</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-cryptopp-encryption.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios-masonry-source.html" title="访问 iOS中Masonry源码分析">iOS中Masonry源码分析</a></h2>
+      <p class="excerpt">Masonry是一个轻量级的iOS布局框架，使用一套更加方便的语法来对AutoLayout进行包装。它拥有自己的描述语法(DSL)， 采用更优雅的链式语法封装了AutoLayout，简介明了并具备高可读性。同时支持iOS和macOS。AutoLayout需求：在父视图上面创建一个绿色的视图，要求距父视图的边距都是10，使用代码方式实现方式如下：(1) 创建视图控件创建一个UIView视图，并把它添加到父视图上面：UIView *view1 = [[UIView alloc] init];v...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-09-01 13:22:56 +0800" class="post-list__meta--date date">2018-09-01</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-masonry-source.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/ios-webviewjavascriptbridge-source.html" title="访问 iOS中WebViewJavaScriptBridge源码分析">iOS中WebViewJavaScriptBridge源码分析</a></h2>
+      <p class="excerpt">WebViewJavascriptBridge是一个WebView中JavaScript和Native进行交互的框架，使用这个框架能够实现JavaScript和Objective-C之间进行消息的互通。另外这个框架设计的也是非常的简介，只有如下几个文件：(1) WebViewJavascriptBridge_JS该文件中只有一个方法NSString * WebViewJavascriptBridge_js(void);, 该方法主要是提供拼接创建一个JavaScript的脚步代码，在旧版中...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-08-18 22:46:29 +0800" class="post-list__meta--date date">2018-08-18</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-webviewjavascriptbridge-source.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/pack-macos-app-to-dmg.html" title="访问 如何将macOS应用程序打包为dmg文件">如何将macOS应用程序打包为dmg文件</a></h2>
+      <p class="excerpt">之前改写过网上开源的一个JSON转Model的Mac APP，当时是直接使用的是将.app格式的文件直接拖到应用里面进行安装的，最近刚好有空就了解了一下dmg文件是怎么打包的，记录下整个的过程方便以后查找。操作步骤1.准备相关文件  (1) 打包生成的.app文件  (2) 一张背景图  (3) Applications文件夹的替身文件(可以到其他的dmg里面去拷贝一个)2.创建空白镜像文件(1) 打开磁盘工具，选择文件 -&gt; 新建映像 -&gt; 空白映像：(2) 在弹出框中填写相...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-08-11 11:46:29 +0800" class="post-list__meta--date date">2018-08-11</time> &#8226; <span class="post-list__meta--tags tags">macOS</span><a class="btn-border-small" href=/blog/pack-macos-app-to-dmg.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/blog/execute-js-code-with-execjs.html" title="访问 Python使用pyexecjs执行JS代码">Python使用pyexecjs执行JS代码</a></h2>
+      <p class="excerpt">近期在采集一个网站的时候遇到一部分的页面是使用JS代码来填充数据的，代码如下：&lt;tr&gt;    &lt;td width="150px" class="success"&gt;案件级别:&lt;/td&gt;    &lt;td colspan="1"&gt;        &lt;script&gt;            var s = getDictLabel([{"id":"4191c4842b3842749dd467655f90b1fa","isNewRecord":f...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2018-07-20 11:46:29 +0800" class="post-list__meta--date date">2018-07-20</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/execute-js-code-with-execjs.html>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+  </ol>
+
+  <hr class="post-list__divider " />
+
+<nav class="pagination" role="navigation">
+    
+    <span class="pagination__page-number">1 / 11</span>
+    
+        <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/2/#blog">更早 &rarr;</a>
+    
+</nav>
+
+
+</div>
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

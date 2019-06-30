@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用Dockerfile构建Docker镜像</title>
+  <meta name="description" content="">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用Dockerfile构建Docker镜像">
+  <meta name="twitter:description" content="">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用Dockerfile构建Docker镜像">
+  <meta property="og:description" content="">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/build-docker-image-with-dockerfile.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-08-01 08:08:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-08-01</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">使用Dockerfile构建Docker镜像</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="/images/install-docker-in-centos/docker-logo-compressed.png" alt="docker-logo.png" /></p>
+
+<p>Docker中有个非常重要的概念叫做——镜像（Image）。Docker 镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。</p>
+
+<p>镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。</p>
+
+<p>Dockerfile 是一个文本文件，其内包含了一条条的指令(Instruction)，每一条指令构建一层，因此每一条指令的内容，就是描述该层应当如何构建。</p>
+
+<h3 id="dockerfile语法说明">Dockerfile语法说明</h3>
+
+<h5 id="1from-指定基础镜像">1、FROM: 指定基础镜像。</h5>
+
+<p>定制镜像的时候都是以一个镜像为基础，在这个基础上面进行定制。<code class="highlighter-rouge">FROM</code>在<code class="highlighter-rouge">Dockerfile</code>中是必须的指令，而且必须是第一条指令。</p>
+
+<ul>
+  <li>1）在Docker Hub上有非常多的官方镜像，比如服务类(nginx/redis)、语言类(node/openjdk/python)、操作系统类(ubuntu/debian/centos)等，我们可以直接拿来使用。</li>
+  <li>2）除了选择现有的镜像作为基础镜像外，Docker还存在一个特殊的镜像，名为<code class="highlighter-rouge">scratch</code>。这个镜像是虚拟的概念，并不实际存在，它表示一个空白的镜像。</li>
+</ul>
+
+<h5 id="2run-执行命令">2、RUN: 执行命令</h5>
+
+<p>run指令是用来执行命令行命令的，由于命令行的强大能力，run指令在定制镜像时是最常用的指令之一。其格式有两种：</p>
+
+<ul>
+  <li>shell格式： <code class="highlighter-rouge">RUN 命令</code>，就像直接在命令行中输入的命令一样，如<code class="highlighter-rouge">RUN echo 'hello, world!' &gt; hello.txt</code></li>
+  <li>exec格式：<code class="highlighter-rouge">RUN ['可执行文件', '参数1', '参数2']</code>，类似于函数调用，将可执行文件和参数分开，如<code class="highlighter-rouge">RUN [ "sh", "-c", "echo $HOME" ]</code></li>
+</ul>
+
+<blockquote>
+  <p><code class="highlighter-rouge">Dockerfile</code>中每一个指令都会建立一层，<code class="highlighter-rouge">RUN</code>也不例外。每一个RUN的行为，就和刚才我们手工建立镜像的过程一样:新建立一层，在其上执行这些命令，执行结束后，commit这一层的修改，构成新的镜像。所以我们在使用的时候尽可能将指令进行整合（可以使用&amp;&amp;将各个所需命令串联起来）。</p>
+</blockquote>
+
+<h4 id="3cmd容器启动命令">3、CMD：容器启动命令</h4>
+
+<p>CMD 指令的格式和 RUN 相似，也是两种格式：</p>
+
+<ul>
+  <li>shell 格式：<code class="highlighter-rouge">CMD &lt;命令&gt;</code></li>
+  <li>exec 格式：<code class="highlighter-rouge">CMD ["可执行文件", "参数1", "参数2"...]</code></li>
+</ul>
+
+<p>在指定了 <code class="highlighter-rouge">ENTRYPOINT</code> 指令后，用 CMD 指定具体的参数。参数列表格式：<code class="highlighter-rouge">CMD ["参数1", "参数2"...]</code></p>
+
+<h4 id="4copy复制文件">4、COPY：复制文件</h4>
+
+<p>和 RUN 指令一样，也有两种格式，一种类似于命令行，一种类似于函数调用：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">COPY &lt;源路径&gt;... &lt;目标路径&gt;</code></li>
+  <li><code class="highlighter-rouge">COPY ["&lt;源路径1&gt;",... "&lt;目标路径&gt;"]</code></li>
+</ul>
+
+<p>COPY 指令将从构建上下文目录中<code class="highlighter-rouge">&lt;源路径&gt;</code>的文件复制到新的一层的镜像内的<code class="highlighter-rouge">&lt;目标路径&gt;</code>位置。</p>
+
+<h4 id="5env-设置环境变量">5、ENV: 设置环境变量</h4>
+
+<p>格式有两种：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">ENV &lt;key&gt; &lt;value&gt;</code></li>
+  <li><code class="highlighter-rouge">ENV &lt;key1&gt;=&lt;value1&gt; &lt;key2&gt;=&lt;value2&gt;...</code></li>
+</ul>
+
+<p>这个指令很简单，就是设置环境变量而已，无论是后面的其它指令，如<code class="highlighter-rouge">RUN</code>，还是运行时的应用，都可以直接使用这里定义的环境变量。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ENV VERSION=1.0 DEBUG=on \
+    NAME="Happy Feet"
+</code></pre></div></div>
+
+<p>这个例子中演示了如何换行，以及对含有空格的值用双引号括起来的办法，这和 Shell 下的行为是一致的。</p>
+
+<h4 id="6expose-声明端口">6、EXPOSE: 声明端口</h4>
+
+<p>格式为 <code class="highlighter-rouge">EXPOSE &lt;端口1&gt; [&lt;端口2&gt;...]</code>。</p>
+
+<p><code class="highlighter-rouge">EXPOSE</code>指令是声明运行时容器提供服务端口，这只是一个声明，在运行时并不会因为这个声明应用就会开启这个端口的服务。在<code class="highlighter-rouge">Dockerfile</code>中写入这样的声明有两个好处，一个是帮助镜像使用者理解这个镜像服务的守护端口，以方便配置映射；另一个用处则是在运行时使用随机端口映射时，也就是<code class="highlighter-rouge">docker run -P</code>时，会自动随机映射<code class="highlighter-rouge">EXPOSE</code>的端口。</p>
+
+<p>要将<code class="highlighter-rouge">EXPOSE</code>和在运行时使用<code class="highlighter-rouge">-p &lt;宿主端口&gt;:&lt;容器端口&gt;</code>区分开来。<code class="highlighter-rouge">-p</code>，是映射宿主端口和容器端口，换句话说，就是将容器的对应端口服务公开给外界访问，而<code class="highlighter-rouge">EXPOSE</code>仅仅是声明容器打算使用什么端口而已，并不会自动在宿主进行端口映射。</p>
+
+<h4 id="7workdir-指定工作目录">7、WORKDIR: 指定工作目录</h4>
+
+<p>格式为 <code class="highlighter-rouge">WORKDIR &lt;工作目录路径&gt;</code>。</p>
+
+<p>使用 <code class="highlighter-rouge">WORKDIR</code> 指令可以来指定工作目录（或者称为当前目录），以后各层的当前目录就被改为指定的目录，如该目录不存在，<code class="highlighter-rouge">WORKDIR</code> 会帮你建立目录。</p>
+
+<h3 id="构建node-web服务镜像">构建Node web服务镜像</h3>
+
+<p><img src="/images/docker-dockerfile/docker-node-logo.jpg" alt="docker-node-logo" /></p>
+
+<h4 id="1使用express创建一个示例项目">1、使用Express创建一个示例项目</h4>
+
+<h5 id="1-安装express应用生成器工具">(1) 安装express应用生成器工具</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install express-generator -g
+</code></pre></div></div>
+
+<h5 id="2-创建示例项目">(2) 创建示例项目</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>express myapp
+</code></pre></div></div>
+
+<h4 id="2创建dockerignore文件">2、创建<code class="highlighter-rouge">.dockerignore</code>文件</h4>
+
+<p>在myapp文件夹下面，新建一个<code class="highlighter-rouge">.dockerignore</code>的文件，相当于<code class="highlighter-rouge">.gitignore</code>，可以将一些不需要的文件进行忽略。示例代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node_modules/  
+.git
+.gitignore
+.idea
+.DS_Store
+*.swp
+*.log
+</code></pre></div></div>
+
+<h4 id="3创建dockerfile文件">3、创建Dockerfile文件</h4>
+
+<p>在myapp文件夹下面，新建<code class="highlighter-rouge">Dockerfile</code>文件，添加如下代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM daocloud.io/node:5
+MAINTAINER hhtczengjing@gmail.com
+ENV PORT 3000
+COPY . /app
+WORKDIR /app
+RUN npm install --registry=https://registry.npm.taobao.org
+EXPOSE 3000
+CMD ["npm", "start"]
+</code></pre></div></div>
+
+<h4 id="4构建镜像">4、构建镜像</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t myapp:1.0.0 .
+</code></pre></div></div>
+
+<p><img src="/images/docker-dockerfile/docker-build.png" alt="" /></p>
+
+<p>在终端执行这行命令之后，使用<code class="highlighter-rouge">docker images</code>可以查看到当前所有的镜像：</p>
+
+<p><img src="/images/docker-dockerfile/docker-images.png" alt="" /></p>
+
+<h4 id="5创建容器">5、创建容器</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 3000:3000 myapp:1.0.0
+</code></pre></div></div>
+
+<p>浏览器访问：http://localhost:3000， 如果出现下面的界面表示成功：</p>
+
+<p><img src="/images/docker-dockerfile/hello-express.png" alt="" /></p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://docs.docker.com/engine/reference/builder/">《Dockerfie 官方文档》</a></p>
+
+<p>2、<a href="https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/">《Dockerfile 最佳实践文档》</a></p>
+
+<p>3、<a href="https://onbing.com/first-blog/">《入门实战：使用Docker构建一个nodejs服务》</a></p>
+
+<p>4、<a href="http://blog.shiqichan.com/Dockerizing-a-Node-js-Web-Application/">《在Docker中运行Node.js的Web应用》</a></p>
+
+<p>5、<a href="https://www.gitbook.com/book/yeasy/docker_practice/details">《Docker — 从入门到实践》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/load-excel-data-with-kettle.html" title="link to 使用Kettle导入Excel数据">使用Kettle导入Excel数据</a></h2>
+       <p class="excerpt">ETL（Extraction, Transformation, and Loading），在日常的工作中我们经常会遇到各种数据的处理，转换，迁移。比如将Excel的数据导入到数据库，将SQLServer里面的数据转换后存到Oracle，将数据库的数据提取到文本等。最开始都是使用写代码然后进行处理，多了几次之后就觉得麻烦了。后来了解到Kettle这个工具，首先无需安装直接就能使用，支持图形化的GUI设计界面，然后可以以工作流的形式流转，在做一些简单或复杂的数据抽取、质量检测、数据清洗、数据转...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-08-20 10:08:00 +0800" class="post-list__meta--date date">2017-08-20</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/load-excel-data-with-kettle.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/centos-nexus-install.html" title="link to Maven私有库Nexus的安装和使用">Maven私有库Nexus的安装和使用</a></h2>
+       <p class="excerpt">在进行Java开发的时候，通常会使用Maven进行第三方库的管理，类似于iOS中的Cocoapods。我们在使用Cocoapods的时候都感受过更新索引库Specs的痛苦，使用Maven的时候依赖库也是从中央库(Central Repository)下载，速度可想而知会很慢。另外如果我们内部开发了一些基础的工具库，又不太方便托管到Central Repository的时候怎么办呢？参考Cocoapods我们可以搭建内部的私有库来解决这些问题。Nexus 是Maven仓库管理器，如果你使用M...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-07-22 00:08:00 +0800" class="post-list__meta--date date">2017-07-22</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/centos-nexus-install.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

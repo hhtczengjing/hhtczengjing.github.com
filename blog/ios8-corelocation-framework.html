@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS8中使用CoreLocation定位</title>
+  <meta name="description" content="在iOS8中，苹果已经强制开发者在请求定位服务时获得用户的授权，此外iOS状态栏中还有指示图标，提示用户当前应用是否正在使用定位服务。另外在iOS8中，苹果进一步改善了定位服务，让开发者请求定位服务时需要向用户提供更多的透明。此外，iOS8中还支持让应用开发者调用全新的“访问监控”功能，当用户允许后应用才能获得更...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS8中使用CoreLocation定位">
+  <meta name="twitter:description" content="在iOS8中，苹果已经强制开发者在请求定位服务时获得用户的授权，此外iOS状态栏中还有指示图标，提示用户当前应用是否正在使用定位服务。另外在iOS8中，苹果进一步改善了定位服务，让开发者请求定位服务时需要向用户提供更多的透明。此外，iOS8中还支持让应用开发者调用全新的“访问监控”功能，当用户允许后应用才能获得更...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS8中使用CoreLocation定位">
+  <meta property="og:description" content="在iOS8中，苹果已经强制开发者在请求定位服务时获得用户的授权，此外iOS状态栏中还有指示图标，提示用户当前应用是否正在使用定位服务。另外在iOS8中，苹果进一步改善了定位服务，让开发者请求定位服务时需要向用户提供更多的透明。此外，iOS8中还支持让应用开发者调用全新的“访问监控”功能，当用户允许后应用才能获得更...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios8-corelocation-framework.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-09-20 20:43:46 +0800" itemprop="datePublished" class="post-meta__date date">2014-09-20</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS8中使用CoreLocation定位</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS8中，苹果已经强制开发者在请求定位服务时获得用户的授权，此外iOS状态栏中还有指示图标，提示用户当前应用是否正在使用定位服务。另外在iOS8中，苹果进一步改善了定位服务，让开发者请求定位服务时需要向用户提供更多的透明。此外，iOS8中还支持让应用开发者调用全新的“访问监控”功能，当用户允许后应用才能获得更多的定位数据。</p>
+
+<p><img src="/images/ios8_location/ios8_location_alert.png" alt="ios8_location_alert.png" /></p>
+
+<p>##iOS8以前使用CoreLocation定位</p>
+
+<p>1、首先定义一个全局的变量用来记录CLLocationManager对象，引入<code class="highlighter-rouge">CoreLocation.framework</code>使用<code class="highlighter-rouge">#import &lt;CoreLocation/CoreLocation.h&gt;</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@property (nonatomic, strong) CLLocationManager  *locationManager;
+</code></pre></div></div>
+
+<p>2、初始化CLLocationManager并开始定位</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.locationManager = [[CLLocationManager alloc]init];
+_locationManager.delegate = self;
+_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+_locationManager.distanceFilter = 10;
+[_locationManager startUpdatingLocation];
+</code></pre></div></div>
+
+<p>3、实现CLLocationManagerDelegate的代理方法</p>
+
+<p>(1)获取到位置数据，返回的是一个CLLocation的数组，一般使用其中的一个</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation *currLocation = [locations lastObject];
+    NSLog(@"经度=%f 纬度=%f 高度=%f", currLocation.coordinate.latitude, currLocation.coordinate.longitude, currLocation.altitude);
+}
+</code></pre></div></div>
+
+<p>(2)获取用户位置数据失败的回调方法，在此通知用户</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    if ([error code] == kCLErrorDenied)
+    {
+        //访问被拒绝
+    }
+    if ([error code] == kCLErrorLocationUnknown) {
+        //无法获取位置信息
+    }
+}
+</code></pre></div></div>
+
+<p>4、在<code class="highlighter-rouge">viewWillDisappear</code>关闭定位</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_locationManager stopUpdatingLocation];
+}
+</code></pre></div></div>
+
+<p>##iOS8中使用CoreLocation定位</p>
+
+<p>1、在使用CoreLocation前需要调用如下函数【iOS8专用】：</p>
+
+<p>iOS8对定位进行了一些修改，其中包括定位授权的方法，CLLocationManager增加了下面的两个方法：</p>
+
+<p>（1）始终允许访问位置信息</p>
+
+<p><code class="highlighter-rouge">- (void)requestAlwaysAuthorization;</code></p>
+
+<p>（2）使用应用程序期间允许访问位置数据</p>
+
+<p><code class="highlighter-rouge">- (void)requestWhenInUseAuthorization;</code></p>
+
+<p>示例如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.locationManager = [[CLLocationManager alloc]init];
+_locationManager.delegate = self;
+_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+_locationManager.distanceFilter = 10;
+[_locationManager requestAlwaysAuthorization];//添加这句
+[_locationManager startUpdatingLocation];
+</code></pre></div></div>
+
+<p>2、在Info.plist文件中添加如下配置：</p>
+
+<p>（1）<code class="highlighter-rouge">NSLocationAlwaysUsageDescription</code></p>
+
+<p>（2）<code class="highlighter-rouge">NSLocationWhenInUseUsageDescription</code></p>
+
+<p>这两个键的值就是授权alert的描述，示例配置如下[<code class="highlighter-rouge">勾选Show Raw Keys/Values后进行添加</code>]：</p>
+
+<p><img src="/images/ios8_location/ios8_location_info_plist.png" alt="ios8_location_info_plist.png" /></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://my.oschina.net/non6/blog/289150">《迎接iOS8 - CoreLocation的变化》</a></p>
+
+<p>2、<a href="http://www.cnblogs.com/ios8/archive/2012/07/30/2614523.html">《IOS开发之Core Location》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/moclin23/article/details/38990257">《IOS8下的定位授权》</a></p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-class-cluster-design-pattern.html" title="link to iOS开发中的类簇设计模式">iOS开发中的类簇设计模式</a></h2>
+       <p class="excerpt">在iOS开发中经常会使用NSArray、NSNumber这样的系统提供的类来组织我们的数据，就拿NSNumber来说，NSNumber有两个比较常用的类方法，如下所示的定义：（1）用来把BOOL类型的数据包装成一个OC的对象：+ (NSNumber *)numberWithBool:(BOOL)value;（2）用来把int类型包装成一个OC对象：+ (NSNumber *)numberWithInt:(int)value;在Xcode中运行下面的代码片段：NSNumber *boolNu...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-09-21 00:11:49 +0800" class="post-list__meta--date date">2014-09-21</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-class-cluster-design-pattern.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-xcode-search-paths.html" title="link to iOS开发中的Search Paths设置">iOS开发中的Search Paths设置</a></h2>
+       <p class="excerpt">在iOS开发中经常遇到一些关于路径的设置，比如引入了百度地图的SDK，项目拷贝到其他的电脑上或者多人同时开发的时候容易报Library Not Found的错误，或者是引入第三方库比如ASIHttpRequest/RETableView经常报#include &lt;&gt;的错误这就需要配置一些搜索路径。##Framework/Library Search Paths1、Framework Search Paths附加到项目中的framework(.framework bundles)的...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-09-14 18:34:42 +0800" class="post-list__meta--date date">2014-09-14</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-xcode-search-paths.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

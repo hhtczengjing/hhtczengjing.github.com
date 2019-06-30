@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中WebViewJavaScriptBridge源码分析</title>
+  <meta name="description" content="WebViewJavascriptBridge是一个WebView中JavaScript和Native进行交互的框架，使用这个框架能够实现JavaScript和Objective-C之间进行消息的互通。另外这个框架设计的也是非常的简介，只有如下几个文件：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中WebViewJavaScriptBridge源码分析">
+  <meta name="twitter:description" content="WebViewJavascriptBridge是一个WebView中JavaScript和Native进行交互的框架，使用这个框架能够实现JavaScript和Objective-C之间进行消息的互通。另外这个框架设计的也是非常的简介，只有如下几个文件：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中WebViewJavaScriptBridge源码分析">
+  <meta property="og:description" content="WebViewJavascriptBridge是一个WebView中JavaScript和Native进行交互的框架，使用这个框架能够实现JavaScript和Objective-C之间进行消息的互通。另外这个框架设计的也是非常的简介，只有如下几个文件：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-webviewjavascriptbridge-source.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-08-18 22:46:29 +0800" itemprop="datePublished" class="post-meta__date date">2018-08-18</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中WebViewJavaScriptBridge源码分析</h1>
+  </header>
+
+  <section class="post">
+    <p><a href="https://github.com/marcuswestin/WebViewJavascriptBridge">WebViewJavascriptBridge</a>是一个WebView中JavaScript和Native进行交互的框架，使用这个框架能够实现JavaScript和Objective-C之间进行消息的互通。另外这个框架设计的也是非常的简介，只有如下几个文件：</p>
+
+<p>(1) <code class="highlighter-rouge">WebViewJavascriptBridge_JS</code></p>
+
+<p>该文件中只有一个方法<code class="highlighter-rouge">NSString * WebViewJavascriptBridge_js(void);</code>, 该方法主要是提供拼接创建一个JavaScript的脚步代码，在旧版中该文件生成的JS代码是用一个txt文件进行保存的。生成的JS代码主要负责对Native端发送的消息进行处理与将JavaScript端的消息发送到Native端，另外进行一些全局的组件的注册等。</p>
+
+<p>(2) <code class="highlighter-rouge">WebViewJavascriptBridgeBase</code></p>
+
+<p>实现了<code class="highlighter-rouge">Bridge</code>的初始化，提供WebView、Native之间的消息通道</p>
+
+<p>(3) <code class="highlighter-rouge">WKWebViewJavascriptBridge/WebViewJavascriptBridge</code></p>
+
+<p>分别负责WKWebView和UIWebView同Native之间的消息处理，实现了<code class="highlighter-rouge">Handler</code>的注册和调用逻辑，通过对各自平台下面的一些关键回调方法进行处理实现对JavaScript端发送的消息进行拦截并进行解析处理等流程。</p>
+
+<h3 id="如何使用">如何使用</h3>
+
+<h4 id="1javascript端">1、JavaScript端</h4>
+
+<p>Bridge的创建，调用本函数会触发Native端执行<code class="highlighter-rouge">WebViewJavascriptBridge_JS</code>文件里面的初始化JS代码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function setupWebViewJavascriptBridge(callback) {
+	if (window.WebViewJavascriptBridge) { 
+	    return callback(WebViewJavascriptBridge); 
+	}
+	if (window.WVJBCallbacks) { 
+	    return window.WVJBCallbacks.push(callback); 
+	}
+	window.WVJBCallbacks = [callback];
+	var WVJBIframe = document.createElement('iframe');
+	WVJBIframe.style.display = 'none';
+	WVJBIframe.src = 'https://__bridge_loaded__';
+	document.documentElement.appendChild(WVJBIframe);
+	setTimeout(function() {
+	    document.documentElement.removeChild(WVJBIframe)
+	}, 0)
+}
+</code></pre></div></div>
+
+<p>该<code class="highlighter-rouge">setupWebViewJavascriptBridge</code>函数主要是通过动态在WebView上面创建一个隐藏的<code class="highlighter-rouge">iframe</code>实现在WebView上面打开<code class="highlighter-rouge">https://__bridge_loaded__</code>这样的一个链接地址。具体的流程后面的分析部分会进行介绍。</p>
+
+<p>初始化完成后就可以进行Handler的注册与调用了</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>setupWebViewJavascriptBridge(function(bridge) {
+	// 注册JS端的Handler供Native进行调用
+	bridge.registerHandler('JS Echo', function(data, responseCallback) {
+		console.log("JS Echo called with:", data)
+		responseCallback(data)
+	})
+	// 调用Native端注册的Handler
+	bridge.callHandler('ObjC Echo', {'key':'value'}, function responseCallback(responseData) {
+		console.log("JS received response:", responseData)
+	})
+})
+</code></pre></div></div>
+
+<h4 id="2native端初始化与使用">2、Native端初始化与使用</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.bridge = [WebViewJavascriptBridge bridgeForWebView:webView];
+// 注册Native端的Handler供JS端使用
+[self.bridge registerHandler:@"ObjC Echo" handler:^(id data, WVJBResponseCallback responseCallback) {
+	NSLog(@"ObjC Echo called with: %@", data);
+	responseCallback(data);
+}];
+// 调用JS端注册的Handler
+[self.bridge callHandler:@"JS Echo" data:nil responseCallback:^(id responseData) {
+	NSLog(@"ObjC received response: %@", responseData);
+}];
+</code></pre></div></div>
+
+<h3 id="源码分析">源码分析</h3>
+
+<p>WebViewJavascriptBridge框架主要是Native和JavaScript之间的双向交互，那么接下来从这几个方面来进行分析：</p>
+
+<h4 id="1native注册handler">1、Native注册Handler</h4>
+
+<p>Native端注册Handler可以供JavaScript进行调用，在Native端注册Handler的时候会调用如下的代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)registerHandler:(NSString *)handlerName handler:(WVJBHandler)handler {
+    _base.messageHandlers[handlerName] = [handler copy];
+}
+</code></pre></div></div>
+<p>从源码来看其实就是在bridge初始化的时候会创建一个<code class="highlighter-rouge">WebViewJavascriptBridgeBase</code>的实例<code class="highlighter-rouge">_base</code>，注册Handler其实就是将Handler处理逻辑的block代码记录到<code class="highlighter-rouge">_base</code>的<code class="highlighter-rouge">messageHandlers</code>里面，该结构是一个<code class="highlighter-rouge">NSMutableDictionary</code>。在使用的时候直接通过Handler的名字就可以找到对应的block。</p>
+
+<h4 id="2javascript注册handler">2、JavaScript注册Handler</h4>
+
+<p>JavaScript端注册Handler的逻辑和Native这边差不多，也是在全局有一个对象进行的记录，可以理解为就是一个可变的字典，记录了Handler的名称和具体的实现代码回调。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function registerHandler(handlerName, handler) {
+    messageHandlers[handlerName] = handler;
+}
+</code></pre></div></div>
+
+<h4 id="3native调用javascript的handler">3、Native调用JavaScript的Handler</h4>
+
+<p>看完了Native/JavaScript端的注册Handler的逻辑，接下来看下Native端是如何调用JavaScript端的Handler的。</p>
+
+<p>首先会调用下面的<code class="highlighter-rouge">callHandler</code>方法：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)callHandler:(NSString *)handlerName {
+    [self callHandler:handlerName data:nil responseCallback:nil];
+}
+
+- (void)callHandler:(NSString *)handlerName data:(id)data {
+    [self callHandler:handlerName data:data responseCallback:nil];
+}
+
+- (void)callHandler:(NSString *)handlerName data:(id)data responseCallback:(WVJBResponseCallback)responseCallback {
+    [_base sendData:data responseCallback:responseCallback handlerName:handlerName];
+}
+</code></pre></div></div>
+
+<p>最终会调用<code class="highlighter-rouge">WebViewJavascriptBridgeBase</code>的<code class="highlighter-rouge">sendData...</code>的方法：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)sendData:(id)data responseCallback:(WVJBResponseCallback)responseCallback handlerName:(NSString*)handlerName {
+    //构造消息
+    NSMutableDictionary* message = [NSMutableDictionary dictionary];
+    //消息体
+    if (data) {
+        message[@"data"] = data;
+    }
+    //回调
+    if (responseCallback) {
+        NSString* callbackId = [NSString stringWithFormat:@"objc_cb_%ld", ++_uniqueId]; //回调的ID唯一标识符
+        self.responseCallbacks[callbackId] = [responseCallback copy];
+        message[@"callbackId"] = callbackId;
+    }
+    //handler的名称
+    if (handlerName) {
+        message[@"handlerName"] = handlerName;
+    }
+    [self _queueMessage:message];
+}
+</code></pre></div></div>
+
+<p>该方法先将传进来的参数进行处理构造成一条消息(message), 消息可以理解成是一个JSON:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+	"data": data /* 必选，发送到JavaScript端的数据 */
+	"callbackId": "objc_cb_xxxx", /* 可选，如果有回调responseCallback会全局创建一个唯一的回调ID，并在responseCallbacks记下来对应的关系*/
+	"handlerName": "handlerName" /* 可选，handler的名称*/
+}
+</code></pre></div></div>
+
+<p>消息结构构造完成之后就调用<code class="highlighter-rouge">_queueMessage</code>方法</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//WVJBMessage =&gt; typedef NSDictionary WVJBMessage;
+- (void)_queueMessage:(WVJBMessage *)message {
+    //startupMessageQueue启动bridge的时候的初始化的消息队列，默认bridge启动完成后会自动调用并清空
+    if (self.startupMessageQueue) {
+        [self.startupMessageQueue addObject:message];
+    } 
+    else {
+        [self _dispatchMessage:message];
+    }
+}
+</code></pre></div></div>
+
+<p>先跳过<code class="highlighter-rouge">startupMessageQueue</code>直接看<code class="highlighter-rouge">_dispatchMessage</code>, 该方法就是处理Native发往JavaScript端的消息的具体实现：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)_dispatchMessage:(WVJBMessage *)message {
+    //将NSDictionary转化为JSON字符串, 并转义一些特殊的字符
+    NSString *messageJSON = [self _serializeMessage:message pretty:NO];
+    [self _log:@"SEND" json:messageJSON];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\f" withString:@"\\f"];
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\u2028" withString:@"\\u2028"]; //行分隔符
+    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\u2029" withString:@"\\u2029"]; //段落分隔符
+    //拼接要调用的JavaScript代码，参数是JSON字符串
+    NSString* javascriptCommand = [NSString stringWithFormat:@"WebViewJavascriptBridge._handleMessageFromObjC('%@');", messageJSON];
+    //切换到主线程执行JS代码
+    if ([[NSThread currentThread] isMainThread]) {
+        [self _evaluateJavascript:javascriptCommand];
+
+    } 
+    else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self _evaluateJavascript:javascriptCommand];
+        });
+    }
+}
+
+// 将NSDictionary转化为JSON字符串, 是否是展开的格式
+- (NSString *)_serializeMessage:(id)message pretty:(BOOL)pretty {
+    return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:message options:(NSJSONWritingOptions)(pretty ? NSJSONWritingPrettyPrinted : 0) error:nil] encoding:NSUTF8StringEncoding];
+}
+
+// 执行JS代码， 其实最终还是调用的是`stringByEvaluatingJavaScriptFromString`
+- (void) _evaluateJavascript:(NSString *)javascriptCommand {
+    //self.delegate =&gt; WebViewJavascriptBridge对象的实例
+    [self.delegate _evaluateJavascript:javascriptCommand];
+}
+
+- (NSString*) _evaluateJavascript:(NSString*)javascriptCommand {
+    return [_webView stringByEvaluatingJavaScriptFromString:javascriptCommand];
+}
+</code></pre></div></div>
+
+<p>到这里Native发送消息到JavaScript了，那么接下来看下JavaScript是如何接收消息会响应的，首先从上面的代码可以看出来发送消息其实就是在WebView上面调用<code class="highlighter-rouge">WebViewJavascriptBridge._handleMessageFromObjC</code>这个JS的方法，参数是一个JSON字符串。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function _handleMessageFromObjC(messageJSON) {
+	_dispatchMessageFromObjC(messageJSON);
+}
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">_handleMessageFromObjC</code>在JS端的实现其实最终调用的是<code class="highlighter-rouge">_dispatchMessageFromObjC</code>这个函数：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function _dispatchMessageFromObjC(messageJSON) {
+    if (dispatchMessagesWithTimeoutSafety) {
+        setTimeout(_doDispatchMessageFromObjC);
+    } 
+    else {
+        _doDispatchMessageFromObjC();
+    }
+		
+	function _doDispatchMessageFromObjC() {
+		 // 解析消息的JSON字符串
+        var message = JSON.parse(messageJSON);
+        var messageHandler;
+        var responseCallback;
+        
+        if (message.responseId) {
+        	  // 对于JavaScript端的消息，判断是否有responseId这个字段，表示需要进行回调处理
+            responseCallback = responseCallbacks[message.responseId];
+            if (!responseCallback) {
+                return;
+            }
+            responseCallback(message.responseData);
+            delete responseCallbacks[message.responseId];
+        } 
+        else {
+        	  // 对于Native端来的消息，判断是否有callbackId这个字段，表示需要进行响应
+            if (message.callbackId) {
+                var callbackResponseId = message.callbackId;
+                responseCallback = function(responseData) {
+                    _doSend({handlerName: message.handlerName, responseId: callbackResponseId, responseData: responseData});
+                };
+            }
+			  
+			  // 执行对应的Handler, 这个就是之前JS端注册的Handler的名称，从全局的配置里面获取到对应的函数实现
+            var handler = messageHandlers[message.handlerName];
+            if (!handler) {
+                console.log("WebViewJavascriptBridge: WARNING: no handler for message from ObjC:", message);
+            } 
+            else {
+            	   // 这里的handler其实就是前面注册的handler，执行完成之后会执行responseCallback
+                handler(message.data, responseCallback);
+            }
+        }
+    }
+}
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">responseCallback</code>里面最终会调用一个<code class="highlighter-rouge">_doSend</code>方法, 该方法会把消息加入到消息发送队列里面，然后通过修改iframe的src属性来达到向Native端发送消息的目的。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function _doSend(message, responseCallback) {
+    if (responseCallback) {
+        var callbackId = 'cb_'+(uniqueId++)+'_'+new Date().getTime();
+        responseCallbacks[callbackId] = responseCallback;
+        message['callbackId'] = callbackId;
+    }
+    sendMessageQueue.push(message);
+    messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + '://' + QUEUE_HAS_MESSAGE;
+}
+</code></pre></div></div>
+
+<h4 id="4javascript调用native的handler">4、JavaScript调用Native的Handler</h4>
+
+<p>JavaScript调用Native的Handler就相比上面的简单一些了，就是直接调用<code class="highlighter-rouge">_doSend</code>方法，根据是否有回调函数然后执行完成之后就从全局的回调里面拿出来执行。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function callHandler(handlerName, data, responseCallback) {
+    if (arguments.length == 2 &amp;&amp; typeof data == 'function') {
+        responseCallback = data;
+        data = null;
+    }
+    _doSend({ handlerName:handlerName, data:data }, responseCallback);
+}
+</code></pre></div></div>
+
+<h3 id="核心逻辑">核心逻辑</h3>
+
+<p>上面只介绍了怎么发送和怎么接收，其实最终主要是如下两个方面的实现：</p>
+
+<h4 id="1uiwebview---native">1、UIWebView -&gt; Native</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    if (webView != _webView) { return YES; }
+    NSURL *url = [request URL];
+    __strong id&lt;UIWebViewDelegate&gt; strongDelegate = _webViewDelegate;
+    if ([_base isWebViewJavascriptBridgeURL:url]) {
+        if ([_base isBridgeLoadedURL:url]) {
+            //__bridge_loaded__:// 注入JS代码
+            [_base injectJavascriptFile];
+        }
+        else if ([_base isQueueMessageURL:url]) {
+            //__wvjb_queue_message__:// 消息处理
+            NSString *messageQueueString = [self _evaluateJavascript:[_base webViewJavascriptFetchQueyCommand]];
+            [_base flushMessageQueue:messageQueueString];
+        }
+        else {
+            //未知的消息类型
+            [_base logUnkownMessage:url];
+        }
+        return NO;
+    }
+    else if (strongDelegate &amp;&amp; [strongDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+        return [strongDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+    }
+    else {
+        return YES;
+    }
+}
+</code></pre></div></div>
+
+<p>初始化的代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)injectJavascriptFile {
+    NSString *js = WebViewJavascriptBridge_js();
+    [self _evaluateJavascript:js];
+    if (self.startupMessageQueue) {
+        NSArray* queue = self.startupMessageQueue;
+        self.startupMessageQueue = nil;
+        for (id queuedMessage in queue) {
+            [self _dispatchMessage:queuedMessage];
+        }
+    }
+}
+</code></pre></div></div>
+
+<h4 id="2native---uiwebview">2、Native -&gt; UIWebView</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSString*) _evaluateJavascript:(NSString *)javascriptCommand {
+    return [_webView stringByEvaluatingJavaScriptFromString:javascriptCommand];
+}
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://github.com/marcuswestin/WebViewJavascriptBridge">WebViewJavascriptBridge主页</a></p>
+
+<p>2、<a href="https://www.cnblogs.com/LeeGof/p/8143408.html">WebViewJavascriptBridge浅析</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-masonry-source.html" title="link to iOS中Masonry源码分析">iOS中Masonry源码分析</a></h2>
+       <p class="excerpt">Masonry是一个轻量级的iOS布局框架，使用一套更加方便的语法来对AutoLayout进行包装。它拥有自己的描述语法(DSL)， 采用更优雅的链式语法封装了AutoLayout，简介明了并具备高可读性。同时支持iOS和macOS。AutoLayout需求：在父视图上面创建一个绿色的视图，要求距父视图的边距都是10，使用代码方式实现方式如下：(1) 创建视图控件创建一个UIView视图，并把它添加到父视图上面：UIView *view1 = [[UIView alloc] init];v...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-09-01 13:22:56 +0800" class="post-list__meta--date date">2018-09-01</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-masonry-source.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/pack-macos-app-to-dmg.html" title="link to 如何将macOS应用程序打包为dmg文件">如何将macOS应用程序打包为dmg文件</a></h2>
+       <p class="excerpt">之前改写过网上开源的一个JSON转Model的Mac APP，当时是直接使用的是将.app格式的文件直接拖到应用里面进行安装的，最近刚好有空就了解了一下dmg文件是怎么打包的，记录下整个的过程方便以后查找。操作步骤1.准备相关文件  (1) 打包生成的.app文件  (2) 一张背景图  (3) Applications文件夹的替身文件(可以到其他的dmg里面去拷贝一个)2.创建空白镜像文件(1) 打开磁盘工具，选择文件 -&gt; 新建映像 -&gt; 空白映像：(2) 在弹出框中填写相...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-08-11 11:46:29 +0800" class="post-list__meta--date date">2018-08-11</time> &#8226; <span class="post-list__meta--tags tags">macOS</span><a class="btn-border-small" href=/blog/pack-macos-app-to-dmg.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发中使用Mantle构建模型层</title>
+  <meta name="description" content="在iOS的开发中为了快速的实现产品的迭代和新功能的开发，常常会弱化Model的功能，NSDictionary作为承载业务的数据类型出现在各种地方（SQLite，Model Object,API Service…）,直接使用objectForKey的方式进行数据的读取，参数和值的正确性完全没有经过编译器检查，字符串...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发中使用Mantle构建模型层">
+  <meta name="twitter:description" content="在iOS的开发中为了快速的实现产品的迭代和新功能的开发，常常会弱化Model的功能，NSDictionary作为承载业务的数据类型出现在各种地方（SQLite，Model Object,API Service…）,直接使用objectForKey的方式进行数据的读取，参数和值的正确性完全没有经过编译器检查，字符串...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发中使用Mantle构建模型层">
+  <meta property="og:description" content="在iOS的开发中为了快速的实现产品的迭代和新功能的开发，常常会弱化Model的功能，NSDictionary作为承载业务的数据类型出现在各种地方（SQLite，Model Object,API Service…）,直接使用objectForKey的方式进行数据的读取，参数和值的正确性完全没有经过编译器检查，字符串...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-mantle-build-model-layer.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-12-10 13:08:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-12-10</time> &#8226; <span class="post-meta__tags tags">Note</span>
+    </div>
+    <h1 class="post-title">iOS开发中使用Mantle构建模型层</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS的开发中为了快速的实现产品的迭代和新功能的开发，常常会弱化Model的功能，NSDictionary作为承载业务的数据类型出现在各种地方（SQLite，Model Object,API Service…）,直接使用objectForKey的方式进行数据的读取，参数和值的正确性完全没有经过编译器检查，字符串很容易写错，极容易导致在运行阶段出现低级bug.</p>
+
+<h3 id="1property名称转换">1、Property名称转换</h3>
+
+<p>由于API使用的开发语言与iOS所使用的Objective-C是截然不同的，所以可能将一些保留关键字作为property的名称(如id)，或者不小心override掉基类的属性(如description)。还有可能API中使用了一个很糟糕的名称，或者使用了不符合Objective-C命名规范的名称，这些我们都需要作转换。</p>
+
+<p>只需要实现MTLJSONSerializing protocol并在+JSONKeyPathsByPropertyKey方法中定义好新旧名称的映射关系即可，Mantle会在序列化及反序列化时对属性名进行自动的转换。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (NSDictionary *)JSONKeyPathsByPropertyKey {
+    return @{
+              @keypath(model, xh)   : @"XH",
+              @keypath(model, bbmc) : @"BBMC",
+              @keypath(model, bbh)  : @"BBH",
+              @keypath(model, bz)   : @"BZ",
+              @keypath(model, xzdz) : @"XZDZ",
+              @keypath(model, fbsj) : @"FBSJ"
+    };
+}
+</code></pre></div></div>
+
+<h3 id="2property类型转换">2、Property类型转换</h3>
+
+<h4 id="1将nsstring的字符串转换为nsurl">（1）将NSString的字符串转换为NSURL：</h4>
+
+<p>iOS中处理URL使用的是NSURL类型，但JSON只支持基本的字符串，Mantle可以自动帮你转换成NSURL。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (NSValueTransformer *)URLJSONTransformer {
+    return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
+}
+</code></pre></div></div>
+
+<h4 id="2将nsstring的字符串映射为enum的成员">（2）将NSString的字符串映射为enum的成员</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (NSValueTransformer *)stateJSONTransformer {
+    return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{
+        @"open": @(GHIssueStateOpen),
+        @"closed": @(GHIssueStateClosed)
+    }];
+}
+</code></pre></div></div>
+
+<h4 id="3将字典转换为objective-c的对象">（3）将字典转换为Objective-C的对象</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (NSValueTransformer *)assigneeJSONTransformer {
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:GHUser.class];
+}
+</code></pre></div></div>
+
+<h4 id="4实现json-value和model-property的互相转换">（4）实现JSON Value和Model Property的互相转换</h4>
+
+<p>1）比如将JSON字符串中的<code class="highlighter-rouge">2015-10-10 10:10</code>转换为NSDate类型，然后将NSDate类型的数据转换为<code class="highlighter-rouge">yyyy-MM-dd HH:mm</code>形式的字符串</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (NSValueTransformer *)updatedAtJSONTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *dateString, BOOL *success, NSError *__autoreleasing *error) {
+        return [self.dateFormatter dateFromString:dateString];
+    } reverseBlock:^id(NSDate *date, BOOL *success, NSError *__autoreleasing *error) {
+        return [self.dateFormatter stringFromDate:date];
+    }];
+}
+</code></pre></div></div>
+
+<p>2）比如需要将<code class="highlighter-rouge">{"id":"xxx", "subject":"", "time":""}</code>这样一个JSON字符串转换为SearchListMailItemModel可以按照下面的方式进行转换</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (NSValueTransformer *)mailJSONTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSArray *value, BOOL *success, NSError *__autoreleasing *error) {
+        if(!value || value.count &lt;= 0) {
+            return nil;
+        }
+        return [SearchListMailItemModel pdModelsWithArray:value error:nil];
+    }];
+}
+</code></pre></div></div>
+
+<h3 id="3统一空值处理">3、统一空值处理</h3>
+
+<p>有的时候API响应的数据会出现空值，如status字段有些情况下是一个字符串，少数情况下返回的是null,如<code class="highlighter-rouge">{"status":null}</code>,Mantle在这种情况下会将status转换为nil,但如果是标量（NSInteger,CGFloat）的时候直接会抛出异常。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@interface MTLModel (PDNullableScalar)
+
+@end
+
+@implementation MTLModel (PDNullableScalar)
+
+- (void)setNilValueForKey:(NSString *)key {
+    [self setValue:@0 forKey:key];  
+}
+
+@end
+</code></pre></div></div>
+
+<h3 id="4便捷nsdictionary-model-model-nsdictionary转换">4、便捷<code class="highlighter-rouge">NSDictionary-&gt;Model</code>, <code class="highlighter-rouge">Model-&gt;NSDictionary</code>转换</h3>
+
+<h4 id="1-将nsdictionary---model">(1) 将<code class="highlighter-rouge">NSDictionary -&gt; Model</code></h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CustomModel *model = [MTLJSONAdapter modelOfClass:PDBaseModel.class fromJSONDictionary:dictionary error:error];
+</code></pre></div></div>
+
+<h4 id="2-将model---nsdictionary">(2) 将<code class="highlighter-rouge">Model -&gt; NSDictionary</code></h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSDictionary *dict = [MTLJSONAdapter JSONDictionaryFromModel:self error:error];
+</code></pre></div></div>
+
+<h3 id="5结合rpjsonvalidator实现json格式的校验">5、结合RPJSONValidator实现JSON格式的校验</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSDictionary *dictionary = @{@"name":@"zhangsan", @"age":20};
+NSDictionary *requirementsDictionary = @{@"name":RPValidatorPredicate.isString.isOptional, @"age":RPValidatorPredicate.isNumber.isOptional};
+NSError *validError = nil;
+BOOL valid = [RPJSONValidator validateValuesFrom:dictionary withRequirements:requirementsDictionary error:&amp;validError];
+if (!valid) {
+        NSString *failingKeys = validError.userInfo[RPJSONValidatorFailingKeys];
+        NSString *errorDescription = [NSString stringWithFormat:@"%@校验失败，错误信息：%@", NSStringFromClass(self), failingKeys];
+        NSAssert(NO, errorDescription);
+        return NO;
+}
+</code></pre></div></div>
+
+<h3 id="6自动nscodingnscopying-procotol的实现">6、自动NSCoding/NSCopying Procotol的实现</h3>
+
+<p>如果需要将一个对象进行归档处理，在OC中需要实现NSCoding的Protocol，需要实现下面两个方法：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (id)initWithCoder:(NSCoder *)coder {
+    self = [self init];
+    if (self == nil) return nil;
+    _URL = [coder decodeObjectForKey:@"URL"];
+    _number = [coder decodeObjectForKey:@"number"];
+    _state = [coder decodeUnsignedIntegerForKey:@"state"];
+    return self;
+}
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)encodeWithCoder:(NSCoder *)coder {
+    if (self.URL != nil) [coder encodeObject:self.URL forKey:@"URL"];
+    if (self.number != nil) [coder encodeObject:self.number forKey:@"number"];
+    [coder encodeUnsignedInteger:self.state forKey:@"state"];
+}
+</code></pre></div></div>
+
+<p>如果需要将一个对象进行Copy处理，那么需要实现NSCopying的Protocol，需要实现下面两个方法：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (id)copyWithZone:(NSZone *)zone {
+    GHIssue *issue = [[self.class allocWithZone:zone] init];
+    issue-&gt;_URL = self.URL;
+    issue-&gt;_number = self.number;
+    issue-&gt;_state = self.state;
+    return issue;
+}
+</code></pre></div></div>
+
+<p>但是使用Mantle之后NSCoding和NSCopyin Procotol是默认进行实现的，直接使用即可</p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="http://www.iwangke.me/2014/10/13/Why-Changba-iOS-choose-Mantle/">为什么唱吧iOS 6.0选择了Mantle</a></p>
+
+<p>2、<a href="https://github.com/Mantle/Mantle">Mantle官网</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/npm-repo-with-verdaccio.html" title="link to 使用Verdaccio搭建npm仓库">使用Verdaccio搭建npm仓库</a></h2>
+       <p class="excerpt">Verdaccio是一个轻量级的私有NPM的Registry（从Sinopiafork过来的，sinopia最后一次更新是在几年前了）。最开始是打算使用cnpmjs这个来搭建私有的npm仓库但是搭建完成之后存在一些问题，所以使用了Sinopia，本文记录下来搭建的过程。直接安装npm install verdaccio -g安装完成之后直接执行命令即可完成启动：verdaccio对于服务器上面部署可以使用pm2更多关于PM2的用法的可以参考：https://wohugb.gitbooks....&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-12-24 13:08:00 +0800" class="post-list__meta--date date">2017-12-24</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/npm-repo-with-verdaccio.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-statsvn-analysis-svn-log.html" title="link to 使用StatSVN对SVN日志进行可视化分析">使用StatSVN对SVN日志进行可视化分析</a></h2>
+       <p class="excerpt">StatSVN是一个开源的SVN统计工具(Java语言编写，最近一次更新是2010-01-01)，能够从Subversion版本库中取得信息，然后生成描述项目开发的各种表格和图表（StatSVN生成的报表是一组包括表格与图表的静态HTML文档）。比如：  代码行数的时间线；  针对每个开发者的代码行数；  开发者的活跃程度；  开发者最近所提交的；  文件数量；  平均文件大小；  最大文件；  哪个文件是修改最多次数的；  目录大小；  带有文件数量和代码行数的Repository tr...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-12-06 13:08:00 +0800" class="post-list__meta--date date">2017-12-06</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/using-statsvn-analysis-svn-log.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

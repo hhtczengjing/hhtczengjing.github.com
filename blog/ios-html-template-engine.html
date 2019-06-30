@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中使用模板引擎渲染HTML界面</title>
+  <meta name="description" content="在iOS实际的开发中，使用UIWebView来加载数据使用的场景特别多。很多时候我们会动态的从服务器获取一段HTML的内容，然后App这边动态的处理这段HTML内容用于展示在UIWebView上。使用到的API接口为：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中使用模板引擎渲染HTML界面">
+  <meta name="twitter:description" content="在iOS实际的开发中，使用UIWebView来加载数据使用的场景特别多。很多时候我们会动态的从服务器获取一段HTML的内容，然后App这边动态的处理这段HTML内容用于展示在UIWebView上。使用到的API接口为：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中使用模板引擎渲染HTML界面">
+  <meta property="og:description" content="在iOS实际的开发中，使用UIWebView来加载数据使用的场景特别多。很多时候我们会动态的从服务器获取一段HTML的内容，然后App这边动态的处理这段HTML内容用于展示在UIWebView上。使用到的API接口为：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-html-template-engine.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-01-17 21:22:04 +0800" itemprop="datePublished" class="post-meta__date date">2015-01-17</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中使用模板引擎渲染HTML界面</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS实际的开发中，使用UIWebView来加载数据使用的场景特别多。很多时候我们会动态的从服务器获取一段HTML的内容，然后App这边动态的处理这段HTML内容用于展示在UIWebView上。使用到的API接口为：</p>
+
+<p><code class="highlighter-rouge">- (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;</code></p>
+
+<p>由于HTML内容通常是变化的，所以我们需要动态生成HTML代码。通常我们从服务器端获取到标题、时间、作者和对应的内容，然后我们需要对这些数据处理之后拼接成一段HTML字符串。对于传统的做法是将上面的需要替换的内容填写一些占位符，放到指定的文件中如（content.html）,如下所示：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>key_title<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div&gt;</span>
+            <span class="nt">&lt;div&gt;</span>
+                 <span class="nt">&lt;h2&gt;</span>key_title<span class="nt">&lt;/h2&gt;</span>
+                 <span class="nt">&lt;div&gt;</span>key_date key_author<span class="nt">&lt;/div&gt;</span>
+                 <span class="nt">&lt;hr/&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;div&gt;</span>key_content<span class="nt">&lt;/div&gt;</span>
+       <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>然后在指定的地方使用如下的方式动态生成HTML代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSString *)loadHTMLByStringFormat:(NSDictionary *)data
+{
+    NSString *templatePath = [[NSBundle mainBundle] pathForResource:@"content" ofType:@"html"];
+    NSMutableString *html = [[NSMutableString alloc] initWithContentsOfFile:templatePath encoding:NSUTF8StringEncoding error:nil];
+    [html replaceOccurrencesOfString:@"key_title" withString:data[@"title"] options:NSCaseInsensitiveSearch range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"key_author" withString:data[@"author"] options:NSCaseInsensitiveSearch range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"key_date" withString:data[@"date"] options:NSCaseInsensitiveSearch range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"key_content" withString:data[@"content"] options:NSCaseInsensitiveSearch range:NSMakeRange(0, html.length)];
+    return html;
+}
+</code></pre></div></div>
+
+<p>在实际的使用中发现还是存在不少的问题，比如我们需要对数据进行预先处理的时候需要写大量的</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSUInteger)replaceOccurrencesOfString:(NSString *)target withString:(NSString *)replacement options:(NSStringCompareOptions)options range:(NSRange)searchRange;
+</code></pre></div></div>
+<p>这样的替换，而且对于一些特殊的字符还需要进行特殊处理等，实在不是太友好，这样就需要一个引擎来专门处理这些事情，本文主要介绍<code class="highlighter-rouge">MGTemplateEngine</code>和<code class="highlighter-rouge">GRMustache</code>的使用。</p>
+
+<p>###使用模板引擎</p>
+
+<p>####MGTemplateEngine的使用</p>
+
+<p><a href="http://mattgemmell.com/mgtemplateengine-templates-with-cocoa/">MGTemplateEngine</a>是<a href="https://github.com/mattgemmell"><code class="highlighter-rouge">Matt Gemmell</code></a>的作品，它是一个比较流行的模板引擎，它的模板语言比较类似于<code class="highlighter-rouge">Smarty</code>、<code class="highlighter-rouge">FreeMarker</code>和<code class="highlighter-rouge">Django</code>。另外它可以支持自定义的Filter（以便实现自定义的渲染逻辑），需要依赖正则表达式的工具类<code class="highlighter-rouge">RegexKit</code>。</p>
+
+<p>1、创建模板</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div&gt;</span>
+            <span class="nt">&lt;div&gt;</span>
+                <span class="nt">&lt;div&gt;</span>
+                    <span class="nt">&lt;h2&gt;&lt;/h2&gt;</span>
+                    <span class="nt">&lt;div&gt;</span> <span class="nt">&lt;/div&gt;</span>
+                    <span class="nt">&lt;hr/&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div&gt;&lt;article</span> <span class="na">class=</span><span class="s">"post-container post-container--single"</span> <span class="na">itemscope</span> <span class="na">itemtype=</span><span class="s">"http://schema.org/BlogPosting"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">"post-header"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"post-meta"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;time</span> <span class="na">datetime=</span><span class="s">"2015-01-10 20:16:21 +0800"</span> <span class="na">itemprop=</span><span class="s">"datePublished"</span> <span class="na">class=</span><span class="s">"post-meta__date date"</span><span class="nt">&gt;</span>2015-01-10<span class="nt">&lt;/time&gt;</span> <span class="ni">&amp;#8226;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"post-meta__tags tags"</span><span class="nt">&gt;</span>iOS<span class="nt">&lt;/span&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">"post-title"</span><span class="nt">&gt;</span>iOS中JavaScript和OC交互<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;/header&gt;</span>
+
+  <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>在iOS开发中很多时候我们会和UIWebView打交道，目前国内的很多应用都采用了UIWebView的混合编程技术，最常见的是微信公众号的内容页面。前段时间在做微信公众平台相关的开发，发现很多应用场景都是利用HTML5和UIWebView来实现的。<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>###机制<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Objective-C语言调用JavaScript语言，是通过UIWebView的
+<span class="nt">&lt;code</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;</span>- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;<span class="nt">&lt;/code&gt;</span>的方法来实现的。该方法向UIWebView传递一段需要执行的JavaScript代码最后获取执行结果。<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>JavaScript语言调用Objective-C语言，并没有现成的API，但是有些方法可以达到相应的效果。具体是利用UIWebView的特性：在UIWebView的内发起的所有网络请求，都可以通过delegate函数得到通知。<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>###示例<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>下面提供一个简单的例子介绍如何相互的调用，实现的效果是在界面上点击一个链接，然后弹出一个对话框判断是否登录成功。<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;img</span> <span class="na">src=</span><span class="s">"/images/uiwebview_js/uiwebview_js_demo.png"</span> <span class="na">alt=</span><span class="s">"uiwebview_js_demo.png"</span> <span class="nt">/&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>（1）示例的HTML的源码如下：<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>html<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>head<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>meta<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>http-equiv=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"content-type"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>content=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"text/html;charset=utf-8"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>/<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>meta<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>http-equiv=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"X-UA-Compatible"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>content=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"IE=Edge"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>/<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>meta<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>content=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"always"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>name=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"referrer"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>/<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>title<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>测试网页<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>/title<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>/head<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>body<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>br<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>/<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>a<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>href=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"devzeng://login?name=zengjing<span class="ni">&amp;amp;</span>password=123456"<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>点击链接<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>/a<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>/body<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>/html<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>（2）UIWebView Delegate回调方法为：<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;</span>- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSURL *url = [request URL];
+    if([[url scheme] isEqualToString:@"devzeng"]) {
+        //处理JavaScript和Objective-C交互
+        if([[url host] isEqualToString:@"login"])
+        {
+            //获取URL上面的参数
+            NSDictionary *params = [self getParams:[url query]];
+            BOOL status = [self login:[params objectForKey:@"name"] password:[params objectForKey:@"password"]];
+            if(status)
+            {
+                //调用JS回调
+                [webView stringByEvaluatingJavaScriptFromString:@"alert('登录成功!')"];
+            }
+            else
+            {
+                [webView stringByEvaluatingJavaScriptFromString:@"alert('登录失败!')"];
+            }
+        }
+        return NO;
+    }
+    return YES;
+}
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>说明：<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>1、同步和异步的问题<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>（1）Objective-C调用JavaScript代码的时候是同步的<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;code</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;</span>- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;<span class="nt">&lt;/code&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>（2）JavaScript调用Objective-C代码的时候是异步的<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;code</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;</span>- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;<span class="nt">&lt;/code&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>2、常见的JS调用<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>（1）获取页面title<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;code</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;</span>NSString *title = [webview stringByEvaluatingJavaScriptFromString:@"document.title"];<span class="nt">&lt;/code&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>（2）获取当前的URL<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;code</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;</span>NSString *url = [webview stringByEvaluatingJavaScriptFromString:@"document.location.href"];<span class="nt">&lt;/code&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>3、使用第三方库<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;code</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;</span>https://github.com/marcuswestin/WebViewJavascriptBridge<span class="nt">&lt;/code&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>###使用案例<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>1、动态将网页上的图片全部缩放<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>JavaScript脚本如下：<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;</span>function ResizeImages() {
+	var myImg, oldWidth;
+	var maxWidth = 320;
+	for(i = 0; i <span class="ni">&amp;lt;</span> document.images.length; i++) {
+		myImg = document.images[i];
+		if(myImg.width <span class="ni">&amp;gt;</span> maxWidth) {
+			oldWidth = myImg.width;
+			myImg.width = maxWidth;
+			myImg.heith = myImg.height*(maxWidth/oldWidth);
+		}
+	}
+}
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>在iOS代码中添加如下代码：<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;</span>[webView stringByEvaluatingJavaScriptFromString:  
+ @"var script = document.createElement('script');"   
+ "script.type = 'text/javascript';"   
+ "script.text = \"function ResizeImages() { "   
+     "var myimg,oldwidth;"  
+     "var maxwidth=380;" //缩放系数   
+     "for(i=0;i <span class="ni">&amp;lt;</span>document.images.length;i++){"   
+         "myimg = document.images[i];"  
+         "if(myimg.width <span class="ni">&amp;gt;</span> maxwidth){"   
+             "oldwidth = myimg.width;"   
+             "myimg.width = maxwidth;"   
+             "myimg.height = myimg.height * (maxwidth/oldwidth);"   
+         "}"   
+     "}"
+ "}\";"   
+ "document.getElementsByTagName('head')[0].appendChild(script);"];
+[webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>###参考资料<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>1、<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"http://blog.devtang.com/blog/2012/03/24/talk-about-uiwebview-and-phonegap/"</span><span class="nt">&gt;</span>《关于UIWebView和PhoneGap的总结》<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>2、<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"http://www.uml.org.cn/mobiledev/201108181.asp"</span><span class="nt">&gt;</span>《iOS开发之Objective-C与JavaScript的交互 》<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+
+  <span class="nt">&lt;/section&gt;</span>
+<span class="nt">&lt;/article&gt;</span>
+
+<span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"read-more"</span><span class="nt">&gt;</span>
+   
+   
+   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"read-more-item"</span><span class="nt">&gt;</span>
+       <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"read-more-item-dim"</span><span class="nt">&gt;</span>最近的文章<span class="nt">&lt;/span&gt;</span>
+       <span class="nt">&lt;h2</span> <span class="na">class=</span><span class="s">"post-list__post-title post-title"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/blog/ios-html-template-engine.html"</span> <span class="na">title=</span><span class="s">"link to iOS中使用模板引擎渲染HTML界面"</span><span class="nt">&gt;</span>iOS中使用模板引擎渲染HTML界面<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+       <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"excerpt"</span><span class="nt">&gt;</span>在iOS实际的开发中，使用UIWebView来加载数据使用的场景特别多。很多时候我们会动态的从服务器获取一段HTML的内容，然后App这边动态的处理这段HTML内容用于展示在UIWebView上。使用到的API接口为：- (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;由于HTML内容通常是变化的，所以我们需要动态生成HTML代码。通常我们从服务器端获取到标题、时间、作者和对应的内容，然后我们需要对这些数据处...<span class="ni">&amp;hellip;</span><span class="nt">&lt;/p&gt;</span>
+       <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"post-list__meta"</span><span class="nt">&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"2015-01-17 21:22:04 +0800"</span> <span class="na">class=</span><span class="s">"post-list__meta--date date"</span><span class="nt">&gt;</span>2015-01-17<span class="nt">&lt;/time&gt;</span> <span class="ni">&amp;#8226;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"post-list__meta--tags tags"</span><span class="nt">&gt;</span>iOS<span class="nt">&lt;/span&gt;&lt;a</span> <span class="na">class=</span><span class="s">"btn-border-small"</span> <span class="na">href=</span><span class="s">/blog/ios-html-template-engine.html</span><span class="nt">&gt;</span>继续阅读<span class="nt">&lt;/a&gt;&lt;/div&gt;</span>
+   <span class="nt">&lt;/div&gt;</span>
+   
+   
+   
+   
+   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"read-more-item"</span><span class="nt">&gt;</span>
+       <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"read-more-item-dim"</span><span class="nt">&gt;</span>更早的文章<span class="nt">&lt;/span&gt;</span>
+       <span class="nt">&lt;h2</span> <span class="na">class=</span><span class="s">"post-list__post-title post-title"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/blog/ios8-touch-id.html"</span> <span class="na">title=</span><span class="s">"link to iOS8中使用TouchID校验用户身份"</span><span class="nt">&gt;</span>iOS8中使用TouchID校验用户身份<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+       <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"excerpt"</span><span class="nt">&gt;</span>在iOS8中，开发者们可使用向第三方应用开放了Touch ID权限的API，以便他们在应用中使用指纹认证来完成用户认证部分。相当一部分的APP（如印象笔记、新版QQ）以及在升级后采用了Touch ID来验证用户身份，用以替代过去使用一般密码或者PIN码，如下图所示：（1）新版QQ：（2）印象笔记高级版本：本文主要介绍如何在应用中集成Touch ID来校验用户的身份。###集成步骤1、环境要求（1）开发环境：Xcode 6（iOS8 SDK）（2）设备要求：iPhone 5s、iPhone ...<span class="ni">&amp;hellip;</span><span class="nt">&lt;/p&gt;</span>
+       <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"post-list__meta"</span><span class="nt">&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"2014-12-07 13:09:47 +0800"</span> <span class="na">class=</span><span class="s">"post-list__meta--date date"</span><span class="nt">&gt;</span>2014-12-07<span class="nt">&lt;/time&gt;</span> <span class="ni">&amp;#8226;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"post-list__meta--tags tags"</span><span class="nt">&gt;</span>iOS<span class="nt">&lt;/span&gt;&lt;a</span> <span class="na">class=</span><span class="s">"btn-border-small"</span> <span class="na">href=</span><span class="s">/blog/ios8-touch-id.html</span><span class="nt">&gt;</span>继续阅读<span class="nt">&lt;/a&gt;&lt;/div&gt;</span>
+   <span class="nt">&lt;/div&gt;</span>
+   
+<span class="nt">&lt;/section&gt;</span>
+
+<span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"post-comments"</span><span class="nt">&gt;</span>
+  
+  
+  
+  
+<span class="nt">&lt;/section&gt;</span>
+
+<span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>2、渲染生成HTML字符串</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSString *)loadHTMLByMGTemplateEngine:(NSDictionary *)data
+{
+    NSString *templatePath = [[NSBundle mainBundle] pathForResource:@"template" ofType:@"html"];
+    MGTemplateEngine *engine = [MGTemplateEngine templateEngine];
+    [engine setMatcher:[ICUTemplateMatcher matcherWithTemplateEngine:engine]];
+    [engine setObject:data[@"title"] forKey:@"title"];
+    [engine setObject:data[@"author"] forKey:@"author"];
+    [engine setObject:data[@"date"] forKey:@"date"];
+    [engine setObject:data[@"content"] forKey:@"content"];
+    return [engine processTemplateInFileAtPath:templatePath withVariables:nil];
+}
+</code></pre></div></div>
+
+<p>3、说明</p>
+
+<p>（1）MGTemplateEngine提供的示例程序是运行在Mac OS上的，如果要使用到iOS上面需要引入Foundation框架</p>
+
+<p>（2）对于运行在Xcode6以上的环境下创建的工程由于没有PCH文件可能会报错，需要在MGTemplateEngine的各个头文件中引入Foundation框架</p>
+
+<p>（3）MGTemplateEngine在GitHub上的地址为<code class="highlighter-rouge">https://github.com/mattgemmell/MGTemplateEngine</code>。</p>
+
+<p>####GRMustache的使用</p>
+
+<p>相比<code class="highlighter-rouge">MGTemplateEngine</code>来说<code class="highlighter-rouge">GRMustache</code>简单不少，</p>
+
+<p>1、处理模板文件</p>
+
+<p>模板文件和MGTemplateEngine的一样。</p>
+
+<p>2、渲染生成HTML字符串</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSString *)loadHTMLByGRMustache:(NSDictionary *)data
+{
+    NSString *templatePath = [[NSBundle mainBundle] pathForResource:@"template" ofType:@"html"];
+    NSString *template = [NSString stringWithContentsOfFile:templatePath encoding:NSUTF8StringEncoding error:nil];
+    return [GRMustacheTemplate renderObject:data fromString:template error:nil];
+}
+</code></pre></div></div>
+
+<p>3、说明</p>
+
+<p>（1）renderObject使用的数据的key必须要和模板中的占位符一一对应起来</p>
+
+<p>（2）GRMustache在GitHub上的地址为<code class="highlighter-rouge">https://github.com/groue/GRMustache</code></p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://mattgemmell.com/mgtemplateengine-templates-with-cocoa/">《MGTemplateEngine - Templates with Cocoa》</a></p>
+
+<p>2、<a href="http://blog.csdn.net/crazy_srufboy/article/details/21748995">《MGTemplateEngine 模版引擎简单使用》</a></p>
+
+<p>3、<a href="http://mustache.github.io/mustache.5.html">《GRMustache Document》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/using-custom-font-in-ios.html" title="link to 在iOS开发中使用自定义字体">在iOS开发中使用自定义字体</a></h2>
+       <p class="excerpt">在iOS的项目开发中经常遇到需要使用一些自定义的字体文件，比如仿宋_GB2312、方正小标宋_GBK等。之前我们为了使用这些自定义的字体，在应用的资源包中放入这些字体文件。因为字体文件通常比较大，有的一个字库就达到10M以上（拿方正小标宋_GBK这个字库来说就有13M之多），这样打包后的ipa文件的体积就可能会变得很大，对于只有个别的模块需要特殊的字体样式的应用来说很不划算，那么在iOS6.0以后苹果就开放了动态加载字体的权限。下面就iOS中使用字体的这两种方式进行介绍。###使用静态字体...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-02-26 20:26:45 +0800" class="post-list__meta--date date">2015-02-26</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/using-custom-font-in-ios.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-uiwebview-interaction-with-javascript.html" title="link to iOS中JavaScript和OC交互">iOS中JavaScript和OC交互</a></h2>
+       <p class="excerpt">在iOS开发中很多时候我们会和UIWebView打交道，目前国内的很多应用都采用了UIWebView的混合编程技术，最常见的是微信公众号的内容页面。前段时间在做微信公众平台相关的开发，发现很多应用场景都是利用HTML5和UIWebView来实现的。###机制Objective-C语言调用JavaScript语言，是通过UIWebView的- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;的方法来实...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-01-10 20:16:21 +0800" class="post-list__meta--date date">2015-01-10</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-uiwebview-interaction-with-javascript.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

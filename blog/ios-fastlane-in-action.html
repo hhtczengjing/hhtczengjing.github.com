@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS中fastlane的使用</title>
+  <meta name="description" content="对于一个iOS APP的发布上线，一般来说都需要经历:编译打包 -&gt; 截图 -&gt; 填写一些说明文字 -&gt; 上传ipa到itunes connect -&gt; 提交供审核。每次都要进行这么多“繁琐”的步骤，对于某些步骤可能一次还不能执行成功需要等着界面提示上传错误然后手动重新再来一次（想想都觉得...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS中fastlane的使用">
+  <meta name="twitter:description" content="对于一个iOS APP的发布上线，一般来说都需要经历:编译打包 -&gt; 截图 -&gt; 填写一些说明文字 -&gt; 上传ipa到itunes connect -&gt; 提交供审核。每次都要进行这么多“繁琐”的步骤，对于某些步骤可能一次还不能执行成功需要等着界面提示上传错误然后手动重新再来一次（想想都觉得...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS中fastlane的使用">
+  <meta property="og:description" content="对于一个iOS APP的发布上线，一般来说都需要经历:编译打包 -&gt; 截图 -&gt; 填写一些说明文字 -&gt; 上传ipa到itunes connect -&gt; 提交供审核。每次都要进行这么多“繁琐”的步骤，对于某些步骤可能一次还不能执行成功需要等着界面提示上传错误然后手动重新再来一次（想想都觉得...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-fastlane-in-action.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-01-15 21:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2017-01-15</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS中fastlane的使用</h1>
+  </header>
+
+  <section class="post">
+    <p>对于一个iOS APP的发布上线，一般来说都需要经历:<code class="highlighter-rouge">编译打包</code> -&gt; <code class="highlighter-rouge">截图</code> -&gt; <code class="highlighter-rouge">填写一些说明文字</code> -&gt; <code class="highlighter-rouge">上传ipa到itunes connect</code> -&gt; <code class="highlighter-rouge">提交供审核</code>。每次都要进行这么多“繁琐”的步骤，对于某些步骤可能一次还不能执行成功需要等着界面提示上传错误然后手动重新再来一次（想想都觉得可怕）。</p>
+
+<p>在日常开发中，打包也是最后上线不可缺少的环节，如果需要生成ipa文件通常需要在Xcode里点击<code class="highlighter-rouge">Product</code> -&gt; <code class="highlighter-rouge">Archive</code>，然后在弹出来的<code class="highlighter-rouge">Organizer</code>中选择导出什么类型(<code class="highlighter-rouge">ad hoc</code>/<code class="highlighter-rouge">enterprise</code>)的包。对于大项目来说动辄编译十分钟以上的来说，一天打几个包就差不多过去了。</p>
+
+<p>为了解决这些问题，<a href="https://github.com/KrauseFx">Felix Krause</a>大神写了一个工具集<a href="https://github.com/fastlane/fastlane">fastlane</a>。fastlane是一套使用Ruby写的自动化工具集，用于iOS和Android的自动化打包、发布等工作。</p>
+
+<p><img src="/images/ios-fastlane-in-action/fastlane-logo.png" alt="fastlane-logo.png" /></p>
+
+<h3 id="fastlane简介">fastlane简介</h3>
+
+<h4 id="1安装fastlane">1、安装fastlane</h4>
+
+<h5 id="1xcode命令行工具">(1)Xcode命令行工具</h5>
+
+<p>确保Xcode命令行工具安装最新版本，使用如下命令进行安装：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xcode-select --install
+</code></pre></div></div>
+
+<h5 id="2安装fastlane">(2)安装fastlane</h5>
+
+<p>fastlane的安装非常简单，直接使用如下命令：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo gem install fastlane
+</code></pre></div></div>
+
+<p>即可完成安装。</p>
+
+<h4 id="2fastlane组件">2、fastlane组件</h4>
+
+<p>fastlane是一个工具集，包含了我们日常开发中上线时需要的大部分操作。比如gym/deliver等。下面对每个工具进行介绍：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/deliver#readme">deliver</a></td>
+      <td>自动上传截图，APP的元数据，二进制(ipa)文件到iTunes Connect</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/snapshot">snapshot</a></td>
+      <td>自动截图（基于Xcode7的UI test）</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/frameit">frameit</a></td>
+      <td>可以把截的图片自动套上一层外边框</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/pem">pem</a></td>
+      <td>自动生成、更新推送配置文件</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/sigh">sigh</a></td>
+      <td>用来创建、更新、下载、修复Provisioning Profile的工具</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/produce">produce</a></td>
+      <td>如果你的产品还没在iTunes Connect(iTC)或者Apple Developer Center(ADC)建立，produce可以自动帮你完成这些工作</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/cert">cert</a></td>
+      <td>自动创建管理iOS代码签名证书</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/pilot">pilot</a></td>
+      <td>管理TestFlight的测试用户，上传二进制文件</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/boarding">boarding</a></td>
+      <td>建立一个添加测试用户界面，发给测试者，可自行添加邮件地址，并同步到iTunes Connect(iTC)</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/gym">gym</a></td>
+      <td>自动化编译打包工具</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/match">match</a></td>
+      <td>证书和配置文件管理工具</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/fastlane/fastlane/tree/master/scan">scan</a></td>
+      <td>自动运行测试工具，并且可以生成漂亮的HTML报告</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="3fastlane核心概念">3、fastlane核心概念</h4>
+
+<p>在运行fastlane命令行工具的时候，会读取当前目录下面的<code class="highlighter-rouge">fastlane</code>文件夹里面的<code class="highlighter-rouge">Fastfile</code>配置文件。里面定义了一个个的<code class="highlighter-rouge">lane</code>，下面是官方提供的一个示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lane :beta do
+  increment_build_number
+  cocoapods
+  match
+  testflight
+  sh "./customScript.sh"
+  slack
+end
+</code></pre></div></div>
+
+<p>像<code class="highlighter-rouge">increment_build_number</code>、<code class="highlighter-rouge">cocoapods</code>这样的一条命令都是一个action，由这样的一个个action组成了一个lane（lane中可以调用其他的lane)。</p>
+
+<h3 id="fastlane实战">fastlane实战</h3>
+
+<h4 id="1初始化">1、初始化</h4>
+
+<p>在项目的根目录下面，执行<code class="highlighter-rouge">fastlane init</code>命令开始初始化。在执行的过程中会要求填写一些项目的资料，如Apple ID等，fastlane会自动检测当前目录下项目的App Name和App Identifier，可以选择自行输入这些信息。初始化完成会在当前目录下面生成一个fastlane的文件夹。</p>
+
+<p><img src="/images/ios-fastlane-in-action/fastlane-init.png" alt="fastlane-init.png" /></p>
+
+<p>最重要的两个文件就是Appfile和Fastfile，主要的说明如下：</p>
+
+<p>（1）Appfile里面存放了App的基本信息包括<code class="highlighter-rouge">app_identifier</code>、<code class="highlighter-rouge">apple_id</code>、<code class="highlighter-rouge">team_id</code>等，如果在init的时候输入了正确的apple_id和密码会自动获取team_id。</p>
+
+<p>（2）Fastfile是最重要的一个文件，在这个里面可以编写和定制我们的自动化脚本，所有的流程控制功能都写在这个文件里面。</p>
+
+<p>说明：</p>
+
+<p>（1）如果在init的时候选择了在iTunes Connect创建App，那么fastlane会调用produce进行初始化，如果没有创建后续可以手动执行<code class="highlighter-rouge">produce init</code>进行创建。如果没有在初始化的时候选择执行produce流程当然deliver也不会执行，后面可以使用<code class="highlighter-rouge">deliver init</code>运行是一样的。</p>
+
+<p>（2）在iTunes Connect中成功创建App之后，fastlane文件夹里面会生成一个Deliverfile的文件。Deliverfile文件主要是deliver的一些配置信息。</p>
+
+<h4 id="2fastfile文件">2、Fastfile文件</h4>
+
+<p>Fastfile文件的主要结构如下所示：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fastlane_version "2.14.2"
+default_platform :ios
+
+platform :ios do
+	before_all do
+   		cocoapods
+  	end
+  	
+  	lane :test do
+  	end
+  	
+  	lane :beta do
+  	end
+  	
+  	lane :release do
+  	end
+  	
+  	after_all do |lane|
+
+  	end
+
+  	error do |lane, exception|
+
+  	end
+end
+</code></pre></div></div>
+
+<p>说明：</p>
+
+<ul>
+  <li>（1）fastlane_version：指定fastlane使用的最小版本</li>
+  <li>（2）default_platform：指定当前默认的平台，可以选择ios/android/mac</li>
+  <li>（3）before_all：在执行每一个lane之前都会调用这部分的内容</li>
+  <li>（4）after_all：在每个lane执行完成之后都会执行这部分的内容</li>
+  <li>（5）error：每个lane执行出错就会执行这部分的内容</li>
+  <li>（6）desc：对lane的描述，fastlane会自动将desc的内容生成说明文档</li>
+  <li>（7）lane：定义一个lane(任务)，可以理解为一个函数，我们在执行的时候使用<code class="highlighter-rouge">fastlane [ios] lane名称</code></li>
+</ul>
+
+<h4 id="3fastfile文件的编写">3、Fastfile文件的编写</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lane :release do |option|
+	#根据传入参数version设置app的版本号
+	increment_version_number(version_number: option[:version]) 
+	#自动增加build号
+	increment_build_number
+    #证书签名
+    sigh
+    #编译打包
+    scheme_name = option[:scheme]
+    configuration = 'Release'
+    version = get_info_plist_value(path: "./#{scheme_name}/Info.plist", key: "CFBundleShortVersionString")
+    build = get_info_plist_value(path: "./#{scheme_name}/Info.plist", key: "CFBundleVersion")
+    output_directory = File.expand_path("..", Dir.pwd) + File::Separator + 'build'
+    output_name = "#{scheme_name}_#{configuration}_#{version}_#{build}_#{Time.now.strftime('%Y%m%d%H%M%S')}.ipa"
+    gym(scheme: scheme_name, clean: true, export_method:'appstore', configuration: configuration, output_directory: output_directory, output_name: output_name)
+  end
+</code></pre></div></div>
+
+<h3 id="参考资料">参考资料</h3>
+
+<p>1、<a href="https://fastlane.tools/">官方网站</a></p>
+
+<p>2、<a href="https://whlsxl.github.io">小团队的自动化发布－Fastlane带来的全自动化发布</a></p>
+
+<p>3、<a href="http://www.jianshu.com/p/1aebb0854c78">Fastlane实战（一）：移动开发自动化之道</a></p>
+
+<p>4、<a href="http://www.jianshu.com/p/0520192c9bd7">Fastlane实战（二）：Action和Plugin机制</a></p>
+
+<p>5、<a href="http://www.jianshu.com/p/faae6f95cbd8">Fastlane实战（五）：高级用法</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-ci-with-jenkins.html" title="link to iOS中使用Jenkins搭建持续集成环境">iOS中使用Jenkins搭建持续集成环境</a></h2>
+       <p class="excerpt">在持续集成(Continuous integration，简称CI)这块，Jenkins无疑是目前使用的比较多的一个开源框架。本文就如何快速搭建一个iOS的持续集成环境进行介绍。Jenkins安装系统要求：必须安装JDK 1.5以上版本，推荐安装最新版本的JDK。可以通过java -version查看是否安装JDK。$ java -version java version "1.8.0_91"Java(TM) SE Runtime Environment (build 1.8.0_91-b...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-02-25 19:00:00 +0800" class="post-list__meta--date date">2017-02-25</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-ci-with-jenkins.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/write-a-spider-with-scrapy.html" title="link to 使用Scrapy开发爬虫初探">使用Scrapy开发爬虫初探</a></h2>
+       <p class="excerpt">近期一直都有关注数据的采集方面的开发，之前也用Python(urllib+BeautifulSoup)写过“爬虫”但是效果不是很好，表现在内存占用过高和做出来的东西不够通用，很多周边的东西（图片下载、缩略图等）都需要自己来实现。趁着近期在公司内部弄到了一台新的CentOS服务器的机会就索性使用Scrapy把前段时间写的空气质量采集的程序改写下，同时把SQLServer换成MySQL，顺便熟悉一下这块的知识。开发环境准备CentOS 6.5自带的是Python 2.6.6,使用Scrapy需...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-12-06 04:40:00 +0800" class="post-list__meta--date date">2016-12-06</time> &#8226; <span class="post-list__meta--tags tags">Python</span><a class="btn-border-small" href=/blog/write-a-spider-with-scrapy.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

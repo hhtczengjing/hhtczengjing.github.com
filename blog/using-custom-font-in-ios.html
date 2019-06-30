@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>在iOS开发中使用自定义字体</title>
+  <meta name="description" content="在iOS的项目开发中经常遇到需要使用一些自定义的字体文件，比如仿宋_GB2312、方正小标宋_GBK等。之前我们为了使用这些自定义的字体，在应用的资源包中放入这些字体文件。因为字体文件通常比较大，有的一个字库就达到10M以上（拿方正小标宋_GBK这个字库来说就有13M之多），这样打包后的ipa文件的体积就可能会变...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在iOS开发中使用自定义字体">
+  <meta name="twitter:description" content="在iOS的项目开发中经常遇到需要使用一些自定义的字体文件，比如仿宋_GB2312、方正小标宋_GBK等。之前我们为了使用这些自定义的字体，在应用的资源包中放入这些字体文件。因为字体文件通常比较大，有的一个字库就达到10M以上（拿方正小标宋_GBK这个字库来说就有13M之多），这样打包后的ipa文件的体积就可能会变...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="在iOS开发中使用自定义字体">
+  <meta property="og:description" content="在iOS的项目开发中经常遇到需要使用一些自定义的字体文件，比如仿宋_GB2312、方正小标宋_GBK等。之前我们为了使用这些自定义的字体，在应用的资源包中放入这些字体文件。因为字体文件通常比较大，有的一个字库就达到10M以上（拿方正小标宋_GBK这个字库来说就有13M之多），这样打包后的ipa文件的体积就可能会变...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/using-custom-font-in-ios.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-02-26 20:26:45 +0800" itemprop="datePublished" class="post-meta__date date">2015-02-26</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">在iOS开发中使用自定义字体</h1>
+  </header>
+
+  <section class="post">
+    <p>在iOS的项目开发中经常遇到需要使用一些自定义的字体文件，比如<code class="highlighter-rouge">仿宋_GB2312、方正小标宋_GBK</code>等。之前我们为了使用这些自定义的字体，在应用的资源包中放入这些字体文件。因为字体文件通常比较大，有的一个字库就达到10M以上（拿<code class="highlighter-rouge">方正小标宋_GBK</code>这个字库来说就有13M之多），这样打包后的ipa文件的体积就可能会变得很大，对于只有个别的模块需要特殊的字体样式的应用来说很不划算，那么在iOS6.0以后苹果就开放了动态加载字体的权限。下面就iOS中使用字体的这两种方式进行介绍。</p>
+
+<p>###使用静态字体</p>
+
+<p>1、将字体文件拷贝到项目工程中，在<code class="highlighter-rouge">Info.plist</code>文件中添加<code class="highlighter-rouge">Fonts provided by application</code>的配置项，其中每一个Item对应的是字体文件的名称，如<code class="highlighter-rouge">DS-DIGI.TTF</code>。</p>
+
+<p><img src="/images/ios_font/ios_font_static_config.png" alt="ios_font_static_config.png" /></p>
+
+<p>2、使用时直接按照如下方式即可：</p>
+
+<p><code class="highlighter-rouge">_textLabel1.font = [UIFont fontWithName:@"DS-Digital" size:40];</code></p>
+
+<p>效果如下：</p>
+
+<p><img src="/images/ios_font/ios_font_static_preview.png" alt="ios_font_static_preview.png" /></p>
+
+<p>3、其他说明：</p>
+
+<p><code class="highlighter-rouge">+ (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize;</code>这个方法中需要指定的fontName不是前面设置的字体文件的文件名，而应该是字体的名称，如何获取字体的名称可以通过如下方式：</p>
+
+<p>（1）打印出当前所有可用的字体，查找对应的字体名称</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)printAllFonts
+{
+    NSArray *fontFamilies = [UIFont familyNames];
+    for (NSString *fontFamily in fontFamilies)
+    {
+        NSArray *fontNames = [UIFont fontNamesForFamilyName:fontFamily];
+        NSLog (@"%@: %@", fontFamily, fontNames);
+    }
+}
+</code></pre></div></div>
+
+<p>（2）通过Mac自带的字体册查看字体的名称</p>
+
+<p>直接双击字体即可打开字体册，如果系统没有安装该字体按照要求安装即可，然后可以在字体的详细信息中找到对应的字体的名称：</p>
+
+<p><img src="/images/ios_font/ios_font_static_fontname.png" alt="ios_font_static_fontname.png" /></p>
+
+<p>###使用动态字体</p>
+
+<p>####1、动态下载自定义的字体</p>
+
+<p>在网易新闻iOS客户端中可以使用自定义的字体，对于未下载的字体可先下载然后安装下次就能自动设置为该字体，效果如下：</p>
+
+<p><img src="/images/ios_font/ios_font_dynamic_163news.png" alt="ios_font_dynamic_163news.png" /></p>
+
+<p>下面就该功能简单介绍实现的步骤</p>
+
+<p>#####（1）下载指定的字体文件到本地</p>
+
+<p>第一次进入该页面会自动到服务器上获取可使用的字体的列表，示例如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[
+ 	{
+ 		"fontTitle": "华康圆体",
+ 		"regularName": "DFYuanW3-GB",
+ 		"boldName": "DFYuanW5-GB",
+ 		"author": "华康科技",
+ 		"date": "2012-10-11",
+ 		"fileUrl": "http://xxxx/font/dfgb_y.zip",
+ 		"fileSize": "3.3MB",
+ 		"previewUrl": "http://yyyy/font/ios_yuanti.png"
+ 	}
+ ]
+</code></pre></div></div>
+<p>上面的内容指明了字体的名称，下载地址等信息，从上面的内容可以看出下载回来的字体文件是一个zip压缩包，再使用前还需要进行解压处理。</p>
+
+<p>######1）下载字体文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSString *)downloadZipFile:(NSString *)fileUrl toPath:(NSString *)path
+{
+    NSError *error = nil;
+    NSURL *url = [NSURL URLWithString:fileUrl];
+    NSString *fileName = [url lastPathComponent];
+    NSData *data = [NSData dataWithContentsOfURL:url options:0 error:&amp;error];
+    if(!error)
+    {
+        NSString *zipPath = [path stringByAppendingPathComponent:fileName];
+        [data writeToFile:zipPath options:0 error:&amp;error];
+        if(!error)
+        {
+            return zipPath;
+        }
+    }
+    return nil;
+}
+</code></pre></div></div>
+
+<p>######2）解压zip压缩包</p>
+
+<p>iOS中解压zip压缩文件非常方便，使用<code class="highlighter-rouge">ZipArchive</code>这个开源项目按照如下的方式即可快速解压zip文件。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSString *)expandZipFile:(NSString *)src toPath:(NSString *)desc
+{
+    ZipArchive *za = [[ZipArchive alloc] init];
+    if ([za UnzipOpenFile:src])
+    {
+        BOOL ret = [za UnzipFileTo:desc overWrite:YES];//解压文件
+        if(ret)
+        {
+            NSString *zipName = [src lastPathComponent];//获取zip文件的文件名
+            [[NSFileManager defaultManager] removeItemAtPath:zipPath error:nil];//删除zip压缩包
+            zipName = [zipName substringToIndex:[zipName rangeOfString:@".zip"].location];//获取解压到的文件夹
+            return [self.downloadPath stringByAppendingPathComponent:zipName];
+        }
+    }
+    return nil;
+}
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">ZipArchive</code>项目地址：<code class="highlighter-rouge">https://github.com/mattconnolly/ZipArchive</code></p>
+
+<p>#####（2）注册指定路径下的字体文件</p>
+
+<p>下载回来的字体文件如果不做处理是不能直接使用的，使用前需要先注册然后才能使用，注册方式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)registerFont:(NSString *)fontPath
+{
+    NSData *dynamicFontData = [NSData dataWithContentsOfFile:fontPath];
+    if (!dynamicFontData)
+    {
+        return;
+    }
+    CFErrorRef error;
+    CGDataProviderRef providerRef = CGDataProviderCreateWithCFData((__bridge CFDataRef)dynamicFontData);
+    CGFontRef font = CGFontCreateWithDataProvider(providerRef);
+    if (! CTFontManagerRegisterGraphicsFont(font, &amp;error))
+    {
+        //注册失败
+        CFStringRef errorDescription = CFErrorCopyDescription(error);
+        NSLog(@"Failed to load font: %@", errorDescription);
+        CFRelease(errorDescription);
+    }
+    CFRelease(font);
+    CFRelease(providerRef);
+}
+</code></pre></div></div>
+
+<p>需要先引入<code class="highlighter-rouge">#import &lt;CoreText/CoreText.h&gt;</code>，<code class="highlighter-rouge">CoreText</code>框架。</p>
+
+<p>#####（3）判断字体是否加载</p>
+
+<p>在使用字体文件前最好是先判断字体是否已经被加载过了，判断方式如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (BOOL)isFontDownloaded:(NSString *)fontName
+{
+    UIFont* aFont = [UIFont fontWithName:fontName size:12.0];
+    BOOL isDownloaded = (aFont &amp;&amp; ([aFont.fontName compare:fontName] == NSOrderedSame || [aFont.familyName compare:fontName] == NSOrderedSame));
+    return isDownloaded;
+}
+</code></pre></div></div>
+
+<p>#####（4）其他说明</p>
+
+<p>经测试注册过的字体在应用关闭后下次开启应用，判断字体是否加载时返回为NO，为了保证正常使用需要每次启动应用的时候先遍历一遍字体文件夹将里面的字体文件都再次注册一遍即可。参考代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//注册fonts目录下面的所有字体文件
+NSArray *ary = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.downloadPath error:nil];
+for (NSString *p1 in ary)
+{
+	NSString *t1 = [self.downloadPath stringByAppendingPathComponent:p1];
+	NSArray *ary1 = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:t1 error:nil];
+	for (NSString *p1 in ary1)
+	{
+		NSString *t2 = [t1 stringByAppendingPathComponent:p1];
+		if([t2 rangeOfString:@".ttf"].location != NSNotFound)
+		{
+			[self registerFont:t2];
+		}
+	}
+}
+</code></pre></div></div>
+
+<p>####2、动态下载苹果提供的字体</p>
+
+<p>大多数的中文字体是有版权的，在应用中加入特殊中文字体还需要处理相应的版权问题。从iOS6开始，苹果就支持动态下载中文字体到系统中。</p>
+
+<h5 id="1苹果支持下载的字体列表">（1）苹果支持下载的字体列表</h5>
+
+<p>1）iOS6字体列表：<code class="highlighter-rouge">http://support.apple.com/zh-cn/HT202599</code></p>
+
+<p>2）iOS7字体列表：<code class="highlighter-rouge">http://support.apple.com/zh-cn/HT5878</code></p>
+
+<h5 id="2官方提供的示例代码">（2）官方提供的示例代码</h5>
+
+<p>访问<code class="highlighter-rouge">https://developer.apple.com/library/ios/samplecode/DownloadFont/Introduction/Intro.html</code>下载示例程序。针对示例程序简单介绍如下：</p>
+
+<p>1）判断字体是否已经被下载过</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>UIFont* aFont = [UIFont fontWithName:fontName size:12.];
+if (aFont &amp;&amp; ([aFont.fontName compare:fontName] == NSOrderedSame || [aFont.familyName compare:fontName] == NSOrderedSame)) {
+	// 字体已经被加载过，可以直接使用
+	return;
+}
+</code></pre></div></div>
+
+<p>2）下载字体</p>
+
+<p>根据字体的PostScript名称构建下载字体所需的参数：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//使用字体的PostScript名称构建一个字典
+NSMutableDictionary *attrs = [NSMutableDictionary dictionaryWithObjectsAndKeys:fontName, kCTFontNameAttribute, nil];
+//根据上面的字典创建一个字体描述对象
+CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((__bridge CFDictionaryRef)attrs);
+//将字体描述对象放到一个数组中
+NSMutableArray *descs = [NSMutableArray arrayWithCapacity:0];
+[descs addObject:(__bridge id)desc];
+CFRelease(desc);
+</code></pre></div></div>
+
+<p>下载字体文件：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>_block BOOL errorDuringDownload = NO;
+CTFontDescriptorMatchFontDescriptorsWithProgressHandler( (__bridge CFArrayRef)descs, NULL,  ^(CTFontDescriptorMatchingState state, CFDictionaryRef progressParameter) {
+    //下载的进度    
+	double progressValue = [[(__bridge NSDictionary *)progressParameter objectForKey:(id)kCTFontDescriptorMatchingPercentage] doubleValue];
+	if (state == kCTFontDescriptorMatchingDidBegin) {
+		dispatch_async( dispatch_get_main_queue(), ^ {
+			//开始匹配
+			NSLog(@"Begin Matching");
+		});
+	} else if (state == kCTFontDescriptorMatchingDidFinish) {
+		dispatch_async( dispatch_get_main_queue(), ^ {
+			if (!errorDuringDownload) {
+				//字体下载完成
+				NSLog(@"%@ downloaded", fontName);
+               //TODO:在此修改UI控件的字体样式
+			}
+		});
+	} else if (state == kCTFontDescriptorMatchingWillBeginDownloading) {
+		//开始下载
+        NSLog(@"Begin Downloading");
+        dispatch_async( dispatch_get_main_queue(), ^ {
+        	//TODO:在此显示下载进度提示
+		});
+	} else if (state == kCTFontDescriptorMatchingDidFinishDownloading) {
+		//下载完成
+		NSLog(@"Finish downloading");
+		dispatch_async( dispatch_get_main_queue(), ^ {
+			//TODO:在此修改UI控件的字体样式，隐藏下载进度提示
+		});
+	} else if (state == kCTFontDescriptorMatchingDownloading) {
+		//正在下载
+		NSLog(@"Downloading %.0f%% complete", progressValue);
+		dispatch_async( dispatch_get_main_queue(), ^ {
+			//TODO:在此修改下载进度条的数值
+		});
+	} else if (state == kCTFontDescriptorMatchingDidFailWithError) {
+		//下载遇到错误，获取错误信息
+		NSError *error = [(__bridge NSDictionary *)progressParameter objectForKey:(id)kCTFontDescriptorMatchingError];
+		NSLog(@"%@", [error localizedDescription]);
+		//设置下载错误标志
+		errorDuringDownload = YES;
+	}
+    return (bool)YES;
+});
+</code></pre></div></div>
+
+<h5 id="3说明">（3）说明</h5>
+
+<p>1）使用动态下载中文字体的API可以动态地向iOS系统中添加字体文件，这些字体文件都是下载到系统的目录中（目录是/private/var/mobile/Library/Assets/com_apple_MobileAsset_Font/），所以并不会造成应用体积的增加，而且可以在多个应用中共享。</p>
+
+<p>2）如何获取字体的PostScript和FontName？可以通过Mac系统自带的字体册来查看。具体请参考前面的步骤。</p>
+
+<p>###参考资料</p>
+
+<p>1、<a href="http://blog.devtang.com/blog/2013/08/11/ios-asian-font-download-introduction/">《动态下载苹果提供的多种中文字体》</a></p>
+
+<p>2、<a href="http://nonomori.farbox.com/post/zi-ti-jia-zai-san-chong-fang-shi">《字体加载三种方式》</a></p>
+
+<p>3、<a href="http://cocoa.venj.me/blog/custom-fonts-in-ios-apps/">《在iOS程序中使用自定义字体》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-arc-block-retain-cycle.html" title="link to iOS中ARC下block的循环引用">iOS中ARC下block的循环引用</a></h2>
+       <p class="excerpt">在iOS4.2时，Apple推出ARC的内存管理机制。这是一种编译期的内存管理方式，在编译期间，编译器会判断对象的使用情况，并适当的加上retain和release，使得对象的内存被合理的管理。所以，从本质上说ARC和MRC在本质上是一样的，都是通过引用计数的内存管理方式。使用ARC虽然可以简化内存管理，但是ARC并不是万能的，有些情况程序为了能够正常运行，会隐式地持有或者复制对象，如果不加以注意，便会造成内存泄露。在ARC下，当block获取到外部变量时，由于编译器无法预测获取到的变量何...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-22 18:07:19 +0800" class="post-list__meta--date date">2015-03-22</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-arc-block-retain-cycle.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/ios-html-template-engine.html" title="link to iOS中使用模板引擎渲染HTML界面">iOS中使用模板引擎渲染HTML界面</a></h2>
+       <p class="excerpt">在iOS实际的开发中，使用UIWebView来加载数据使用的场景特别多。很多时候我们会动态的从服务器获取一段HTML的内容，然后App这边动态的处理这段HTML内容用于展示在UIWebView上。使用到的API接口为：- (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;由于HTML内容通常是变化的，所以我们需要动态生成HTML代码。通常我们从服务器端获取到标题、时间、作者和对应的内容，然后我们需要对这些数据处...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-01-17 21:22:04 +0800" class="post-list__meta--date date">2015-01-17</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/ios-html-template-engine.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

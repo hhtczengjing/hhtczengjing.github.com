@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用Ant实现iOS项目的自动编译打包</title>
+  <meta name="description" content="Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供维护，目前最新的版本是1.9.4。本文主要介绍如何在iOS开发中使用Ant来提高开发效率，重点涉及到ant的安装、build配置文件的基本语法和iOS build...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用Ant实现iOS项目的自动编译打包">
+  <meta name="twitter:description" content="Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供维护，目前最新的版本是1.9.4。本文主要介绍如何在iOS开发中使用Ant来提高开发效率，重点涉及到ant的安装、build配置文件的基本语法和iOS build...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用Ant实现iOS项目的自动编译打包">
+  <meta property="og:description" content="Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供维护，目前最新的版本是1.9.4。本文主要介绍如何在iOS开发中使用Ant来提高开发效率，重点涉及到ant的安装、build配置文件的基本语法和iOS build...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-auto-build-by-ant.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-08-02 00:13:17 +0800" itemprop="datePublished" class="post-meta__date date">2014-08-02</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">使用Ant实现iOS项目的自动编译打包</h1>
+  </header>
+
+  <section class="post">
+    <p>Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供维护，目前最新的版本是1.9.4。本文主要介绍如何在iOS开发中使用Ant来提高开发效率，重点涉及到ant的安装、build配置文件的基本语法和iOS build脚本等内容。</p>
+
+<p><img src="/images/ant_for_ios/apache_ant_logo.png" alt="ant logo" /></p>
+
+<p>##安装ANT工具</p>
+
+<p>1、到Apache Ant的官网上下载最新的ant工具包</p>
+
+<p>可以直接使用浏览器下载，或者是其他下载工具。<a href="http://apache.dataguru.cn//ant/binaries/apache-ant-1.9.4-bin.zip">下载地址</a></p>
+
+<p>也可以使用如下的命令:</p>
+
+<p><code class="highlighter-rouge">wget http://apache.dataguru.cn//ant/binaries/apache-ant-1.9.4-bin.zip</code></p>
+
+<p>2、将下载并解压后的<code class="highlighter-rouge">apache-ant-1.9.4</code>目录拷贝到<code class="highlighter-rouge">/usr/local</code>下</p>
+
+<p><code class="highlighter-rouge">unzip apache-ant-1.9.4-bin.zip</code></p>
+
+<p><code class="highlighter-rouge">cp apache-ant-1.9.4 /usr/local/</code></p>
+
+<p>3、设置环境变量</p>
+
+<p>(1)获取root权限，会提示要输入密码</p>
+
+<p><code class="highlighter-rouge">sudo -s</code></p>
+
+<p>(2)修改bashrc文件的读写权限</p>
+
+<p><code class="highlighter-rouge">chmod +w /etc/bashrc</code></p>
+
+<p>(3)用vim打开<code class="highlighter-rouge">/etc/bashrc</code>按<code class="highlighter-rouge">i</code>进入编辑,在文件的末尾添加下面两行</p>
+
+<p><code class="highlighter-rouge">export ANT_HOME=/usr/local/apache-ant-1.9.4</code></p>
+
+<p><code class="highlighter-rouge">export PATH=${PATH}:${ANT_HOME}/bin</code></p>
+
+<p>(4)编辑完成后按<code class="highlighter-rouge">ESC</code>，输入<code class="highlighter-rouge">:wq!</code>退出vim</p>
+
+<p>3、退出终端重新打开输入<code class="highlighter-rouge">ant -version</code>,如果能看到<code class="highlighter-rouge">Apache Ant(TM) version 1.9.3</code>表示安装成功，如果看到<code class="highlighter-rouge">No Java runtime present</code>这样也表示安装成功，但是需要安装<code class="highlighter-rouge">JAVA JRE</code>环境.</p>
+
+<p>4、其实也可以通过Homebrew来安装，直接在终端输入<code class="highlighter-rouge">brew install ant</code>，但是本人从未尝试正常安装每次都是下载失败，如果有兴趣可以试试。</p>
+
+<p>##Ant build.xml说明</p>
+
+<p>当开始一个新的项目时，首先应该编写Ant构建文件。构建文件定义了构建过程，并被团队开发中每个人使用。Ant构建文件默认命名为 build.xml，也可以取其他的名字。只不过在运行的时候把这个命名当作参数传给Ant。构建文件可以放在任何的位置。一般做法是放在项目顶层目录中，这样可以保持项目的简洁和清晰。</p>
+
+<p>Ant构建文件是XML文件。每个构建文件定义一个唯一的项目(Project元素)。每个项目下可以定义很多目标(target元素)，这些目标之间可以有依赖关系。当执行这类目标时，需要执行他们所依赖的目标。每个目标中可以定义多个任务，目标中还定义了所要执行的任务序列。Ant在构建目标时必须调用所定义的任务。</p>
+
+<p>下面简单介绍下property、project和target标签的基本用法：</p>
+
+<p>1、project标签</p>
+
+<p>每个构建文件对应一个项目。<project>标签时构建文件的根标签。它可以有多个属性，其各个属性的含义分别如下：</project></p>
+
+<p>(1)default表示默认的运行目标，这个属性是必须的</p>
+
+<p>(2)basedir表示项目的基准目录</p>
+
+<p>(3)name表示项目名</p>
+
+<p>(4)description表示项目的描述</p>
+
+<p>2、target标签</p>
+
+<p>一个project可以有多个target标签，另外一个target标签可以依赖其他的target标签。例如，有一个target用于编译程序，另一个target用于声称可执行文件。在生成可执行文件之前必须先编译该文件，因策可执行文件的target依赖于编译程序的 target。Target的所有属性如下：</p>
+
+<p>(1)name表示标明，这个属性是必须的</p>
+
+<p>(2)depends表示依赖的目标</p>
+
+<p>(3)if表示仅当属性设置时才执行</p>
+
+<p>(4)unless表示当属性没有设置时才执行</p>
+
+<p>(5)description表示项目的描述</p>
+
+<p>Ant的depends属性指定了target的执行顺序。Ant会依照depends属性中target出现顺序依次执行每个target。在执行之前，首先需要执行它所依赖的target。程序中的名为run的target的depends属性compile，而名为compile的target的 depends属性是prepare，所以这几个target执行的顺序是prepare-&gt;compile-&gt;run。一个target只能被执行一次，即使有多个target依赖于它。如果没有if或unless属性，target总会被执行</p>
+
+<p>3、property标签</p>
+
+<p>property是用来定义属性的，或者是全局变量，其主要有name和value两个参数，其中name指的是属性的名字，value表示属性的值。</p>
+
+<p>在需要使用属性的地方使用<code class="highlighter-rouge">${name}</code>即可调用该属性的值。</p>
+
+<p>##Xcode命令行工具</p>
+
+<p>1、查看当前系统支持的SDK的版本</p>
+
+<p><code class="highlighter-rouge">xcodebuild -showsdks</code></p>
+
+<p>2、查看Xcode的version和build</p>
+
+<p><code class="highlighter-rouge">xcodebuild -version</code></p>
+
+<p>3、显示工程项目的信息，需要先cd到*.xcodeproj的目录</p>
+
+<p><code class="highlighter-rouge">xcodebuild -list</code></p>
+
+<p>4、clean工程</p>
+
+<p><code class="highlighter-rouge">xcodebuild clean -sdk iphoneos7.0 -configuration Release</code></p>
+
+<p>5、编译工程</p>
+
+<p><code class="highlighter-rouge">xcodebuild -sdk iphoneos7.0 -configuration Release -target Demo</code></p>
+
+<p>6、打包ipa</p>
+
+<p><code class="highlighter-rouge">xcrun -sdk iphoneos PackageApplication -v ./build/Release-iphoneos/Demo.app -o Demo.ipa</code></p>
+
+<p>##范例</p>
+
+<p>下面是本人参考资料编写的一个简单的ant build.xml文件示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;project name="Demo" default="debug" basedir="."&gt;
+
+    &lt;property environment="env"/&gt;
+    
+    &lt;!-- 属性配置 --&gt;
+    &lt;property name="app.name"               value="Demo"/&gt;
+    &lt;property name="app.plist"              value="Demo/Demo-Info.plist"/&gt;
+    &lt;property name="script.command.build"   value="xcodebuild"/&gt; 
+    
+    &lt;!-- 时间格式配置 --&gt;
+    &lt;tstamp&gt;
+        &lt;format property="time.now" pattern="yyyyMMddhhmmss" locale="zh"/&gt;
+    &lt;/tstamp&gt;
+    
+    &lt;!-- debug模式 --&gt;
+    &lt;target name="debug" description="debug"&gt;
+        &lt;antcall target="compile"&gt;
+            &lt;param name="compile.configuration" value="Debug"/&gt;
+            &lt;param name="compile.sdk" value="iphonesimulator"/&gt;
+        &lt;/antcall&gt;
+    &lt;/target&gt;
+    
+    &lt;!-- release模式 --&gt;
+    &lt;target name="release" description="release"&gt;
+        &lt;antcall target="compile"&gt;
+            &lt;param name="compile.workspace" value="${app.workspace}"/&gt;
+            &lt;param name="compile.scheme" value="${app.scheme}"/&gt;
+            &lt;param name="compile.configuration" value="Release"/&gt;
+            &lt;param name="compile.sdk" value="iphoneos"/&gt;
+        &lt;/antcall&gt;
+    &lt;/target&gt;
+    
+    &lt;!-- 发布模式 --&gt;
+    &lt;target name="deploy" description="deploy"&gt;
+        &lt;echo message="开始发布应用程序:${app.name}"/&gt;
+        &lt;antcall target="plist"/&gt;
+        &lt;antcall target="release"/&gt;
+        &lt;antcall target="ipa"/&gt;
+        &lt;antcall target="zip"/&gt;
+        &lt;echo message="发布应用程序${app.name}完成"/&gt;
+    &lt;/target&gt;
+
+    &lt;!-- 在原来数值的基础上加1 --&gt;
+    &lt;scriptdef name="increase.number" language="javascript"&gt;
+        &lt;attribute name="value" /&gt;
+        &lt;attribute name="property"/&gt;
+        &lt;![CDATA[
+            var initVal = attributes.get("value");
+            var finalVal = parseInt(initVal) + 1;
+            project.setProperty(attributes.get("property"), finalVal);
+        ]]&gt;
+    &lt;/scriptdef&gt;
+    
+    &lt;!-- 压缩dSYM文件 --&gt;
+    &lt;target name="zip" description="zip dsym"&gt;
+        &lt;exec executable="zip" failOnError="true"&gt;
+            &lt;arg line="-r build/${app.name}.app.dSYM.zip build/${app.name}.app.dSYM"/&gt;
+        &lt;/exec&gt;
+    &lt;/target&gt;
+    
+    &lt;!-- 编译源码 --&gt;
+    &lt;target name="compile" description=""&gt;
+        &lt;exec executable="${script.command.build}" failOnError="true"&gt;
+            &lt;arg line="-verbose -configuration ${compile.configuration} -sdk ${compile.sdk}"/&gt;
+            &lt;arg value="clean"/&gt;
+            &lt;arg value="build"/&gt;
+            &lt;arg value="CONFIGURATION_BUILD_DIR=${basedir}/build"/&gt;
+        &lt;/exec&gt;
+    &lt;/target&gt;
+    
+    &lt;!-- 生成IPA文件 --&gt;
+    &lt;target name="ipa" description=""&gt;
+        &lt;!-- 获取版本号 --&gt;
+        &lt;exec executable="/usr/libexec/PlistBuddy" outputproperty="CurrentVersion" errorproperty="PListError" failOnError="true"&gt;
+            &lt;arg value="-c"/&gt;
+            &lt;arg value="Print :CFBundleShortVersionString"/&gt;
+            &lt;arg value="${app.plist}"/&gt;
+        &lt;/exec&gt;
+        &lt;!-- 获取Build号 --&gt;
+        &lt;exec executable="/usr/libexec/PlistBuddy" outputproperty="CurrentBuild" errorproperty="PListError" failOnError="true"&gt;
+            &lt;arg value="-c"/&gt;
+            &lt;arg value="Print :CFBundleVersion"/&gt;
+            &lt;arg value="${app.plist}"/&gt;
+        &lt;/exec&gt;
+        &lt;!-- 打包IPA --&gt;
+        &lt;exec executable="xcrun" failOnError="true"&gt;
+            &lt;arg line="-sdk iphoneos PackageApplication"/&gt;
+            &lt;arg line="-v &amp;quot;${basedir}/build/${app.name}.app&amp;quot;"/&gt;
+            &lt;arg line="-o &amp;quot;${basedir}/build/${app.name}_Release_${CurrentVersion}_${CurrentBuild}_${time.now}.ipa&amp;quot;"/&gt;
+            &lt;arg line="--embed ${provisioning.file}"/&gt;
+        &lt;/exec&gt;
+    &lt;/target&gt;
+    
+    &lt;!-- plist增加版本号 --&gt;
+    &lt;target name="plist" description=""&gt;
+        &lt;exec executable="/usr/libexec/PlistBuddy" outputproperty="CurrentVersion" errorproperty="PListError" failOnError="true"&gt;
+            &lt;arg value="-c"/&gt;
+            &lt;arg value="Print :CFBundleVersion"/&gt;
+            &lt;arg value="${app.plist}"/&gt;
+        &lt;/exec&gt;
+        
+        &lt;echo message="Fetched the last version in the plist: ${CurrentVersion}" /&gt;
+        &lt;increase.number value="${CurrentVersion}" property="result"/&gt;
+        
+        &lt;exec executable="/usr/libexec/PlistBuddy" outputproperty="PListOutput" errorproperty="PListError" failOnError="true"&gt;
+            &lt;arg value="-c"/&gt;
+            &lt;arg value="Set :CFBundleVersion ${result}" /&gt;
+            &lt;arg value="${app.plist}"/&gt;
+        &lt;/exec&gt;
+        
+        &lt;echo message="Output: ${PListOutput}"/&gt;
+        &lt;echo message="Errors: ${PListError}"/&gt;
+        &lt;echo message="Old version number: ${CurrentVersion} New Version Number: ${result}" /&gt;
+    &lt;/target&gt;
+
+&lt;/project&gt;
+
+</code></pre></div></div>
+<p>关于如何调用，直接在终端cd到build.xml文件所在的目录，记住将build.xml文件放置在.xcodeproj文件的同级目录下，输入如下命令即可一键打包编译：</p>
+
+<p>Debug工程：<code class="highlighter-rouge">ant debug</code></p>
+
+<p>Release工程：<code class="highlighter-rouge">ant release</code></p>
+
+<p>发布打包项目：<code class="highlighter-rouge">ant deploy</code></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://zh.wikipedia.org/zh-cn/Apache_Ant">《Apache Ant》</a></p>
+
+<p>2、<a href="http://www.cnblogs.com/clarkchen/archive/2011/03/10/1980194.html">《Ant之build.xml详解》</a></p>
+
+<p>3、<a href="http://blog.csdn.net/crazybigfish/article/details/18215439">《Mac OS X，下载并安装ant》</a></p>
+
+<p>4、<a href="http://networking.ctocio.com.cn/481/12534981.shtml">《使用命令行实现iOS持续集成》</a></p>
+
+<p>5、<a href="https://github.com/maxoly/Kimera">参考项目实例工程Kimera</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/java-jndi-datasource.html" title="link to Java使用JNDI配置WEB项目数据源">Java使用JNDI配置WEB项目数据源</a></h2>
+       <p class="excerpt">JNDI(Java Naming and Directory Interface,Java命名与目录接口)是Java提供的一种标准的命名系统接口，JNDI提供统一的客户端API，通过不同的访问提供者接口JNDI SPI(Service Provider Interface,服务提供者接口)的实现，由管理者将JNDI API映射为特定的命名服务和目录系统，使得Java应用程序可以和这些命名服务和目录服务之间进行交互。##使用传统的方式一般对于普通的项目，习惯上使用.properties的文件...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-08-06 21:28:49 +0800" class="post-list__meta--date date">2014-08-06</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/blog/java-jndi-datasource.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/oc-method-swizzling.html" title="link to Objective-C中的Method Swizzling">Objective-C中的Method Swizzling</a></h2>
+       <p class="excerpt">Objective-C对象在收到消息之后会经过Dynamic Message Dispatch System(动态消息派发系统)来进行处理，该系统会查出消息对应的方法并执行其代码。那么对于给定@selector名称相对应的方法是否可以在运行期可以动态改变呢？如果能善用这个特性，则可发挥出巨大优势，因为我们可以不需要源码也不需要通过继承子类来覆写对应的方法就能改变这个类本身的功能。没错，Objective-C中确实提供了这样的操作，这就是我们这里会介绍到的Method Swizzling(方...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-07-30 22:59:19 +0800" class="post-list__meta--date date">2014-07-30</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/blog/oc-method-swizzling.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

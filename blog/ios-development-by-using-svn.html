@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS开发中SVN管理工具的使用</title>
+  <meta name="description" content="SVN是Subversion的简称，是一个开放源代码的版本控制系统，相较于RCS、CVS，它采用了分支管理系统，它的设计目标就是取代CVS。互联网上很多版本控制服务已从CVS转移到Subversion。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS开发中SVN管理工具的使用">
+  <meta name="twitter:description" content="SVN是Subversion的简称，是一个开放源代码的版本控制系统，相较于RCS、CVS，它采用了分支管理系统，它的设计目标就是取代CVS。互联网上很多版本控制服务已从CVS转移到Subversion。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS开发中SVN管理工具的使用">
+  <meta property="og:description" content="SVN是Subversion的简称，是一个开放源代码的版本控制系统，相较于RCS、CVS，它采用了分支管理系统，它的设计目标就是取代CVS。互联网上很多版本控制服务已从CVS转移到Subversion。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://blog.devzeng.com/blog/ios-development-by-using-svn.html">
+  <link rel="alternate" type="application/rss+xml" title="曾静的博客" href="http://blog.devzeng.com/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 曾静的博客 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="曾静的博客 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for 曾静的博客" class="blog-button">曾静的博客</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">但行好事，莫问前程.</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是曾静 (@devzeng)，目前暂居深圳。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        <p class="panel-cover__description">这是我用来记录平日学习笔记的地方，欢迎您的访问.</p>
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="/archives.html" target="_blank" title="历史文章归档">归档</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/devzeng" title="@devzeng 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/hhtczengjing" title="@hhtczengjing 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li class="navigation__item">
+    <a href="http://twitter.com/hhtczengjing" title="@hhtczengjing" target="_blank">
+      <i class='social fa fa-twitter'></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:hhtczengjing@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-slate"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-10-18 15:58:25 +0800" itemprop="datePublished" class="post-meta__date date">2014-10-18</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">iOS开发中SVN管理工具的使用</h1>
+  </header>
+
+  <section class="post">
+    <p>SVN是Subversion的简称，是一个开放源代码的版本控制系统，相较于RCS、CVS，它采用了分支管理系统，它的设计目标就是取代CVS。互联网上很多版本控制服务已从CVS转移到Subversion。</p>
+
+<p><img src="/images/ios_svn/tortoisesvn_logo.png" alt="tortoisesvn_logo.png" /></p>
+
+<p>##SVN命令行工具</p>
+
+<p>1、从本地导入代码到服务器(第一次初始化导入)，在终端中输入：</p>
+
+<p><code class="highlighter-rouge">svn import /Users/apple/Documents/workspace/project svn://hostname/svn/project --username=mj --password=123 -m "初始化导入"</code></p>
+
+<p>说明：将/Users/apple/Documents/workspace/project中的所有内容，上传到服务器svn仓库的project目录下，后面双引号中的”初始化导入”是注释</p>
+
+<p>2、从服务器端下载代码到客户端本地，在终端中输入：</p>
+
+<p><code class="highlighter-rouge">svn checkout svn://hostname/svn/project --username=用户名 --password=密码 /Users/apple/Documents/code</code></p>
+
+<p>说明：将服务器中svn仓库中的project目录下的内容下载到/Users/apple/Documents/code目录中</p>
+
+<p>3、提交更改过的代码到服务器</p>
+
+<p>在步骤2中已经将服务器端的代码都下载到/Users/apple/Documents/code目录中，现在修改下里面的一些代码，然后提交这些修改到服务器</p>
+
+<p>（1）打开终端，先定位到/Users/apple/Documents/code目录，输入：</p>
+
+<p><code class="highlighter-rouge">cd /Users/apple/Documents/code</code></p>
+
+<p>（2）输入提交指令：</p>
+
+<p><code class="highlighter-rouge">svn commit -m "修改了文件"</code></p>
+
+<p>执行上面的命令会将/Users/apple/Documents/code下的所有修改都同步到服务器端。</p>
+
+<p>4、更新服务器端的代码到客户端</p>
+
+<p>这个应该是最简单的指令了，在终端中定位到客户端代码目录后，比如上面的/Users/apple/Documents/code目录，然后再输入指令：<code class="highlighter-rouge">svn update</code></p>
+
+<p>获取SVN的其他用法，可以在终端输入：<code class="highlighter-rouge">svn help</code></p>
+
+<p>使用命令行的工具操作SVN确实不太方便，因此下面介绍在MAC下比较优秀的SVN客户端的使用方法：</p>
+
+<p>##Cornerstone客户端的使用</p>
+
+<p>1、从SVN服务器导出项目</p>
+
+<p>（1）打开Cornerstone客户端，在右边的界面中选择Add Respository的按钮，如下图所示：</p>
+
+<p><img src="/images/ios_svn/cornerstone_client_001.png" alt="cornerstone_client_001.png" /></p>
+
+<p>（2）填写项目SVN的路径信息</p>
+
+<p>如果项目的SVN的路径是<code class="highlighter-rouge">http://hostname:port/...</code>形式的话，就选择HTTP Server,如下图所示：</p>
+
+<p><img src="/images/ios_svn/cornerstone_client_002.png" alt="cornerstone_client_002.png" /></p>
+
+<p>其中上面的Protocol可以选择是使用HTTP还是HTTPS。</p>
+
+<p>如果项目的SVN的路径是<code class="highlighter-rouge">svn://hostname:port/...</code>形式的话，就选择SVN Server，如下图所示：</p>
+
+<p><img src="/images/ios_svn/cornerstone_client_003.png" alt="cornerstone_client_003.png" /></p>
+
+<p>说明：</p>
+
+<p>Server：指的是服务的名称，如IP地址或者是域名</p>
+
+<p>Port:指的是端口号</p>
+
+<p>Repository：指的的项目SVN地址的相对路径，如项目的地址是<code class="highlighter-rouge">http://192.168.1.100/svn/project</code>,那么对应的Repository为svn/project</p>
+
+<p>（3）导出项目到本地</p>
+
+<p>选择左上角的Check out,如下图所示：</p>
+
+<p><img src="/images/ios_svn/cornerstone_client_004.jpg" alt="cornerstone_client_004.jpg" /></p>
+
+<p>然后会提示需要选择导出到指定的路径信息：</p>
+
+<p><img src="/images/ios_svn/cornerstone_client_005.jpg" alt="cornerstone_client_005.jpg" /></p>
+
+<p>Check Out As:指明项目导出的文件夹的名称</p>
+
+<p>Where:指的是本地存储的目录，另外下面可以选择导出的SVN版本的格式，填写完成后点击Check Out即可。</p>
+
+<p>2、提交修改到SVN服务器或者更新代码到本地</p>
+
+<p>前提条件是已经导出项目到本地，提交代码时选择Commit，更新代码选择Update即可，如下：</p>
+
+<p><img src="/images/ios_svn/cornerstone_client_006.png" alt="cornerstone_client_006.png" /></p>
+
+<p>3、其他说明</p>
+
+<p>（1）如果提交代码的时候部分文件或者文件夹的状态是一个<code class="highlighter-rouge">?</code>的图标，需要单击右键选择<code class="highlighter-rouge">Add to working copy</code>添加到SVN的管理然后再提交。</p>
+
+<p>（2）可以通过查看Log来比较不同版本的修改情况。</p>
+
+<p>##SmartSVN客户端的使用</p>
+
+<p>1、从SVN服务器导出项目到本地</p>
+
+<p>（1）打开SmartSVN，在启动界面中选择<code class="highlighter-rouge">Check out project from repository</code>,如下所示：</p>
+
+<p><img src="/images/ios_svn/smartsvn_client_001.png" alt="smartsvn_client_001.png" /></p>
+
+<p>（2）填写SVN路径的地址，和选择需要导出到的路径，如下图所示：</p>
+
+<p><img src="/images/ios_svn/smartsvn_client_002.png" alt="smartsvn_client_002.png" /></p>
+
+<p>确定后会提示需要输入用户名和密码，然后一直点击Finish就可以导出项目到本地了。</p>
+
+<p>2、更新/提交代码</p>
+
+<p>关于如何提交和更新代码，可以选择指定的项目然后点击左上角的Commit和Update，对应提交本地修改的代码到服务器和从服务器更新最新的代码：</p>
+
+<p><img src="/images/ios_svn/smartsvn_client_003.jpg" alt="smartsvn_client_003.jpg" /></p>
+
+<p>##参考资料</p>
+
+<p>1、<a href="http://blog.csdn.net/q199109106q/article/details/8655204">《Mac环境下svn的使用》</a></p>
+
+<p>2、<a href="http://blog.csdn.net/xiaohulunb/article/details/20627995">《用CornerStone配置SVN，HTTP及svn简单使用说明》</a></p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/startssl-free-certificate.html" title="link to 在StartSSL上申请免费SSL证书">在StartSSL上申请免费SSL证书</a></h2>
+       <p class="excerpt">跟VeriSign一样，StartSSL（http://www.startssl.com，公司名：StartCom）也是一家CA机构，它的根证书很久之前就被一些具有开源背景的浏览器支持（Firefox浏览器、谷歌Chrome浏览器、苹果Safari浏览器等）。在去年9月份，StartSSL竟然搞定了微软：微软在升级补丁中，更新了通过Windows根证书认证程序（Windows Root Certificate Program）的厂商清单，并首次将StartCom公司列入了该认证清单，这是微...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-10-20 22:18:54 +0800" class="post-list__meta--date date">2014-10-20</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/startssl-free-certificate.html>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/blog/aliyun-ubuntu-svn-server.html" title="link to 阿里云Ubuntu系统搭建SVN服务器">阿里云Ubuntu系统搭建SVN服务器</a></h2>
+       <p class="excerpt">近期入手了一台阿里云（阿里云是国内优秀的云计算服务提供商，属于阿里巴巴旗下）的云服务器（Ubuntu系统）打算用来做WEB API的服务器，另外为了便于对数据和相关文档的管理需要在服务器上搭建SVN服务器，本文主要是用于记录如何搭建SVN服务器以及在搭建过程中遇到的一些问题。##SVN服务器相关软件安装1、使用SSH远程服务器（1）对于MAC OS/Liunx的用户直接打开终端输入ssh 用户名@实例名，例如 ssh root@192.168.1.100执行上面的命令后终端会提示输入密码，...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2014-10-14 23:39:09 +0800" class="post-list__meta--date date">2014-10-14</time> &#8226; <span class="post-list__meta--tags tags">Note</span><a class="btn-border-small" href=/blog/aliyun-ubuntu-svn-server.html>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-06-30 生成，感谢<a href="https://github.com">GitHub</a>为本站提供存储空间.</span>
+        <span class="footer__copyright">本站由 <a href="http://blog.devzeng.com">@devzeng</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/hhtczengjing/hhtczengjing.github.com">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
